@@ -47,3 +47,8 @@ kotlin {
 flutter {
     source = "../.."
 }
+
+tasks.matching { it.name.contains("FlutterBuild") || it.name.contains("flutterBuild") }.configureEach {
+    doNotTrackState("OneDrive ReparsePoint workaround")
+}
+
