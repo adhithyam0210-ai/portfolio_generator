@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
@@ -443,7 +445,7 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: isSelected ? color.withOpacity(0.12) : Colors.black.withOpacity(0.02),
+                  color: isSelected ? color.withValues(alpha: 0.12) : Colors.black.withValues(alpha: 0.02),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -455,7 +457,7 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.12),
+                  color: color.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(Icons.style, color: color, size: 22),
@@ -506,6 +508,119 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Color(0xFF0F172A)),
         ),
         const SizedBox(height: 16),
+
+        // Profile Picture Upload from Device
+        Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.grey.shade200),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.03),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              // Avatar circle
+              Stack(
+                children: [
+                  Container(
+                    width: 72,
+                    height: 72,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF2563EB), Color(0xFF60A5FA)],
+                      ),
+                      border: Border.all(color: const Color(0xFF2563EB), width: 2),
+                    ),
+                    child: ClipOval(
+                      child: _buildAvatarPreview(
+                        provider.profile.personal.avatarUrl,
+                        provider.profile.personal.fullName,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: () => _pickAvatarImage(provider),
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2563EB),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: const Icon(Icons.camera_alt, color: Colors.white, size: 14),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Profile Picture',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Upload your headshot or portrait from device',
+                      style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () => _pickAvatarImage(provider),
+                          icon: const Icon(Icons.upload, size: 14),
+                          label: Text(
+                            provider.profile.personal.avatarUrl.isNotEmpty ? 'Change' : 'Upload Photo',
+                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF2563EB),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          ),
+                        ),
+                        if (provider.profile.personal.avatarUrl.isNotEmpty) ...[
+                          const SizedBox(width: 8),
+                          OutlinedButton.icon(
+                            onPressed: () => _removeAvatar(provider),
+                            icon: const Icon(Icons.delete_outline, size: 14, color: Colors.red),
+                            label: const Text('Remove', style: TextStyle(fontSize: 11, color: Colors.red, fontWeight: FontWeight.bold)),
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(color: Colors.red.shade200),
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
 
         _buildTextField('Full Name', _nameController, Icons.person),
         _buildTextField('Headline / Target Role', _headlineController, Icons.badge),
@@ -810,6 +925,88 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
           }).toList(),
         ),
       ],
+    );
+  }
+
+  Future<void> _pickAvatarImage(PortfolioProvider provider) async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        withData: true,
+      );
+      if (result != null && result.files.isNotEmpty) {
+        final file = result.files.first;
+        List<int>? bytes = file.bytes;
+        if (bytes == null && file.path != null) {
+          bytes = await File(file.path!).readAsBytes();
+        }
+        if (bytes != null) {
+          final base64String = base64Encode(bytes);
+          final ext = file.extension ?? 'jpg';
+          final dataUri = 'data:image/$ext;base64,$base64String';
+          setState(() {
+            provider.profile.personal.avatarUrl = dataUri;
+          });
+          provider.saveAndSync();
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Profile picture updated successfully!'),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Avatar pick error: $e');
+    }
+  }
+
+  void _removeAvatar(PortfolioProvider provider) {
+    setState(() {
+      provider.profile.personal.avatarUrl = '';
+    });
+    provider.saveAndSync();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Profile picture removed'),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  Widget _buildAvatarPreview(String avatarUrl, String fullName) {
+    if (avatarUrl.isNotEmpty) {
+      if (avatarUrl.startsWith('data:image')) {
+        try {
+          final base64Part = avatarUrl.split(',').last;
+          return Image.memory(
+            base64Decode(base64Part),
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          );
+        } catch (_) {}
+      } else if (avatarUrl.startsWith('http')) {
+        return Image.network(
+          avatarUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+          errorBuilder: (_, __, ___) => _buildPlaceholderInitial(fullName),
+        );
+      }
+    }
+    return _buildPlaceholderInitial(fullName);
+  }
+
+  Widget _buildPlaceholderInitial(String fullName) {
+    return Center(
+      child: Text(
+        fullName.isNotEmpty ? fullName[0].toUpperCase() : 'P',
+        style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: Colors.white),
+      ),
     );
   }
 

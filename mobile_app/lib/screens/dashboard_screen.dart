@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -121,6 +122,37 @@ class DashboardScreen extends StatelessWidget {
                           ],
                         ),
                       ],
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  // User Avatar Circle
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const BuilderWizardScreen(initialStep: 2)),
+                      );
+                    },
+                    child: Container(
+                      width: 64,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF2563EB), Color(0xFF60A5FA)],
+                        ),
+                        border: Border.all(color: const Color(0xFF38BDF8), width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF2563EB).withValues(alpha: 0.3),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: ClipOval(
+                        child: _buildDashboardAvatar(profile.personal.avatarUrl, profile.personal.fullName),
+                      ),
                     ),
                   ),
                 ],
@@ -393,6 +425,40 @@ class DashboardScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDashboardAvatar(String avatarUrl, String fullName) {
+    if (avatarUrl.isNotEmpty) {
+      if (avatarUrl.startsWith('data:image')) {
+        try {
+          final base64Part = avatarUrl.split(',').last;
+          return Image.memory(
+            base64Decode(base64Part),
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          );
+        } catch (_) {}
+      } else if (avatarUrl.startsWith('http')) {
+        return Image.network(
+          avatarUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+          errorBuilder: (_, __, ___) => _buildPlaceholderInitial(fullName),
+        );
+      }
+    }
+    return _buildPlaceholderInitial(fullName);
+  }
+
+  Widget _buildPlaceholderInitial(String fullName) {
+    return Center(
+      child: Text(
+        fullName.isNotEmpty ? fullName[0].toUpperCase() : 'P',
+        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: Colors.white),
       ),
     );
   }

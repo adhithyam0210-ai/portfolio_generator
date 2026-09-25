@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -683,11 +684,8 @@ class PortfolioPreviewScreen extends StatelessWidget {
                     width: cfg.isPopArt ? 2 : 2.5,
                   ),
                 ),
-                child: Center(
-                  child: Text(
-                    profile.personal.fullName.isNotEmpty ? profile.personal.fullName[0].toUpperCase() : 'P',
-                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Colors.white),
-                  ),
+                child: ClipOval(
+                  child: _buildAvatarImage(profile.personal.avatarUrl, profile.personal.fullName, cfg),
                 ),
               ),
               const SizedBox(width: 16),
@@ -1113,6 +1111,40 @@ class PortfolioPreviewScreen extends StatelessWidget {
           border: cfg.isPopArt ? Border.all(color: const Color(0xFF0F172A), width: 1.5) : null,
         ),
         child: Icon(icon, size: 16, color: cfg.textColor),
+      ),
+    );
+  }
+
+  Widget _buildAvatarImage(String avatarUrl, String fullName, TemplateConfig cfg) {
+    if (avatarUrl.isNotEmpty) {
+      if (avatarUrl.startsWith('data:image')) {
+        try {
+          final base64Part = avatarUrl.split(',').last;
+          return Image.memory(
+            base64Decode(base64Part),
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          );
+        } catch (_) {}
+      } else if (avatarUrl.startsWith('http')) {
+        return Image.network(
+          avatarUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+          errorBuilder: (_, __, ___) => _buildInitialLetter(fullName),
+        );
+      }
+    }
+    return _buildInitialLetter(fullName);
+  }
+
+  Widget _buildInitialLetter(String fullName) {
+    return Center(
+      child: Text(
+        fullName.isNotEmpty ? fullName[0].toUpperCase() : 'P',
+        style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Colors.white),
       ),
     );
   }

@@ -26,7 +26,8 @@ import {
   Download,
   Monitor,
   Tablet,
-  Smartphone
+  Smartphone,
+  Camera
 } from 'lucide-react';
 import Link from 'next/link';
 import { TemplateSelectorStep } from './TemplateSelectorStep';
@@ -61,6 +62,26 @@ export const PortfolioBuilderWizard = () => {
       }));
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleAvatarFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPersonalForm((prev) => ({
+        ...prev,
+        avatarUrl: reader.result as string,
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveAvatar = () => {
+    setPersonalForm((prev) => ({
+      ...prev,
+      avatarUrl: '',
+    }));
   };
 
   // Input helper tag states
@@ -260,12 +281,71 @@ export const PortfolioBuilderWizard = () => {
 
             {/* STEP 2: PERSONAL BIO */}
             {currentStep === 2 && (
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
                   <User className="w-5 h-5 text-blue-600" />
                   Personal Information & Contacts
                 </h2>
-                
+
+                {/* Profile Picture Upload from Device */}
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-5">
+                  <div className="relative group shrink-0">
+                    <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-blue-500 shadow-md bg-slate-200 flex items-center justify-center">
+                      {personalForm.avatarUrl ? (
+                        <img
+                          src={personalForm.avatarUrl}
+                          alt="Avatar preview"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-2xl font-black text-slate-400">
+                          {personalForm.fullName ? personalForm.fullName[0].toUpperCase() : 'P'}
+                        </span>
+                      )}
+                    </div>
+                    <label
+                      htmlFor="avatar-upload-input"
+                      className="absolute bottom-0 right-0 p-1.5 rounded-full bg-blue-600 text-white shadow-md hover:bg-blue-700 cursor-pointer transition-colors"
+                      title="Upload from device"
+                    >
+                      <Camera className="w-3.5 h-3.5" />
+                    </label>
+                  </div>
+
+                  <div className="flex-1 text-center sm:text-left space-y-1.5">
+                    <h3 className="font-extrabold text-sm text-slate-900">Profile Picture</h3>
+                    <p className="text-xs text-slate-500">
+                      Upload a photo directly from your device. It will automatically display on all 21 portfolio templates.
+                    </p>
+                    <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1">
+                      <input
+                        id="avatar-upload-input"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleAvatarFileUpload}
+                        className="hidden"
+                      />
+                      <label
+                        htmlFor="avatar-upload-input"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-sm cursor-pointer transition-colors"
+                      >
+                        <FileUp className="w-3.5 h-3.5" />
+                        <span>{personalForm.avatarUrl ? 'Change Photo' : 'Upload from Device'}</span>
+                      </label>
+                      {personalForm.avatarUrl && (
+                        <button
+                          type="button"
+                          onClick={handleRemoveAvatar}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-xl text-xs font-bold transition-colors"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>Remove</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-medium">
                   <div>
                     <label className="block text-slate-700 mb-1 font-bold">Full Name</label>
