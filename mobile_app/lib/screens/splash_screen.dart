@@ -51,8 +51,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     });
 
     // Ensure provider data is loaded
-    final provider = Provider.of<PortfolioProvider>(context, listen: false);
-    await provider.reload();
+    try {
+      final provider = Provider.of<PortfolioProvider>(context, listen: false);
+      await provider.reload().timeout(const Duration(seconds: 2));
+    } catch (_) {}
+
 
     // Stage 2: Templates & themes
     await Future.delayed(const Duration(milliseconds: 500));

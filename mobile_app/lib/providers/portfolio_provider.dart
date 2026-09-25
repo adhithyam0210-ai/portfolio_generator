@@ -33,12 +33,15 @@ class PortfolioProvider extends ChangeNotifier {
         _profile = PortfolioProfile.fromJson(jsonDecode(cached));
       }
 
-      // Try syncing from Supabase
-      final cloudProfile = await SupabaseService().getPortfolioByUsername(_profile.username);
+      // Try syncing from Supabase with timeout
+      final cloudProfile = await SupabaseService()
+          .getPortfolioByUsername(_profile.username)
+          .timeout(const Duration(seconds: 2), onTimeout: () => null);
       if (cloudProfile != null) {
         _profile = cloudProfile;
         await _saveLocal();
       }
+
     } catch (e) {
       debugPrint('Local/Cloud load error: $e');
     } finally {

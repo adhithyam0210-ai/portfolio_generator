@@ -34,8 +34,7 @@ class SupabaseService {
     if (!isReady) return false;
     try {
       // 1. Upsert profile table
-      await client.from('profiles').upsert({
-        'id': profile.userId,
+      final profilePayload = <String, dynamic>{
         'username': profile.username,
         'email': profile.personal.email,
         'full_name': profile.personal.fullName,
@@ -54,7 +53,9 @@ class SupabaseService {
         'is_published': profile.isPublished,
         'portfolio_json': profile.toJson(),
         'updated_at': DateTime.now().toIso8601String(),
-      });
+      };
+      await client.from('profiles').upsert(profilePayload, onConflict: 'username');
+
 
       // 2. Sync Education
       if (profile.education.isNotEmpty) {
