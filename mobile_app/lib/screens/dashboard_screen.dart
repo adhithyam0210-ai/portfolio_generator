@@ -7,13 +7,11 @@ import '../providers/portfolio_provider.dart';
 import '../services/supabase_service.dart';
 import '../widgets/share_bottom_sheet.dart';
 import 'builder_wizard_screen.dart';
-import 'ats_resume_screen.dart';
 import 'landing_screen.dart';
 import 'portfolio_preview_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
-  final VoidCallback? onOpenAtsResume;
-  const DashboardScreen({super.key, this.onOpenAtsResume});
+  const DashboardScreen({super.key});
 
   Future<void> _handleSignOut(BuildContext context) async {
     final bool? confirmed = await showDialog<bool>(
@@ -392,85 +390,6 @@ class DashboardScreen extends StatelessWidget {
                   _buildChecklistItem(
                     'Uploaded Resume / CV',
                     profile.personal.resumeUrl != null && profile.personal.resumeUrl!.isNotEmpty,
-                  ),
-                ],
-              ),
-            ),
-            // ATS Resume Card
-            Container(
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF1E293B), Color(0xFF0F172A)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: const [
-                  BoxShadow(color: Color(0x10000000), blurRadius: 12, offset: Offset(0, 4)),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF2563EB).withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFF3B82F6).withValues(alpha: 0.4)),
-                    ),
-                    child: const Icon(Icons.description, color: Color(0xFF60A5FA), size: 22),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Text(
-                              'ATS Resume',
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
-                            ),
-                            const SizedBox(width: 6),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF059669),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: const Text('1-PAGE SPEC', style: TextStyle(fontSize: 8.5, fontWeight: FontWeight.w900, color: Colors.white)),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 3),
-                        const Text(
-                          'Auto-compiled 1-page ATS format.',
-                          style: TextStyle(fontSize: 11, color: Color(0xFF94A3B8)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (onOpenAtsResume != null) {
-                        onOpenAtsResume!();
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const AtsResumeScreen()),
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2563EB),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    ),
-                    child: const Text('View →', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),

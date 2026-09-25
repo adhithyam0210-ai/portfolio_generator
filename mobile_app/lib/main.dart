@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'providers/portfolio_provider.dart';
-import 'screens/ats_resume_screen.dart';
 import 'screens/builder_wizard_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/portfolio_preview_screen.dart';
@@ -71,16 +70,10 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
     final provider = Provider.of<PortfolioProvider>(context);
 
     final screens = [
-      DashboardScreen(
-        onOpenAtsResume: () => setState(() => _currentIndex = 2),
-      ),
+      const DashboardScreen(),
       BuilderWizardScreen(
         initialStep: 1,
         onBack: () => setState(() => _currentIndex = 0),
-      ),
-      AtsResumeScreen(
-        onBack: () => setState(() => _currentIndex = 0),
-        onNavigateToBuilder: () => setState(() => _currentIndex = 1),
       ),
       PortfolioPreviewScreen(
         profile: provider.profile,
@@ -119,11 +112,6 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
               icon: Icon(Icons.edit_note_outlined),
               selectedIcon: Icon(Icons.edit_note, color: Color(0xFF2563EB)),
               label: 'Builder',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.description_outlined),
-              selectedIcon: Icon(Icons.description, color: Color(0xFF2563EB)),
-              label: 'ATS Resume',
             ),
             NavigationDestination(
               icon: Icon(Icons.visibility_outlined),

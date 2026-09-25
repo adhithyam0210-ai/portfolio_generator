@@ -792,15 +792,19 @@ class PortfolioPreviewScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'STUDIO NORDIC • ${profile.personal.fullName.toUpperCase()}',
-              style: _getMonospaceStyle(
-                fontSize: 10,
-                letterSpacing: 1.5,
-                color: const Color(0xFF78716C),
-                fontWeight: FontWeight.bold,
+            Expanded(
+              child: Text(
+                'STUDIO NORDIC • ${profile.personal.fullName.toUpperCase()}',
+                overflow: TextOverflow.ellipsis,
+                style: _getMonospaceStyle(
+                  fontSize: 10,
+                  letterSpacing: 1.5,
+                  color: const Color(0xFF78716C),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
+            const SizedBox(width: 8),
             Text(
               'SELECTED WORK',
               style: _getMonospaceStyle(
@@ -827,11 +831,14 @@ class PortfolioPreviewScreen extends StatelessWidget {
           children: [
             Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFFFF6B6B), shape: BoxShape.circle)),
             const SizedBox(width: 8),
-            Text(
-              profile.personal.fullName,
-              style: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A)),
+            Flexible(
+              child: Text(
+                profile.personal.fullName,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A)),
+              ),
             ),
-            const SizedBox(width: 6),
+            const SizedBox(width: 4),
             Text(
               '/ UI•UX Case Studies',
               style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w600, color: const Color(0xFF94A3B8)),
@@ -2892,6 +2899,49 @@ class PortfolioPreviewScreen extends StatelessWidget {
       );
     }
 
+    if (cfg.isCyberMatrix) {
+      return Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF090D0F),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.7)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    exp.role,
+                    style: _getMonospaceStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '${exp.startDate} - ${exp.endDate}',
+                  style: _getMonospaceStyle(fontSize: 10, color: cfg.primaryColor, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            const SizedBox(height: 3),
+            Text(
+              exp.company,
+              style: _getMonospaceStyle(fontSize: 11, color: cfg.primaryColor),
+            ),
+            if (exp.description.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                exp.description.join(' • '),
+                style: _getMonospaceStyle(fontSize: 10.5, color: const Color(0xFFCBD5E1), height: 1.4),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: _cardBoxDecoration(cfg),
@@ -2901,10 +2951,13 @@ class PortfolioPreviewScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                exp.role,
-                style: _getTitleStyle(cfg, fontSize: 14),
+              Expanded(
+                child: Text(
+                  exp.role,
+                  style: _getTitleStyle(cfg, fontSize: 14),
+                ),
               ),
+              const SizedBox(width: 8),
               Text(
                 '${exp.startDate} - ${exp.endDate}',
                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: cfg.primaryColor),
@@ -3029,6 +3082,49 @@ class PortfolioPreviewScreen extends StatelessWidget {
         ),
       );
     }
+    if (cfg.isCyberMatrix) {
+      return Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF090D0F),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.7)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    edu.degree,
+                    style: _getMonospaceStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '${edu.startYear} - ${edu.endYear}',
+                  style: _getMonospaceStyle(fontSize: 10, color: cfg.primaryColor, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            const SizedBox(height: 3),
+            Text(
+              edu.institution,
+              style: _getMonospaceStyle(fontSize: 11, color: cfg.primaryColor),
+            ),
+            if (edu.fieldOfStudy.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Text(
+                'Field: ${edu.fieldOfStudy}',
+                style: _getMonospaceStyle(fontSize: 10.5, color: const Color(0xFFCBD5E1)),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: _cardBoxDecoration(cfg),
@@ -3044,6 +3140,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
                   style: _getTitleStyle(cfg, fontSize: 14),
                 ),
               ),
+              const SizedBox(width: 8),
               Text(
                 '${edu.startYear} - ${edu.endYear}',
                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: cfg.primaryColor),
@@ -3258,13 +3355,15 @@ class PortfolioPreviewScreen extends StatelessWidget {
       children: [
         Icon(icon, size: 16, color: iconColor),
         const SizedBox(width: 8),
-        Text(
-          title,
-          style: cfg.isTerminal || cfg.isCyberMatrix
-              ? _getMonospaceStyle(fontSize: 13, fontWeight: FontWeight.bold, color: textColor)
-              : cfg.isEditorial
-                  ? _getEditorialStyle(fontSize: 16, fontWeight: FontWeight.w800, color: textColor)
-                  : _getTitleStyle(cfg, fontSize: 14),
+        Expanded(
+          child: Text(
+            title,
+            style: cfg.isTerminal || cfg.isCyberMatrix
+                ? _getMonospaceStyle(fontSize: 13, fontWeight: FontWeight.bold, color: textColor)
+                : cfg.isEditorial
+                    ? _getEditorialStyle(fontSize: 16, fontWeight: FontWeight.w800, color: textColor)
+                    : _getTitleStyle(cfg, fontSize: 14),
+          ),
         ),
       ],
     );
