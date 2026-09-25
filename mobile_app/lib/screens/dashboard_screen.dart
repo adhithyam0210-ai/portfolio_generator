@@ -7,15 +7,16 @@ import '../providers/portfolio_provider.dart';
 import '../services/supabase_service.dart';
 import '../widgets/share_bottom_sheet.dart';
 import 'builder_wizard_screen.dart';
+import 'ats_resume_screen.dart';
 import 'landing_screen.dart';
 import 'portfolio_preview_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
+  final VoidCallback? onOpenAtsResume;
+  const DashboardScreen({super.key, this.onOpenAtsResume});
 
-  Future<void> _handleTwoStepSignOut(BuildContext context) async {
-    // Confirmation Dialog 1: Initial Prompt
-    final bool? firstConfirm = await showDialog<bool>(
+  Future<void> _handleSignOut(BuildContext context) async {
+    final bool? confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogCtx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -32,71 +33,20 @@ class DashboardScreen extends StatelessWidget {
             const SizedBox(width: 12),
             const Expanded(
               child: Text(
-                'Sign Out? (1 of 2)',
+                'Sign Out',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
           ],
         ),
         content: const Text(
-          'Are you sure you want to sign out from your Portfolify account session?',
+          'Are you sure you want to sign out from your Portfolify account?',
           style: TextStyle(fontSize: 14, color: Color(0xFF475569)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogCtx, false),
             child: const Text('Cancel', style: TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.w600)),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFF1F5F9),
-              foregroundColor: const Color(0xFF0F172A),
-              elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            ),
-            onPressed: () => Navigator.pop(dialogCtx, true),
-            child: const Text('Continue →', style: TextStyle(fontWeight: FontWeight.bold)),
-          ),
-        ],
-      ),
-    );
-
-    if (firstConfirm != true) return;
-
-    if (!context.mounted) return;
-
-    // Confirmation Dialog 2: Final Warning Confirmation
-    final bool? finalConfirm = await showDialog<bool>(
-      context: context,
-      builder: (dialogCtx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFEF2F2),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Icon(Icons.warning_amber_rounded, color: Color(0xFFDC2626), size: 24),
-            ),
-            const SizedBox(width: 12),
-            const Expanded(
-              child: Text(
-                'Final Confirmation (2 of 2)',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w900, color: Color(0xFFDC2626)),
-              ),
-            ),
-          ],
-        ),
-        content: const Text(
-          'Please confirm: Signing out will end your session. Any unpublished changes will remain on this device, but you will need your credentials to log back in.\n\nDo you definitely want to sign out now?',
-          style: TextStyle(fontSize: 13.5, color: Color(0xFF334155), height: 1.4),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogCtx, false),
-            child: const Text('Stay Logged In', style: TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.w600)),
           ),
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
@@ -107,16 +57,15 @@ class DashboardScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             ),
             onPressed: () => Navigator.pop(dialogCtx, true),
-            icon: const Icon(Icons.check, size: 18),
-            label: const Text('Yes, Sign Out Now', style: TextStyle(fontWeight: FontWeight.bold)),
+            icon: const Icon(Icons.logout_rounded, size: 16),
+            label: const Text('Sign Out', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         ],
       ),
     );
 
-    if (finalConfirm != true) return;
+    if (confirmed != true) return;
 
-    // Execute Sign Out
     try {
       await SupabaseService().signOut();
     } catch (_) {}
@@ -171,20 +120,11 @@ class DashboardScreen extends StatelessWidget {
           ],
         ),
         actions: [
-          if (provider.isSyncing)
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: SizedBox(
-                width: 16,
-                height: 16,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
-            ),
-          // Two-Step Sign Out Header Button
+          // Single-Step Sign Out Header Button
           Padding(
             padding: const EdgeInsets.only(right: 12),
             child: InkWell(
-              onTap: () => _handleTwoStepSignOut(context),
+              onTap: () => _handleSignOut(context),
               borderRadius: BorderRadius.circular(10),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -245,46 +185,6 @@ class DashboardScreen extends StatelessWidget {
                           profile.personal.headline,
                           style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
                         ),
-                        const SizedBox(height: 14),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: [
-                            ElevatedButton.icon(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (_) => const BuilderWizardScreen(initialStep: 1)),
-                                );
-                              },
-                              icon: const Icon(Icons.edit, size: 14),
-                              label: const Text('Open Builder', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF2563EB),
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              ),
-                            ),
-                            OutlinedButton.icon(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (_) => PortfolioPreviewScreen(profile: profile)),
-                                );
-                              },
-                              icon: const Icon(Icons.visibility, size: 14),
-                              label: const Text('Live View', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: Colors.white,
-                                side: const BorderSide(color: Colors.white24),
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              ),
-                            ),
-                          ],
-                        ),
-
                       ],
                     ),
                   ),
@@ -323,25 +223,6 @@ class DashboardScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-
-            // Sync Status Chip
-            if (provider.syncMessage != null)
-              Container(
-                margin: const EdgeInsets.only(bottom: 16),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.blue.shade200),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.cloud_done, size: 16, color: Color(0xFF2563EB)),
-                    const SizedBox(width: 8),
-                    Text(provider.syncMessage!, style: const TextStyle(fontSize: 12, color: Color(0xFF2563EB), fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              ),
 
             // Public Portfolio Link Card
             Container(
@@ -515,6 +396,85 @@ class DashboardScreen extends StatelessWidget {
                 ],
               ),
             ),
+            // ATS Resume Card
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF1E293B), Color(0xFF0F172A)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: const [
+                  BoxShadow(color: Color(0x10000000), blurRadius: 12, offset: Offset(0, 4)),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF2563EB).withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: const Color(0xFF3B82F6).withValues(alpha: 0.4)),
+                    ),
+                    child: const Icon(Icons.description, color: Color(0xFF60A5FA), size: 22),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Text(
+                              'ATS Resume',
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                            const SizedBox(width: 6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF059669),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: const Text('1-PAGE SPEC', style: TextStyle(fontSize: 8.5, fontWeight: FontWeight.w900, color: Colors.white)),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 3),
+                        const Text(
+                          'Auto-compiled 1-page ATS format.',
+                          style: TextStyle(fontSize: 11, color: Color(0xFF94A3B8)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (onOpenAtsResume != null) {
+                        onOpenAtsResume!();
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const AtsResumeScreen()),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2563EB),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                    child: const Text('View →', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 16),
 
             // Analytics Grid
@@ -600,6 +560,7 @@ class DashboardScreen extends StatelessWidget {
           final base64Part = avatarUrl.split(',').last;
           return Image.memory(
             base64Decode(base64Part),
+            gaplessPlayback: true,
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
@@ -608,6 +569,7 @@ class DashboardScreen extends StatelessWidget {
       } else if (avatarUrl.startsWith('http')) {
         return Image.network(
           avatarUrl,
+          gaplessPlayback: true,
           fit: BoxFit.cover,
           width: double.infinity,
           height: double.infinity,

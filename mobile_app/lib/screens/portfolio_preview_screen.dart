@@ -498,7 +498,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
                           ? '> STACK --LIST'
                           : cfg.isCyberMatrix
                               ? '[SECURITY ARSENAL // SKILLS]'
-                              : 'Technical Arsenal & Skills',
+                              : cfg.isNordic
+                                  ? '02 / TECHNICAL STACK'
+                                  : cfg.isBento
+                                      ? 'Design & Engineering Tooling'
+                                      : 'Technical Arsenal & Skills',
                       Icons.code,
                       cfg.primaryColor,
                       cfg.textColor,
@@ -516,7 +520,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
                           ? '> DEPLOYED_PROJECTS --ALL'
                           : cfg.isCyberMatrix
                               ? '[SECURITY LABS & TARGETS]'
-                              : 'Hardening Labs & Projects',
+                              : cfg.isNordic
+                                  ? '01 / SELECTED WORK (${profile.projects.length})'
+                                  : cfg.isBento
+                                      ? 'Featured Case Studies'
+                                      : 'Hardening Labs & Projects',
                       Icons.rocket_launch,
                       cfg.secondaryColor,
                       cfg.textColor,
@@ -535,9 +543,15 @@ class PortfolioPreviewScreen extends StatelessWidget {
                     _buildSectionHeader(
                       cfg.isTerminal
                           ? '> CAREER_TRACE --HISTORY'
-                          : cfg.isEditorial
-                              ? 'Professional Engagements'
-                              : 'Work Experience',
+                          : cfg.isCyberMatrix
+                              ? '[OPERATIVE HISTORY // ROLES]'
+                              : cfg.isNordic
+                                  ? '03 / EXPERIENCE HISTORY'
+                                  : cfg.isBento
+                                      ? 'Work Experience & Journey'
+                                      : cfg.isEditorial
+                                          ? 'Professional Engagements'
+                                          : 'Work Experience',
                       Icons.work_outline,
                       cfg.primaryColor,
                       cfg.textColor,
@@ -556,9 +570,15 @@ class PortfolioPreviewScreen extends StatelessWidget {
                     _buildSectionHeader(
                       cfg.isTerminal
                           ? '> CREDENTIALS --ACADEMIC'
-                          : cfg.isEditorial
-                              ? 'Academic Foundations'
-                              : 'Education & Credentials',
+                          : cfg.isCyberMatrix
+                              ? '[ACADEMIC CLEARANCE // DEGREES]'
+                              : cfg.isNordic
+                                  ? '04 / ACADEMIC FOUNDATIONS'
+                                  : cfg.isBento
+                                      ? 'Academic Background & Degrees'
+                                      : cfg.isEditorial
+                                          ? 'Academic Foundations'
+                                          : 'Education & Credentials',
                       Icons.school_outlined,
                       cfg.primaryColor,
                       cfg.textColor,
@@ -754,6 +774,76 @@ class PortfolioPreviewScreen extends StatelessWidget {
                 letterSpacing: 1.5,
                 color: cfg.primaryColor,
               ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isNordic) {
+      // Scandinavian Minimalist Top Bar (Matching MinimalNordicTemplate)
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: const BoxDecoration(
+          color: Color(0xFFF6F4EF),
+          border: Border(bottom: BorderSide(color: Color(0xFFE2DDD3), width: 1)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'STUDIO NORDIC • ${profile.personal.fullName.toUpperCase()}',
+              style: _getMonospaceStyle(
+                fontSize: 10,
+                letterSpacing: 1.5,
+                color: const Color(0xFF78716C),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              'SELECTED WORK',
+              style: _getMonospaceStyle(
+                fontSize: 9,
+                letterSpacing: 1.0,
+                color: const Color(0xFFA8A29E),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isBento) {
+      // Bento UI/UX Top Bar (Matching UIUXDesignerTemplate)
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1)),
+        ),
+        child: Row(
+          children: [
+            Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFFFF6B6B), shape: BoxShape.circle)),
+            const SizedBox(width: 8),
+            Text(
+              profile.personal.fullName,
+              style: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A)),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              '/ UI•UX Case Studies',
+              style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w600, color: const Color(0xFF94A3B8)),
+            ),
+            const Spacer(),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0F172A),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Text('Download CV', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: Colors.white)),
             ),
           ],
         ),
@@ -1252,7 +1342,461 @@ class PortfolioPreviewScreen extends StatelessWidget {
       );
     }
 
-    // Default Glass / Bento / Nordic Card
+    if (cfg.isNordic) {
+      // Scandinavian Minimalist / Swiss Architectural Card (Matching MinimalNordicTemplate)
+      return Container(
+        padding: const EdgeInsets.all(22),
+        decoration: BoxDecoration(
+          color: const Color(0xFFEFECE6),
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: const Color(0xFFE2DDD3), width: 1.2),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '— ARCHITECTURAL & SOFTWARE PORTFOLIO',
+              style: _getMonospaceStyle(
+                fontSize: 10,
+                letterSpacing: 1.8,
+                color: const Color(0xFF78716C),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 14),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        profile.personal.fullName,
+                        style: GoogleFonts.dmSerifDisplay(
+                          fontSize: 28,
+                          fontWeight: FontWeight.normal,
+                          color: const Color(0xFF1C1B1A),
+                          letterSpacing: -0.5,
+                          height: 1.1,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        profile.personal.headline,
+                        style: GoogleFonts.inter(
+                          fontSize: 13,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w400,
+                          color: const Color(0xFF44403C),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 14),
+                // Nordic Architectural Profile Picture Box
+                Container(
+                  width: 76,
+                  height: 76,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: const Color(0xFFD5CEC0), width: 1.5),
+                    color: const Color(0xFFEFECE6),
+                    boxShadow: const [
+                      BoxShadow(color: Color(0x10000000), blurRadius: 6, offset: Offset(0, 2)),
+                    ],
+                  ),
+                  padding: const EdgeInsets.all(3),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: _buildAvatarImage(profile.personal.avatarUrl, profile.personal.fullName, cfg),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Text(
+              profile.personal.bio,
+              style: GoogleFonts.inter(
+                fontSize: 12.5,
+                color: const Color(0xFF57534E),
+                height: 1.55,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                if (profile.personal.location.isNotEmpty)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: const Color(0xFFD5CEC0)),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.location_on, size: 12, color: Color(0xFF78716C)),
+                        const SizedBox(width: 4),
+                        Text(
+                          profile.personal.location,
+                          style: GoogleFonts.inter(fontSize: 11, color: const Color(0xFF57534E), fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (profile.personal.email.isNotEmpty)
+                  InkWell(
+                    onTap: () => _launchUrl('mailto:${profile.personal.email}'),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xFF1C1B1A), width: 1.2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text('Email →', style: _getMonospaceStyle(fontSize: 11, color: const Color(0xFF1C1B1A), fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                if (profile.personal.githubUrl.isNotEmpty)
+                  InkWell(
+                    onTap: () => _launchUrl(profile.personal.githubUrl),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xFF1C1B1A), width: 1.2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text('GitHub →', style: _getMonospaceStyle(fontSize: 11, color: const Color(0xFF1C1B1A), fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                if (profile.personal.linkedinUrl.isNotEmpty)
+                  InkWell(
+                    onTap: () => _launchUrl(profile.personal.linkedinUrl),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xFF1C1B1A), width: 1.2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text('LinkedIn →', style: _getMonospaceStyle(fontSize: 11, color: const Color(0xFF1C1B1A), fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isBento) {
+      // Bento UI/UX Designer Card (Matching Web UIUXDesignerTemplate)
+      return Container(
+        padding: const EdgeInsets.all(22),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+          boxShadow: const [
+            BoxShadow(color: Color(0x0A0F172A), blurRadius: 16, offset: Offset(0, 4)),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Target role pill badge with palette icon
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFF1F1),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFFFFD4D4)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.palette_outlined, size: 13, color: Color(0xFFFF6B6B)),
+                  const SizedBox(width: 5),
+                  Text(
+                    profile.personal.targetRole.isNotEmpty
+                        ? profile.personal.targetRole
+                        : 'Software Engineer / Web & App Dev',
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFFFF6B6B),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+
+            // Giant Hero Title with coral highlight
+            RichText(
+              text: TextSpan(
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                  color: const Color(0xFF0F172A),
+                  height: 1.15,
+                  letterSpacing: -0.6,
+                ),
+                children: const [
+                  TextSpan(text: 'Crafting intuitive accessible '),
+                  TextSpan(
+                    text: 'user experience',
+                    style: TextStyle(color: Color(0xFFFF6B6B)),
+                  ),
+                  TextSpan(text: ' & digital products.'),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            // Headline
+            Text(
+              profile.personal.headline,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: const Color(0xFF334155),
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Text(
+                    profile.personal.bio,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFF64748B),
+                      height: 1.45,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+                // Bento Avatar with subtle ring
+                Container(
+                  width: 72,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(22),
+                    border: Border.all(color: Colors.white, width: 3),
+                    boxShadow: const [
+                      BoxShadow(color: Color(0x18FF6B6B), blurRadius: 14, offset: Offset(0, 4)),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: _buildAvatarImage(profile.personal.avatarUrl, profile.personal.fullName, cfg),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Bento action pills
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                if (profile.personal.linkedinUrl.isNotEmpty)
+                  InkWell(
+                    onTap: () => _launchUrl(profile.personal.linkedinUrl),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0F172A),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: const [
+                          BoxShadow(color: Color(0x200F172A), blurRadius: 6, offset: Offset(0, 2)),
+                        ],
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.link, size: 13, color: Colors.white),
+                          SizedBox(width: 5),
+                          Text('LinkedIn Profile', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Colors.white)),
+                        ],
+                      ),
+                    ),
+                  ),
+                if (profile.personal.githubUrl.isNotEmpty)
+                  InkWell(
+                    onTap: () => _launchUrl(profile.personal.githubUrl),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF1F5F9),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: const Color(0xFFCBD5E1)),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.code, size: 13, color: Color(0xFF0F172A)),
+                          SizedBox(width: 5),
+                          Text('GitHub / Work', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
+                        ],
+                      ),
+                    ),
+                  ),
+                if (profile.personal.email.isNotEmpty)
+                  InkWell(
+                    onTap: () => _launchUrl('mailto:${profile.personal.email}'),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF8FAFC),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.mail_outline, size: 13, color: Color(0xFFFF6B6B)),
+                          SizedBox(width: 5),
+                          Text('Email', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF334155))),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isAiResearcher) {
+      // AI Researcher Academic / Neural Theme Card
+      return Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: const Color(0xFF18122B),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFFD946EF).withValues(alpha: 0.5), width: 1.5),
+          boxShadow: [
+            BoxShadow(color: const Color(0xFFD946EF).withValues(alpha: 0.15), blurRadius: 18),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFD946EF).withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: const Color(0xFFD946EF).withValues(alpha: 0.4)),
+                  ),
+                  child: Text(
+                    'arXiv:2409.STUDIO',
+                    style: _getMonospaceStyle(fontSize: 10, fontWeight: FontWeight.bold, color: const Color(0xFFD946EF)),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text('// PEER REVIEWED', style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFF22D3EE))),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        profile.personal.fullName,
+                        style: GoogleFonts.spaceGrotesk(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        profile.personal.headline,
+                        style: GoogleFonts.spaceGrotesk(fontSize: 12, fontWeight: FontWeight.w600, color: const Color(0xFFC084FC)),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  width: 68,
+                  height: 68,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: const Color(0xFF22D3EE), width: 2),
+                    boxShadow: [
+                      BoxShadow(color: const Color(0xFF22D3EE).withValues(alpha: 0.3), blurRadius: 10),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: _buildAvatarImage(profile.personal.avatarUrl, profile.personal.fullName, cfg),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              profile.personal.bio,
+              style: GoogleFonts.spaceGrotesk(fontSize: 12, color: const Color(0xFFCBD5E1), height: 1.45),
+            ),
+            const SizedBox(height: 14),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                if (profile.personal.githubUrl.isNotEmpty)
+                  InkWell(
+                    onTap: () => _launchUrl(profile.personal.githubUrl),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF281F3D),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: const Color(0xFFD946EF).withValues(alpha: 0.5)),
+                      ),
+                      child: Text('Code / Repos ↗', style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFFD946EF), fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                if (profile.personal.email.isNotEmpty)
+                  InkWell(
+                    onTap: () => _launchUrl('mailto:${profile.personal.email}'),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF281F3D),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: const Color(0xFF22D3EE).withValues(alpha: 0.5)),
+                      ),
+                      child: Text('Contact PI ↗', style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFF22D3EE), fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Default Glass / Modern Card
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: _cardBoxDecoration(cfg),
@@ -1420,6 +1964,83 @@ class PortfolioPreviewScreen extends StatelessWidget {
       );
     }
 
+    if (cfg.isNordic) {
+      // Scandinavian Minimalist Scorecard
+      return Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        decoration: BoxDecoration(
+          color: const Color(0xFFEFECE6),
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: const Color(0xFFE2DDD3), width: 1),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Column(
+              children: [
+                Text(projectsCount, style: GoogleFonts.dmSerifDisplay(fontSize: 18, color: const Color(0xFF1C1B1A))),
+                Text('PROJECTS', style: _getMonospaceStyle(fontSize: 9, color: const Color(0xFF78716C), letterSpacing: 1.0)),
+              ],
+            ),
+            Container(width: 1, height: 24, color: const Color(0xFFD5CEC0)),
+            Column(
+              children: [
+                Text(skillsCount, style: GoogleFonts.dmSerifDisplay(fontSize: 18, color: const Color(0xFF1C1B1A))),
+                Text('TECH STACK', style: _getMonospaceStyle(fontSize: 9, color: const Color(0xFF78716C), letterSpacing: 1.0)),
+              ],
+            ),
+            Container(width: 1, height: 24, color: const Color(0xFFD5CEC0)),
+            Column(
+              children: [
+                Text(rolesCount, style: GoogleFonts.dmSerifDisplay(fontSize: 18, color: const Color(0xFF1C1B1A))),
+                Text('CAREER', style: _getMonospaceStyle(fontSize: 9, color: const Color(0xFF78716C), letterSpacing: 1.0)),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isBento) {
+      // Bento Soft Floating Metric Bar
+      return Container(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+          boxShadow: const [
+            BoxShadow(color: Color(0x060F172A), blurRadius: 10, offset: Offset(0, 3)),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Column(
+              children: [
+                Text(projectsCount, style: GoogleFonts.plusJakartaSans(fontSize: 18, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A))),
+                const Text('Case Studies', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFFFF6B6B))),
+              ],
+            ),
+            Container(width: 1, height: 28, color: const Color(0xFFF1F5F9)),
+            Column(
+              children: [
+                Text(skillsCount, style: GoogleFonts.plusJakartaSans(fontSize: 18, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A))),
+                const Text('Design Tooling', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF64748B))),
+              ],
+            ),
+            Container(width: 1, height: 28, color: const Color(0xFFF1F5F9)),
+            Column(
+              children: [
+                Text(rolesCount, style: GoogleFonts.plusJakartaSans(fontSize: 18, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A))),
+                const Text('Experience', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF64748B))),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
     // Default Scorecard (No Live Views!)
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
@@ -1445,6 +2066,115 @@ class PortfolioPreviewScreen extends StatelessWidget {
       ...profile.skills.frameworks,
       ...profile.skills.tools,
     ];
+
+    if (cfg.isNordic) {
+      // Minimalist Nordic Architectural Stack Box
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: const Color(0xFFEFECE6),
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: const Color(0xFFE2DDD3), width: 1),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (profile.skills.languages.isNotEmpty) ...[
+              Text('LANGUAGES', style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFF78716C), letterSpacing: 1.2, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 4),
+              Text(profile.skills.languages.join(', '), style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: const Color(0xFF1C1B1A))),
+              const SizedBox(height: 12),
+            ],
+            if (profile.skills.frameworks.isNotEmpty) ...[
+              Text('FRAMEWORKS', style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFF78716C), letterSpacing: 1.2, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 4),
+              Text(profile.skills.frameworks.join(', '), style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: const Color(0xFF1C1B1A))),
+              const SizedBox(height: 12),
+            ],
+            if (profile.skills.tools.isNotEmpty) ...[
+              Text('DEVELOPER TOOLS', style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFF78716C), letterSpacing: 1.2, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 4),
+              Text(profile.skills.tools.join(', '), style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: const Color(0xFF1C1B1A))),
+            ],
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isBento) {
+      // Bento Soft Categorized Skill Cards
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+          boxShadow: const [
+            BoxShadow(color: Color(0x060F172A), blurRadius: 10, offset: Offset(0, 3)),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (profile.skills.languages.isNotEmpty) ...[
+              Text('CORE & LANGUAGES', style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w800, color: const Color(0xFF64748B))),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: profile.skills.languages.map((s) => Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF1F1),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: const Color(0xFFFFD4D4)),
+                  ),
+                  child: Text(s, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFFFF6B6B))),
+                )).toList(),
+              ),
+              const SizedBox(height: 14),
+            ],
+            if (profile.skills.frameworks.isNotEmpty) ...[
+              Text('FRAMEWORKS & LIBRARIES', style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w800, color: const Color(0xFF64748B))),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: profile.skills.frameworks.map((s) => Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF1F5F9),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: const Color(0xFFE2E8F0)),
+                  ),
+                  child: Text(s, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
+                )).toList(),
+              ),
+              const SizedBox(height: 14),
+            ],
+            if (profile.skills.tools.isNotEmpty) ...[
+              Text('TOOLS & DESIGN ECOSYSTEM', style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w800, color: const Color(0xFF64748B))),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: profile.skills.tools.map((s) => Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: const Color(0xFFCBD5E1)),
+                  ),
+                  child: Text(s, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF334155))),
+                )).toList(),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
 
     if (cfg.isPopArt) {
       // Colorful candy tags with 2px black borders and shadows
@@ -1664,6 +2394,246 @@ class PortfolioPreviewScreen extends StatelessWidget {
       );
     }
 
+    if (cfg.isNordic) {
+      final idx = profile.projects.indexOf(project);
+      return Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: const Color(0xFFEFECE6),
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: const Color(0xFFE2DDD3), width: 1),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'PROJ_0${idx >= 0 ? idx + 1 : 1}',
+              style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFF78716C), letterSpacing: 1.0),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              project.title,
+              style: GoogleFonts.dmSerifDisplay(fontSize: 18, color: const Color(0xFF1C1B1A)),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              project.description,
+              style: GoogleFonts.inter(fontSize: 12, color: const Color(0xFF57534E), height: 1.45),
+            ),
+            if (project.technologies.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: project.technologies.map((t) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: const Color(0xFFD5CEC0)),
+                    ),
+                    child: Text(t, style: _getMonospaceStyle(fontSize: 9, color: const Color(0xFF57534E))),
+                  );
+                }).toList(),
+              ),
+            ],
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                if (project.githubUrl != null && project.githubUrl!.isNotEmpty)
+                  GestureDetector(
+                    onTap: () => _launchUrl(project.githubUrl!),
+                    child: Text('GitHub →', style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.bold, color: const Color(0xFF1C1B1A))),
+                  ),
+                if (project.liveUrl != null && project.liveUrl!.isNotEmpty) ...[
+                  const SizedBox(width: 14),
+                  GestureDetector(
+                    onTap: () => _launchUrl(project.liveUrl!),
+                    child: Text('Live Site ↗', style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.bold, color: const Color(0xFF1C1B1A))),
+                  ),
+                ],
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isBento) {
+      return Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+          boxShadow: const [
+            BoxShadow(color: Color(0x080F172A), blurRadius: 10, offset: Offset(0, 3)),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF1F1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Text('FEATURED CASE STUDY', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Color(0xFFFF6B6B))),
+                ),
+                if (project.liveUrl != null && project.liveUrl!.isNotEmpty)
+                  GestureDetector(
+                    onTap: () => _launchUrl(project.liveUrl!),
+                    child: const Row(
+                      children: [
+                        Text('Case Study', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Color(0xFFFF6B6B))),
+                        SizedBox(width: 2),
+                        Icon(Icons.arrow_forward, size: 12, color: Color(0xFFFF6B6B)),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              project.title,
+              style: GoogleFonts.plusJakartaSans(fontSize: 16, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A)),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              project.description,
+              style: GoogleFonts.plusJakartaSans(fontSize: 12, color: const Color(0xFF64748B), height: 1.4),
+            ),
+            if (project.technologies.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: project.technologies.map((t) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF1F5F9),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(t, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF334155))),
+                  );
+                }).toList(),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isAiResearcher) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1E1735),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: const Color(0xFFD946EF).withValues(alpha: 0.4)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text('[RESEARCH BENCHMARK]', style: _getMonospaceStyle(fontSize: 9, color: const Color(0xFF22D3EE), fontWeight: FontWeight.bold)),
+                const Spacer(),
+                if (project.liveUrl != null && project.liveUrl!.isNotEmpty)
+                  GestureDetector(
+                    onTap: () => _launchUrl(project.liveUrl!),
+                    child: Text('Read Paper ↗', style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFFD946EF), fontWeight: FontWeight.bold)),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              project.title,
+              style: GoogleFonts.spaceGrotesk(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              project.description,
+              style: GoogleFonts.spaceGrotesk(fontSize: 11, color: const Color(0xFFCBD5E1), height: 1.4),
+            ),
+            if (project.technologies.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: project.technologies.map((t) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF281F3D),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: const Color(0xFF22D3EE).withValues(alpha: 0.4)),
+                    ),
+                    child: Text(t, style: _getMonospaceStyle(fontSize: 9, color: const Color(0xFF22D3EE))),
+                  );
+                }).toList(),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isCyberMatrix) {
+      return Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF090D0F),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.7)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.shield_outlined, size: 13, color: cfg.primaryColor),
+                const SizedBox(width: 6),
+                Text('[TARGET // LAB]', style: _getMonospaceStyle(fontSize: 10, color: cfg.primaryColor, fontWeight: FontWeight.bold)),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: cfg.primaryColor.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text('VERIFIED', style: _getMonospaceStyle(fontSize: 9, color: cfg.primaryColor, fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              project.title.toUpperCase(),
+              style: _getMonospaceStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              project.description,
+              style: _getMonospaceStyle(fontSize: 11, color: const Color(0xFFCBD5E1), height: 1.4),
+            ),
+            if (project.technologies.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 6,
+                children: project.technologies.map((t) {
+                  return Text('[$t]', style: _getMonospaceStyle(fontSize: 10, color: cfg.primaryColor));
+                }).toList(),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
+
     // Default Project Card
     return Container(
       padding: const EdgeInsets.all(16),
@@ -1725,6 +2695,203 @@ class PortfolioPreviewScreen extends StatelessWidget {
   // --- EXPERIENCE & EDUCATION CARDS ---
 
   Widget _buildExperienceCard(ExperienceItem exp, TemplateConfig cfg) {
+    if (cfg.isNordic) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color(0xFFEFECE6),
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: const Color(0xFFE2DDD3), width: 1),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    exp.role,
+                    style: GoogleFonts.dmSerifDisplay(fontSize: 17, color: const Color(0xFF1C1B1A)),
+                  ),
+                ),
+                Text(
+                  '${exp.startDate} – ${exp.endDate}',
+                  style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFF78716C)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 3),
+            Text(
+              exp.company + (exp.location != null && exp.location!.isNotEmpty ? ' — ${exp.location}' : ''),
+              style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w600, color: const Color(0xFF44403C)),
+            ),
+            if (exp.description.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              ...exp.description.map((b) => Padding(
+                padding: const EdgeInsets.only(bottom: 3),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('• ', style: TextStyle(color: Color(0xFF78716C))),
+                    Expanded(
+                      child: Text(b, style: GoogleFonts.inter(fontSize: 11.5, color: const Color(0xFF57534E), height: 1.4)),
+                    ),
+                  ],
+                ),
+              )),
+            ],
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isBento) {
+      return Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    exp.role,
+                    style: GoogleFonts.plusJakartaSans(fontSize: 15, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A)),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF1F5F9),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    '${exp.startDate} - ${exp.endDate}',
+                    style: const TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Color(0xFF64748B)),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              exp.company,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFFFF6B6B)),
+            ),
+            if (exp.description.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              ...exp.description.map((d) => Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.check_circle_outline, size: 13, color: Color(0xFFFF6B6B)),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        d,
+                        style: GoogleFonts.plusJakartaSans(fontSize: 11.5, color: const Color(0xFF475569), height: 1.4),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+            ],
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isPopArt) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFF0F172A), width: 2),
+          boxShadow: const [
+            BoxShadow(color: Color(0xFF0F172A), offset: Offset(2.5, 2.5)),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    exp.role,
+                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w900, color: Color(0xFF0F172A)),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFEF08A),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: const Color(0xFF0F172A), width: 1.2),
+                  ),
+                  child: Text('${exp.startDate} - ${exp.endDate}', style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Color(0xFF0F172A))),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(exp.company, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Color(0xFFE11D48))),
+            if (exp.description.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(exp.description.join(' • '), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Color(0xFF334155), height: 1.4)),
+            ],
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isTerminal) {
+      return Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF080C16),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFF1E293B)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text('\$ git log -1 --role', style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFF10B981))),
+                const Spacer(),
+                Text('${exp.startDate}..${exp.endDate}', style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFF64748B))),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'commit: ${exp.role}',
+              style: _getMonospaceStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            Text(
+              'author: ${exp.company}',
+              style: _getMonospaceStyle(fontSize: 11, color: cfg.primaryColor),
+            ),
+            if (exp.description.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                exp.description.join('; '),
+                style: _getMonospaceStyle(fontSize: 10.5, color: const Color(0xFF94A3B8)),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: _cardBoxDecoration(cfg),
@@ -1754,7 +2921,6 @@ class PortfolioPreviewScreen extends StatelessWidget {
               exp.description.join(' • '),
               style: _getBodyStyle(cfg, fontSize: 11, color: cfg.subtextColor, height: 1.4),
             ),
-
           ],
         ],
       ),
@@ -1762,6 +2928,107 @@ class PortfolioPreviewScreen extends StatelessWidget {
   }
 
   Widget _buildEducationCard(EducationItem edu, TemplateConfig cfg) {
+    if (cfg.isNordic) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color(0xFFEFECE6),
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: const Color(0xFFE2DDD3), width: 1),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    edu.institution,
+                    style: GoogleFonts.dmSerifDisplay(fontSize: 16, color: const Color(0xFF1C1B1A)),
+                  ),
+                ),
+                Text(
+                  '${edu.startYear} – ${edu.endYear}',
+                  style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFF78716C)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 3),
+            Text(
+              '${edu.degree} in ${edu.fieldOfStudy}${edu.gpa != null && edu.gpa!.isNotEmpty ? ' (GPA: ${edu.gpa})' : ''}',
+              style: GoogleFonts.inter(fontSize: 11.5, fontWeight: FontWeight.w600, color: const Color(0xFF44403C)),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isBento) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    edu.degree,
+                    style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A)),
+                  ),
+                ),
+                Text('${edu.startYear} - ${edu.endYear}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF64748B))),
+              ],
+            ),
+            const SizedBox(height: 3),
+            Text(edu.institution, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFFFF6B6B))),
+            if (edu.fieldOfStudy.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Text('Major: ${edu.fieldOfStudy}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+            ],
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isPopArt) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFF0F172A), width: 2),
+          boxShadow: const [
+            BoxShadow(color: Color(0xFF0F172A), offset: Offset(2.5, 2.5)),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(edu.degree, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w900, color: Color(0xFF0F172A))),
+                ),
+                Text('${edu.startYear} - ${edu.endYear}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Color(0xFF0F172A))),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(edu.institution, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Color(0xFF0284C7))),
+            if (edu.fieldOfStudy.isNotEmpty)
+              Text('Major: ${edu.fieldOfStudy}', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Color(0xFF475569))),
+          ],
+        ),
+      );
+    }
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: _cardBoxDecoration(cfg),
@@ -1881,9 +3148,9 @@ class PortfolioPreviewScreen extends StatelessWidget {
       return BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFF0F172A), width: 2),
+        border: Border.all(color: const Color(0xFF0F172A), width: 2.5),
         boxShadow: const [
-          BoxShadow(color: Color(0xFF0F172A), offset: Offset(3, 3)),
+          BoxShadow(color: Color(0xFF0F172A), offset: Offset(3.5, 3.5)),
         ],
       );
     }
@@ -1892,15 +3159,80 @@ class PortfolioPreviewScreen extends StatelessWidget {
       return BoxDecoration(
         color: const Color(0xFF080C16),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF1E293B)),
+        border: Border.all(color: const Color(0xFF1E293B), width: 1.5),
       );
     }
 
     if (cfg.isCyberMatrix) {
       return BoxDecoration(
         color: const Color(0xFF05080A),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.4)),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.6), width: 1.5),
+        boxShadow: [
+          BoxShadow(color: cfg.primaryColor.withValues(alpha: 0.12), blurRadius: 10),
+        ],
+      );
+    }
+
+    if (cfg.isGlassmorphism) {
+      return BoxDecoration(
+        color: cfg.cardBgColor.withValues(alpha: 0.75),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.18), width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: cfg.primaryColor.withValues(alpha: 0.15),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      );
+    }
+
+    if (cfg.isBento) {
+      return BoxDecoration(
+        color: cfg.cardBgColor,
+        borderRadius: BorderRadius.circular(26),
+        border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.2), width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: cfg.primaryColor.withValues(alpha: 0.08),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      );
+    }
+
+    if (cfg.isNordic) {
+      return BoxDecoration(
+        color: cfg.cardBgColor,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFD6D3D1), width: 1),
+      );
+    }
+
+    if (cfg.isAiResearcher) {
+      return BoxDecoration(
+        color: const Color(0xFF0F0B1E),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFF4338CA), width: 1.5),
+        boxShadow: const [
+          BoxShadow(color: Color(0x304338CA), blurRadius: 12),
+        ],
+      );
+    }
+
+    if (cfg.isEditorial) {
+      return BoxDecoration(
+        color: cfg.cardBgColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border(
+          left: BorderSide(color: cfg.primaryColor, width: 3.5),
+          top: BorderSide(color: cfg.isDark ? Colors.white12 : const Color(0xFFE2E8F0)),
+          right: BorderSide(color: cfg.isDark ? Colors.white12 : const Color(0xFFE2E8F0)),
+          bottom: BorderSide(color: cfg.isDark ? Colors.white12 : const Color(0xFFE2E8F0)),
+        ),
       );
     }
 
@@ -1932,25 +3264,122 @@ class PortfolioPreviewScreen extends StatelessWidget {
               ? _getMonospaceStyle(fontSize: 13, fontWeight: FontWeight.bold, color: textColor)
               : cfg.isEditorial
                   ? _getEditorialStyle(fontSize: 16, fontWeight: FontWeight.w800, color: textColor)
-                  : TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w900,
-                      color: textColor,
-                    ),
+                  : _getTitleStyle(cfg, fontSize: 14),
         ),
       ],
     );
   }
 
   Widget _buildSkillChip(String skill, TemplateConfig cfg) {
+    if (cfg.isPopArt) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFEF08A),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFF0F172A), width: 1.5),
+          boxShadow: const [
+            BoxShadow(color: Color(0xFF0F172A), offset: Offset(1.5, 1.5)),
+          ],
+        ),
+        child: Text(
+          skill,
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 11,
+            fontWeight: FontWeight.w900,
+            color: const Color(0xFF0F172A),
+          ),
+        ),
+      );
+    }
+
+    if (cfg.isTerminal) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: const Color(0xFF0F172A),
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.4)),
+        ),
+        child: Text(
+          '\$ $skill',
+          style: GoogleFonts.firaCode(
+            fontSize: 11,
+            fontWeight: FontWeight.bold,
+            color: cfg.primaryColor,
+          ),
+        ),
+      );
+    }
+
+    if (cfg.isCyberMatrix) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: const Color(0xFF05080A),
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: cfg.primaryColor),
+          boxShadow: [
+            BoxShadow(color: cfg.primaryColor.withValues(alpha: 0.3), blurRadius: 4),
+          ],
+        ),
+        child: Text(
+          '[$skill]',
+          style: GoogleFonts.orbitron(
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+            color: cfg.primaryColor,
+          ),
+        ),
+      );
+    }
+
+    if (cfg.isGlassmorphism) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+        ),
+        child: Text(
+          skill,
+          style: GoogleFonts.outfit(
+            fontSize: 11,
+            fontWeight: FontWeight.bold,
+            color: cfg.textColor,
+          ),
+        ),
+      );
+    }
+
+    if (cfg.isBento) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [cfg.primaryColor.withValues(alpha: 0.2), cfg.secondaryColor.withValues(alpha: 0.2)],
+          ),
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.4)),
+        ),
+        child: Text(
+          skill,
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 11,
+            fontWeight: FontWeight.w800,
+            color: cfg.isDark ? Colors.white : cfg.primaryColor,
+          ),
+        ),
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: cfg.primaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: cfg.primaryColor.withValues(alpha: 0.25),
-        ),
+        border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.25)),
       ),
       child: Text(
         skill,
@@ -1964,6 +3393,37 @@ class PortfolioPreviewScreen extends StatelessWidget {
   }
 
   Widget _buildSocialIcon(IconData icon, VoidCallback onTap, TemplateConfig cfg) {
+    if (cfg.isPopArt) {
+      return GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: const Color(0xFF0F172A), width: 1.5),
+            boxShadow: const [BoxShadow(color: Color(0xFF0F172A), offset: Offset(1.5, 1.5))],
+          ),
+          child: Icon(icon, size: 16, color: const Color(0xFF0F172A)),
+        ),
+      );
+    }
+
+    if (cfg.isTerminal) {
+      return GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0F172A),
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.4)),
+          ),
+          child: Icon(icon, size: 14, color: cfg.primaryColor),
+        ),
+      );
+    }
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
@@ -2057,31 +3517,112 @@ class PortfolioPreviewScreen extends StatelessWidget {
   // --- TYPOGRAPHY ENGINE ---
 
   TextStyle _getTitleStyle(TemplateConfig cfg, {required double fontSize}) {
-    if (cfg.isEditorial) {
-      return _getEditorialStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: cfg.textColor);
+    switch (cfg.archetype) {
+      case TemplateArchetype.terminal:
+        return GoogleFonts.firaCode(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: cfg.textColor,
+        );
+      case TemplateArchetype.cyberMatrix:
+        return GoogleFonts.orbitron(
+          fontSize: fontSize,
+          fontWeight: FontWeight.w900,
+          color: cfg.textColor,
+          letterSpacing: 1.0,
+        );
+      case TemplateArchetype.popArt:
+        return GoogleFonts.plusJakartaSans(
+          fontSize: fontSize,
+          fontWeight: FontWeight.w900,
+          color: cfg.textColor,
+          letterSpacing: -0.5,
+        );
+      case TemplateArchetype.editorial:
+        return GoogleFonts.playfairDisplay(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: cfg.textColor,
+        );
+      case TemplateArchetype.minimalNordic:
+        return GoogleFonts.dmSerifDisplay(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: cfg.textColor,
+        );
+      case TemplateArchetype.aiResearcher:
+        return GoogleFonts.spaceGrotesk(
+          fontSize: fontSize,
+          fontWeight: FontWeight.w800,
+          color: cfg.textColor,
+        );
+      case TemplateArchetype.glassmorphism:
+        return GoogleFonts.outfit(
+          fontSize: fontSize,
+          fontWeight: FontWeight.w800,
+          color: cfg.textColor,
+        );
+      case TemplateArchetype.bento:
+        return GoogleFonts.syne(
+          fontSize: fontSize,
+          fontWeight: FontWeight.w800,
+          color: cfg.textColor,
+        );
     }
-    if (cfg.isTerminal || cfg.isCyberMatrix) {
-      return _getMonospaceStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: cfg.textColor);
-    }
-    return TextStyle(
-      fontSize: fontSize,
-      fontWeight: FontWeight.w900,
-      color: cfg.textColor,
-    );
   }
 
   TextStyle _getBodyStyle(TemplateConfig cfg, {required double fontSize, Color? color, double? height}) {
-    if (cfg.isTerminal || cfg.isCyberMatrix) {
-      return _getMonospaceStyle(fontSize: fontSize, color: color ?? cfg.subtextColor, height: height);
+    switch (cfg.archetype) {
+      case TemplateArchetype.terminal:
+        return GoogleFonts.firaCode(
+          fontSize: fontSize,
+          color: color ?? cfg.subtextColor,
+          height: height ?? 1.4,
+        );
+      case TemplateArchetype.cyberMatrix:
+        return GoogleFonts.shareTechMono(
+          fontSize: fontSize,
+          color: color ?? cfg.subtextColor,
+          height: height ?? 1.4,
+        );
+      case TemplateArchetype.popArt:
+        return GoogleFonts.plusJakartaSans(
+          fontSize: fontSize,
+          color: color ?? cfg.textColor,
+          height: height ?? 1.35,
+          fontWeight: FontWeight.w600,
+        );
+      case TemplateArchetype.editorial:
+        return GoogleFonts.newsreader(
+          fontSize: fontSize,
+          color: color ?? cfg.textColor,
+          height: height ?? 1.5,
+        );
+      case TemplateArchetype.minimalNordic:
+        return GoogleFonts.inter(
+          fontSize: fontSize,
+          color: color ?? cfg.textColor,
+          height: height ?? 1.5,
+        );
+      case TemplateArchetype.aiResearcher:
+        return GoogleFonts.spaceGrotesk(
+          fontSize: fontSize,
+          color: color ?? cfg.subtextColor,
+          height: height ?? 1.4,
+        );
+      case TemplateArchetype.glassmorphism:
+        return GoogleFonts.outfit(
+          fontSize: fontSize,
+          color: color ?? cfg.textColor,
+          height: height ?? 1.45,
+        );
+      case TemplateArchetype.bento:
+        return GoogleFonts.plusJakartaSans(
+          fontSize: fontSize,
+          color: color ?? cfg.textColor,
+          height: height ?? 1.4,
+        );
     }
-    if (cfg.isEditorial) {
-      return _getEditorialStyle(fontSize: fontSize, color: color ?? cfg.textColor, height: height);
-    }
-    return TextStyle(
-      fontSize: fontSize,
-      color: color ?? cfg.textColor,
-      height: height,
-    );
   }
 
   TextStyle _getMonospaceStyle({
@@ -2123,6 +3664,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
           final base64Part = avatarUrl.split(',').last;
           return Image.memory(
             base64Decode(base64Part),
+            gaplessPlayback: true,
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
@@ -2131,6 +3673,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
       } else if (avatarUrl.startsWith('http')) {
         return Image.network(
           avatarUrl,
+          gaplessPlayback: true,
           fit: BoxFit.cover,
           width: double.infinity,
           height: double.infinity,

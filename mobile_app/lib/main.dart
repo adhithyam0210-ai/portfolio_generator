@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'providers/portfolio_provider.dart';
+import 'screens/ats_resume_screen.dart';
 import 'screens/builder_wizard_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/portfolio_preview_screen.dart';
@@ -49,22 +50,38 @@ class PortfolifyApp extends StatelessWidget {
 }
 
 class MainNavigationShell extends StatefulWidget {
-  const MainNavigationShell({super.key});
+  final int initialIndex;
+  const MainNavigationShell({super.key, this.initialIndex = 0});
 
   @override
   State<MainNavigationShell> createState() => _MainNavigationShellState();
 }
 
 class _MainNavigationShellState extends State<MainNavigationShell> {
-  int _currentIndex = 0;
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<PortfolioProvider>(context);
 
     final screens = [
-      const DashboardScreen(),
-      const BuilderWizardScreen(initialStep: 1),
+      DashboardScreen(
+        onOpenAtsResume: () => setState(() => _currentIndex = 2),
+      ),
+      BuilderWizardScreen(
+        initialStep: 1,
+        onBack: () => setState(() => _currentIndex = 0),
+      ),
+      AtsResumeScreen(
+        onBack: () => setState(() => _currentIndex = 0),
+        onNavigateToBuilder: () => setState(() => _currentIndex = 1),
+      ),
       PortfolioPreviewScreen(
         profile: provider.profile,
         onBack: () => setState(() => _currentIndex = 0),
@@ -84,34 +101,38 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
           children: screens,
         ),
 
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: (index) {
-          setState(() => _currentIndex = index);
-        },
-        backgroundColor: Colors.white,
-        elevation: 8,
-        indicatorColor: const Color(0xFFEFF6FF),
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.dashboard_outlined),
-            selectedIcon: Icon(Icons.dashboard, color: Color(0xFF2563EB)),
-            label: 'Dashboard',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.edit_note_outlined),
-            selectedIcon: Icon(Icons.edit_note, color: Color(0xFF2563EB)),
-            label: 'Builder',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.visibility_outlined),
-            selectedIcon: Icon(Icons.visibility, color: Color(0xFF2563EB)),
-            label: 'Live Preview',
-          ),
-        ],
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: _currentIndex,
+          onDestinationSelected: (index) {
+            setState(() => _currentIndex = index);
+          },
+          backgroundColor: Colors.white,
+          elevation: 8,
+          indicatorColor: const Color(0xFFEFF6FF),
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(Icons.dashboard_outlined),
+              selectedIcon: Icon(Icons.dashboard, color: Color(0xFF2563EB)),
+              label: 'Dashboard',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.edit_note_outlined),
+              selectedIcon: Icon(Icons.edit_note, color: Color(0xFF2563EB)),
+              label: 'Builder',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.description_outlined),
+              selectedIcon: Icon(Icons.description, color: Color(0xFF2563EB)),
+              label: 'ATS Resume',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.visibility_outlined),
+              selectedIcon: Icon(Icons.visibility, color: Color(0xFF2563EB)),
+              label: 'Live Preview',
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }

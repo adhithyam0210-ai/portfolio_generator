@@ -379,8 +379,8 @@ export default function TemplatesPage() {
               viewport === 'desktop'
                 ? 'w-full max-w-[1280px]'
                 : viewport === 'tablet'
-                ? 'w-[768px] max-w-full rounded-2xl border-4 border-slate-700'
-                : 'w-[390px] max-w-full rounded-3xl border-8 border-slate-800'
+                ? 'w-[768px] max-w-full rounded-2xl border-4 border-slate-700 viewport-tablet'
+                : 'w-[390px] max-w-full rounded-3xl border-8 border-slate-800 viewport-mobile'
             }`}
           >
             <TemplateRenderer profile={profile} />

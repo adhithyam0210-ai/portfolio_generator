@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class PortfolioProfile {
   String userId;
   String username;

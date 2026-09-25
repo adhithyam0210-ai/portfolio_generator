@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../main.dart';
 import 'login_screen.dart';
 import 'signup_screen.dart';
 
@@ -210,26 +209,7 @@ class LandingScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
-
-                  // Guest Preview Button
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (_) => const MainNavigationShell()),
-                      );
-                    },
-                    child: Text(
-                      'Explore Studio as Guest →',
-                      style: GoogleFonts.inter(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF64748B),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 28),
                 ],
               ),
             ),

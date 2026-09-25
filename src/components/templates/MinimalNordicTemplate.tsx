@@ -46,30 +46,53 @@ export const MinimalNordicTemplate: React.FC<TemplateProps> = ({ profile, isPubl
             — ARCHITECTURAL & SOFTWARE PORTFOLIO
           </span>
 
-          <h1 className="text-4xl sm:text-7xl font-normal text-[#1C1B1A] tracking-tight leading-[1.08] max-w-5xl">
-            {personal.fullName}
-          </h1>
+          <div className="flex flex-col-reverse md:flex-row md:items-start justify-between gap-8">
+            <div className="space-y-6 max-w-4xl">
+              <h1 className="text-4xl sm:text-7xl font-normal text-[#1C1B1A] tracking-tight leading-[1.08]">
+                {personal.fullName}
+              </h1>
 
-          <p className="text-xl sm:text-2xl font-sans font-light text-stone-700 italic max-w-3xl">
-            {personal.headline}
-          </p>
+              <p className="text-xl sm:text-2xl font-sans font-light text-stone-700 italic">
+                {personal.headline}
+              </p>
 
-          <p className="text-stone-700 text-sm sm:text-base leading-relaxed max-w-3xl font-sans font-normal">
-            {personal.bio}
-          </p>
+              <p className="text-stone-700 text-sm sm:text-base leading-relaxed font-sans font-normal">
+                {personal.bio}
+              </p>
 
-          <div className="flex flex-wrap items-center gap-6 text-xs font-sans text-stone-600 font-semibold pt-4">
-            {personal.location && (
-              <span className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-stone-800" />
-                {personal.location}
-              </span>
-            )}
-            {personal.email && (
-              <a href={`mailto:${personal.email}`} className="flex items-center gap-1.5 hover:text-black">
-                <Mail className="w-3.5 h-3.5 text-stone-800" />
-                {personal.email}
-              </a>
+              <div className="flex flex-wrap items-center gap-6 text-xs font-sans text-stone-600 font-semibold pt-2">
+                {personal.location && (
+                  <span className="flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-stone-800" />
+                    {personal.location}
+                  </span>
+                )}
+                {personal.email && (
+                  <a href={`mailto:${personal.email}`} className="flex items-center gap-1.5 hover:text-black">
+                    <Mail className="w-3.5 h-3.5 text-stone-800" />
+                    {personal.email}
+                  </a>
+                )}
+              </div>
+            </div>
+
+            {/* Nordic Minimalist Profile Picture */}
+            {personal.avatarUrl ? (
+              <div className="shrink-0">
+                <div className="w-28 h-28 sm:w-40 sm:h-40 rounded-2xl overflow-hidden border border-[#D5CEC0] shadow-sm bg-[#EFECE6] p-1">
+                  <img
+                    src={personal.avatarUrl}
+                    alt={personal.fullName}
+                    className="w-full h-full object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-500"
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="shrink-0">
+                <div className="w-28 h-28 sm:w-40 sm:h-40 rounded-2xl border border-[#D5CEC0] bg-[#EFECE6] flex items-center justify-center text-3xl font-serif text-stone-600">
+                  {personal.fullName ? personal.fullName[0].toUpperCase() : 'P'}
+                </div>
+              </div>
             )}
           </div>
         </div>

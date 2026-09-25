@@ -1,15 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
+import '../main.dart';
 import '../models/portfolio_models.dart';
 import '../providers/portfolio_provider.dart';
 import 'portfolio_preview_screen.dart';
 
 class BuilderWizardScreen extends StatefulWidget {
   final int initialStep;
-  const BuilderWizardScreen({super.key, this.initialStep = 1});
+  final VoidCallback? onBack;
+  const BuilderWizardScreen({super.key, this.initialStep = 1, this.onBack});
 
   @override
   State<BuilderWizardScreen> createState() => _BuilderWizardScreenState();
@@ -17,6 +20,7 @@ class BuilderWizardScreen extends StatefulWidget {
 
 class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
   late int _currentStep;
+  Uint8List? _avatarBytesCache;
 
   // Controllers for Personal Bio
   late TextEditingController _nameController;
@@ -38,6 +42,13 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
     super.initState();
     _currentStep = widget.initialStep;
     final profile = Provider.of<PortfolioProvider>(context, listen: false).profile;
+
+    if (profile.personal.avatarUrl.isNotEmpty && profile.personal.avatarUrl.startsWith('data:image')) {
+      try {
+        final base64Part = profile.personal.avatarUrl.split(',').last;
+        _avatarBytesCache = base64Decode(base64Part);
+      } catch (_) {}
+    }
 
     _nameController = TextEditingController(text: profile.personal.fullName);
     _headlineController = TextEditingController(text: profile.personal.headline);
@@ -108,7 +119,19 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFF0F172A)),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            _saveCurrentStep();
+            if (widget.onBack != null) {
+              widget.onBack!();
+            } else if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const MainNavigationShell()),
+              );
+            }
+          },
         ),
         title: const Text(
           'Portfolio Builder',
@@ -117,6 +140,7 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
         actions: [
           TextButton.icon(
             onPressed: () {
+              _saveCurrentStep();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => PortfolioPreviewScreen(profile: profile)),
@@ -125,16 +149,7 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
             icon: const Icon(Icons.visibility, size: 16, color: Color(0xFF2563EB)),
             label: const Text('Preview', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF2563EB))),
           ),
-          IconButton(
-            icon: const Icon(Icons.cloud_upload_outlined, color: Color(0xFF0F172A)),
-            tooltip: 'Sync to Supabase',
-            onPressed: () {
-              _saveCurrentStep();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Portfolio synced to Supabase!'), behavior: SnackBarBehavior.floating),
-              );
-            },
-          ),
+          const SizedBox(width: 4),
         ],
       ),
       body: Column(
@@ -669,6 +684,7 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
                     provider.profile.personal.resumeFileName = file.name;
                     provider.profile.personal.resumeUrl = 'https://portfolify.app/resumes/${file.name}';
                     provider.saveAndSync();
+                    if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Attached resume: ${file.name}'), behavior: SnackBarBehavior.floating),
                     );
@@ -941,10 +957,12 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
           bytes = await File(file.path!).readAsBytes();
         }
         if (bytes != null) {
-          final base64String = base64Encode(bytes);
+          final uint8 = Uint8List.fromList(bytes);
+          final base64String = base64Encode(uint8);
           final ext = file.extension ?? 'jpg';
           final dataUri = 'data:image/$ext;base64,$base64String';
           setState(() {
+            _avatarBytesCache = uint8;
             provider.profile.personal.avatarUrl = dataUri;
           });
           provider.saveAndSync();
@@ -965,6 +983,7 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
 
   void _removeAvatar(PortfolioProvider provider) {
     setState(() {
+      _avatarBytesCache = null;
       provider.profile.personal.avatarUrl = '';
     });
     provider.saveAndSync();
@@ -980,9 +999,22 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
     if (avatarUrl.isNotEmpty) {
       if (avatarUrl.startsWith('data:image')) {
         try {
+          if (_avatarBytesCache != null) {
+            return Image.memory(
+              _avatarBytesCache!,
+              key: ValueKey(_avatarBytesCache.hashCode),
+              gaplessPlayback: true,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+            );
+          }
           final base64Part = avatarUrl.split(',').last;
+          _avatarBytesCache = base64Decode(base64Part);
           return Image.memory(
-            base64Decode(base64Part),
+            _avatarBytesCache!,
+            key: ValueKey(_avatarBytesCache.hashCode),
+            gaplessPlayback: true,
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
@@ -991,6 +1023,8 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
       } else if (avatarUrl.startsWith('http')) {
         return Image.network(
           avatarUrl,
+          key: ValueKey(avatarUrl),
+          gaplessPlayback: true,
           fit: BoxFit.cover,
           width: double.infinity,
           height: double.infinity,

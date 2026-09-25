@@ -106,3 +106,157 @@ button, a, input, select, textarea {
     display: block !important;
   }
 }
+
+/* Authentic Mobile & Tablet Device Frame Simulation */
+.viewport-mobile {
+  max-width: 390px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Hide desktop navbar menus and secondary text */
+.viewport-mobile nav a[href^="#"],
+.viewport-mobile nav div[class*="items-center"][class*="gap-6"],
+.viewport-mobile nav div[class*="items-center"][class*="gap-4"],
+.viewport-mobile nav div[class*="items-center"][class*="gap-8"],
+.viewport-mobile nav .hidden,
+.viewport-mobile nav .md\:flex,
+.viewport-mobile nav .md\:inline-block,
+.viewport-mobile nav .md\:inline,
+.viewport-mobile nav .lg\:flex,
+.viewport-mobile nav .lg\:block,
+.viewport-mobile nav .hidden.md\:flex,
+.viewport-mobile nav .hidden.md\:inline-block {
+  display: none !important;
+}
+
+.viewport-mobile nav {
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.viewport-mobile nav a[class*="Download"],
+.viewport-mobile nav a[class*="rounded-full"],
+.viewport-mobile nav a[href*="resume"] {
+  padding: 0.25rem 0.65rem !important;
+  font-size: 0.7rem !important;
+}
+
+/* Force 1-column layouts and stack flex rows */
+.viewport-mobile .grid,
+.viewport-mobile .grid-cols-1.md\:grid-cols-2,
+.viewport-mobile .grid-cols-1.md\:grid-cols-3,
+.viewport-mobile .grid-cols-1.lg\:grid-cols-3,
+.viewport-mobile .grid-cols-1.md\:grid-cols-4,
+.viewport-mobile .grid-cols-2.md\:grid-cols-4,
+.viewport-mobile [class*="lg:grid-cols-12"],
+.viewport-mobile [class*="md:grid-cols-12"] {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+}
+
+.viewport-mobile [class*="col-span-"] {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.viewport-mobile .md\:flex-row,
+.viewport-mobile .lg\:flex-row {
+  flex-direction: column !important;
+}
+
+/* Headings scale down to authentic mobile sizes */
+.viewport-mobile h1,
+.viewport-mobile .text-3xl,
+.viewport-mobile .text-4xl,
+.viewport-mobile .text-5xl,
+.viewport-mobile .text-6xl,
+.viewport-mobile .text-7xl,
+.viewport-mobile [class*="text-3xl"],
+.viewport-mobile [class*="text-4xl"],
+.viewport-mobile [class*="text-5xl"],
+.viewport-mobile [class*="text-6xl"] {
+  font-size: 1.5rem !important;
+  line-height: 1.2 !important;
+}
+
+.viewport-mobile p.text-xl,
+.viewport-mobile p.text-2xl,
+.viewport-mobile [class*="text-xl"],
+.viewport-mobile [class*="text-2xl"] {
+  font-size: 1rem !important;
+  line-height: 1.4 !important;
+}
+
+/* Spacing and card padding adjustments */
+.viewport-mobile .p-6,
+.viewport-mobile .p-8,
+.viewport-mobile .p-10,
+.viewport-mobile .p-12,
+.viewport-mobile .p-16 {
+  padding: 1.15rem !important;
+}
+
+.viewport-mobile .px-4,
+.viewport-mobile .px-6,
+.viewport-mobile .px-8,
+.viewport-mobile .px-12,
+.viewport-mobile .px-16 {
+  padding-left: 0.85rem !important;
+  padding-right: 0.85rem !important;
+}
+
+.viewport-mobile .pt-8,
+.viewport-mobile .pt-12,
+.viewport-mobile .pt-16,
+.viewport-mobile .pt-20 {
+  padding-top: 1.25rem !important;
+}
+
+.viewport-mobile .space-y-24 > :not([hidden]) ~ :not([hidden]),
+.viewport-mobile .space-y-20 > :not([hidden]) ~ :not([hidden]),
+.viewport-mobile .space-y-16 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1.5rem !important;
+}
+
+.viewport-mobile .gap-12,
+.viewport-mobile .gap-10,
+.viewport-mobile .gap-8 {
+  gap: 1rem !important;
+}
+
+/* Avatar sizes */
+.viewport-mobile .w-40.h-40,
+.viewport-mobile .w-48.h-48,
+.viewport-mobile .w-56.h-56,
+.viewport-mobile .w-64.h-64 {
+  width: 5.5rem !important;
+  height: 5.5rem !important;
+}
+
+/* Tablet viewport overrides */
+.viewport-tablet {
+  max-width: 680px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.viewport-tablet nav a[href^="#"],
+.viewport-tablet nav .hidden.md\:flex {
+  display: none !important;
+}
+
+.viewport-tablet .grid-cols-1.lg\:grid-cols-3,
+.viewport-tablet .grid-cols-1.md\:grid-cols-3 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.viewport-tablet h1,
+.viewport-tablet .text-4xl.sm\:text-7xl,
+.viewport-tablet .text-5xl.sm\:text-7xl {
+  font-size: 2.25rem !important;
+  line-height: 1.2 !important;
+}

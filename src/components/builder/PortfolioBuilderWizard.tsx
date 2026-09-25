@@ -1042,12 +1042,12 @@ export const PortfolioBuilderWizard = () => {
                 className="overflow-y-scroll flex-1 min-h-0 p-3 bg-slate-100/70 scroll-smooth preview-scroll-container"
               >
                 <div
-                  className={`mx-auto transition-all duration-300 bg-white rounded-2xl shadow-sm ${
+                  className={`mx-auto transition-all duration-300 bg-white shadow-sm overflow-hidden ${
                     previewViewport === 'desktop'
-                      ? 'w-full'
+                      ? 'w-full rounded-2xl'
                       : previewViewport === 'tablet'
-                      ? 'max-w-[768px] border-2 border-slate-600'
-                      : 'max-w-[390px] border-4 border-slate-700 rounded-3xl'
+                      ? 'w-[768px] max-w-full border-2 border-slate-600 rounded-2xl viewport-tablet'
+                      : 'w-[390px] max-w-full border-4 border-slate-700 rounded-3xl viewport-mobile'
                   }`}
                 >
                   <TemplateRenderer
