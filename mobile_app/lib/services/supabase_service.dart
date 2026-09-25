@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../core/constants/supabase_config.dart';
@@ -166,4 +165,48 @@ class SupabaseService {
       return null;
     }
   }
+
+  // --- Authentication Helpers ---
+
+  User? get currentUser => isReady ? client.auth.currentUser : null;
+
+  Future<AuthResponse?> signIn({required String email, required String password}) async {
+    if (!isReady) return null;
+    try {
+      final res = await client.auth.signInWithPassword(email: email, password: password);
+      return res;
+    } catch (e) {
+      debugPrint('Supabase signIn error: $e');
+      rethrow;
+    }
+  }
+
+  Future<AuthResponse?> signUp({
+    required String email,
+    required String password,
+    String? fullName,
+  }) async {
+    if (!isReady) return null;
+    try {
+      final res = await client.auth.signUp(
+        email: email,
+        password: password,
+        data: fullName != null ? {'full_name': fullName} : null,
+      );
+      return res;
+    } catch (e) {
+      debugPrint('Supabase signUp error: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> signOut() async {
+    if (!isReady) return;
+    try {
+      await client.auth.signOut();
+    } catch (e) {
+      debugPrint('Supabase signOut error: $e');
+    }
+  }
 }
+

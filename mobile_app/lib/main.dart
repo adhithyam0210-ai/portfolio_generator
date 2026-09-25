@@ -65,14 +65,25 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
     final screens = [
       const DashboardScreen(),
       const BuilderWizardScreen(initialStep: 1),
-      PortfolioPreviewScreen(profile: provider.profile),
+      PortfolioPreviewScreen(
+        profile: provider.profile,
+        onBack: () => setState(() => _currentIndex = 0),
+      ),
     ];
 
-    return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: screens,
-      ),
+    return PopScope(
+      canPop: _currentIndex == 0,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop && _currentIndex != 0) {
+          setState(() => _currentIndex = 0);
+        }
+      },
+      child: Scaffold(
+        body: IndexedStack(
+          index: _currentIndex,
+          children: screens,
+        ),
+
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
         onDestinationSelected: (index) {
@@ -99,6 +110,8 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

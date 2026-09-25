@@ -2,14 +2,143 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../models/portfolio_models.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/portfolio_provider.dart';
+import '../services/supabase_service.dart';
 import '../widgets/share_bottom_sheet.dart';
 import 'builder_wizard_screen.dart';
+import 'landing_screen.dart';
 import 'portfolio_preview_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
+
+  Future<void> _handleTwoStepSignOut(BuildContext context) async {
+    // Confirmation Dialog 1: Initial Prompt
+    final bool? firstConfirm = await showDialog<bool>(
+      context: context,
+      builder: (dialogCtx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEF2F2),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(Icons.logout_rounded, color: Color(0xFFEF4444), size: 22),
+            ),
+            const SizedBox(width: 12),
+            const Expanded(
+              child: Text(
+                'Sign Out? (1 of 2)',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+        content: const Text(
+          'Are you sure you want to sign out from your Portfolify account session?',
+          style: TextStyle(fontSize: 14, color: Color(0xFF475569)),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogCtx, false),
+            child: const Text('Cancel', style: TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.w600)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFF1F5F9),
+              foregroundColor: const Color(0xFF0F172A),
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            onPressed: () => Navigator.pop(dialogCtx, true),
+            child: const Text('Continue →', style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+
+    if (firstConfirm != true) return;
+
+    if (!context.mounted) return;
+
+    // Confirmation Dialog 2: Final Warning Confirmation
+    final bool? finalConfirm = await showDialog<bool>(
+      context: context,
+      builder: (dialogCtx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEF2F2),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(Icons.warning_amber_rounded, color: Color(0xFFDC2626), size: 24),
+            ),
+            const SizedBox(width: 12),
+            const Expanded(
+              child: Text(
+                'Final Confirmation (2 of 2)',
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w900, color: Color(0xFFDC2626)),
+              ),
+            ),
+          ],
+        ),
+        content: const Text(
+          'Please confirm: Signing out will end your session. Any unpublished changes will remain on this device, but you will need your credentials to log back in.\n\nDo you definitely want to sign out now?',
+          style: TextStyle(fontSize: 13.5, color: Color(0xFF334155), height: 1.4),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogCtx, false),
+            child: const Text('Stay Logged In', style: TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.w600)),
+          ),
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFDC2626),
+              foregroundColor: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            ),
+            onPressed: () => Navigator.pop(dialogCtx, true),
+            icon: const Icon(Icons.check, size: 18),
+            label: const Text('Yes, Sign Out Now', style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+
+    if (finalConfirm != true) return;
+
+    // Execute Sign Out
+    try {
+      await SupabaseService().signOut();
+    } catch (_) {}
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('is_logged_in', false);
+
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('You have been safely signed out.'),
+        backgroundColor: Color(0xFF0F172A),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LandingScreen()),
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +173,44 @@ class DashboardScreen extends StatelessWidget {
         actions: [
           if (provider.isSyncing)
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 8),
               child: SizedBox(
                 width: 16,
                 height: 16,
                 child: CircularProgressIndicator(strokeWidth: 2),
               ),
             ),
+          // Two-Step Sign Out Header Button
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: InkWell(
+              onTap: () => _handleTwoStepSignOut(context),
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFEF2F2),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: const Color(0xFFFCA5A5).withValues(alpha: 0.5)),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.logout_rounded, size: 15, color: Color(0xFFEF4444)),
+                    SizedBox(width: 5),
+                    Text(
+                      'Sign Out',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFFEF4444),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -86,7 +246,9 @@ class DashboardScreen extends StatelessWidget {
                           style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
                         ),
                         const SizedBox(height: 14),
-                        Row(
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
                           children: [
                             ElevatedButton.icon(
                               onPressed: () {
@@ -100,10 +262,10 @@ class DashboardScreen extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF2563EB),
                                 foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                               ),
                             ),
-                            const SizedBox(width: 8),
                             OutlinedButton.icon(
                               onPressed: () {
                                 Navigator.push(
@@ -116,11 +278,13 @@ class DashboardScreen extends StatelessWidget {
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: Colors.white,
                                 side: const BorderSide(color: Colors.white24),
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                               ),
                             ),
                           ],
                         ),
+
                       ],
                     ),
                   ),

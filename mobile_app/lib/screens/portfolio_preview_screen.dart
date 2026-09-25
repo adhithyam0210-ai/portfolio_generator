@@ -2,8 +2,20 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../main.dart';
 import '../models/portfolio_models.dart';
 import '../widgets/share_bottom_sheet.dart';
+
+enum TemplateArchetype {
+  terminal,
+  popArt,
+  editorial,
+  cyberMatrix,
+  aiResearcher,
+  glassmorphism,
+  bento,
+  minimalNordic,
+}
 
 class TemplateConfig {
   final String id;
@@ -15,11 +27,8 @@ class TemplateConfig {
   final Color primaryColor;
   final Color secondaryColor;
   final bool isDark;
-  final bool isPopArt;
-  final bool isTerminal;
-  final bool isCyberMatrix;
-  final bool isNordic;
   final String roleBadge;
+  final TemplateArchetype archetype;
 
   const TemplateConfig({
     required this.id,
@@ -30,22 +39,34 @@ class TemplateConfig {
     required this.subtextColor,
     required this.primaryColor,
     required this.secondaryColor,
+    required this.archetype,
     this.isDark = false,
-    this.isPopArt = false,
-    this.isTerminal = false,
-    this.isCyberMatrix = false,
-    this.isNordic = false,
     required this.roleBadge,
   });
+
+  bool get isTerminal => archetype == TemplateArchetype.terminal;
+  bool get isPopArt => archetype == TemplateArchetype.popArt;
+  bool get isEditorial => archetype == TemplateArchetype.editorial;
+  bool get isCyberMatrix => archetype == TemplateArchetype.cyberMatrix;
+  bool get isAiResearcher => archetype == TemplateArchetype.aiResearcher;
+  bool get isGlassmorphism => archetype == TemplateArchetype.glassmorphism;
+  bool get isBento => archetype == TemplateArchetype.bento;
+  bool get isNordic => archetype == TemplateArchetype.minimalNordic;
 }
 
 class PortfolioPreviewScreen extends StatelessWidget {
   final PortfolioProfile profile;
+  final VoidCallback? onBack;
 
-  const PortfolioPreviewScreen({super.key, required this.profile});
+  const PortfolioPreviewScreen({
+    super.key,
+    required this.profile,
+    this.onBack,
+  });
 
   static TemplateConfig getTemplateConfig(String templateId) {
     switch (templateId) {
+      // 1. Bento / UIUX
       case 'role-uiux':
         return const TemplateConfig(
           id: 'role-uiux',
@@ -57,9 +78,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFFFF6B6B),
           secondaryColor: Color(0xFFFF8E8E),
           isDark: false,
+          archetype: TemplateArchetype.bento,
           roleBadge: 'BENTO FIGMA CASE STUDIES',
         );
 
+      // 2. Terminal Fullstack
       case 'role-fullstack':
         return const TemplateConfig(
           id: 'role-fullstack',
@@ -71,10 +94,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFF3A86EF),
           secondaryColor: Color(0xFFFBBF24),
           isDark: true,
-          isTerminal: true,
+          archetype: TemplateArchetype.terminal,
           roleBadge: 'TERMINAL // FULLSTACK ACTIVE',
         );
 
+      // 3. AI Researcher
       case 'role-ai-researcher':
         return const TemplateConfig(
           id: 'role-ai-researcher',
@@ -86,9 +110,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFFD946EF),
           secondaryColor: Color(0xFF22D3EE),
           isDark: true,
+          archetype: TemplateArchetype.aiResearcher,
           roleBadge: 'arXiv // NEURIPS CITATIONS',
         );
 
+      // 4. Cybersecurity Analyst
       case 'role-cybersecurity':
         return const TemplateConfig(
           id: 'role-cybersecurity',
@@ -100,10 +126,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFF00FF66),
           secondaryColor: Color(0xFF10B981),
           isDark: true,
-          isCyberMatrix: true,
+          archetype: TemplateArchetype.cyberMatrix,
           roleBadge: 'SEC_OPS // CLEARANCE VERIFIED',
         );
 
+      // 5. DevOps Engineer (Terminal)
       case 'role-devops':
         return const TemplateConfig(
           id: 'role-devops',
@@ -115,10 +142,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFF38BDF8),
           secondaryColor: Color(0xFFF97316),
           isDark: true,
-          isTerminal: true,
+          archetype: TemplateArchetype.terminal,
           roleBadge: 'CI/CD PASSING • K8S CLUSTER 99.99%',
         );
 
+      // 6. QA Engineer (Matrix / Test Suites)
       case 'role-qa':
         return const TemplateConfig(
           id: 'role-qa',
@@ -130,9 +158,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFF2A9D8F),
           secondaryColor: Color(0xFF10B981),
           isDark: true,
+          archetype: TemplateArchetype.cyberMatrix,
           roleBadge: 'TEST SUITES 100% PASSED',
         );
 
+      // 7. ML Engineer (AI Researcher / Deep Tech)
       case 'role-ml-engineer':
         return const TemplateConfig(
           id: 'role-ml-engineer',
@@ -144,9 +174,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFF6366F1),
           secondaryColor: Color(0xFFF59E0B),
           isDark: true,
+          archetype: TemplateArchetype.aiResearcher,
           roleBadge: 'ACCURACY: 98.4% • PYTORCH CUDA',
         );
 
+      // 8. Data Analyst (Minimal Nordic / Metric BI)
       case 'role-data-analyst':
         return const TemplateConfig(
           id: 'role-data-analyst',
@@ -158,9 +190,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFF0284C7),
           secondaryColor: Color(0xFF06B6D4),
           isDark: false,
+          archetype: TemplateArchetype.minimalNordic,
           roleBadge: 'EXECUTIVE BI SCORECARD',
         );
 
+      // 9. Canva Pop Art (Pop Art / Neo-Brutalist)
       case 'canva-pop':
         return const TemplateConfig(
           id: 'canva-pop',
@@ -172,38 +206,43 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFFF59E0B),
           secondaryColor: Color(0xFFEC4899),
           isDark: false,
-          isPopArt: true,
+          archetype: TemplateArchetype.popArt,
           roleBadge: '✨ CANVA POP ART • OPEN TO WORK',
         );
 
+      // 10. Adobe Behance (Pop Art / Creative Studio)
       case 'adobe-behance':
         return const TemplateConfig(
           id: 'adobe-behance',
-          title: 'Adobe Creative Studio',
-          bgColor: Color(0xFF121212),
-          cardBgColor: Color(0xFF1E1E1E),
-          textColor: Colors.white,
-          subtextColor: Color(0xFF94A3B8),
-          primaryColor: Color(0xFF3B82F6),
-          secondaryColor: Color(0xFF60A5FA),
-          isDark: true,
-          roleBadge: 'BEHANCE CREATIVE SHOWCASE',
+          title: 'Adobe Behance Portfolio',
+          bgColor: Color(0xFFFFFBF0),
+          cardBgColor: Colors.white,
+          textColor: Color(0xFF1E1B18),
+          subtextColor: Color(0xFF57534E),
+          primaryColor: Color(0xFFFF5722),
+          secondaryColor: Color(0xFFFFC107),
+          isDark: false,
+          archetype: TemplateArchetype.popArt,
+          roleBadge: 'BEHANCE FEATURED CURATION',
         );
 
+      // 11. Figma Glass (Glassmorphism)
       case 'figma-glass':
         return const TemplateConfig(
           id: 'figma-glass',
-          title: 'Figma Neo-Glass',
-          bgColor: Color(0xFF0D0E15),
-          cardBgColor: Color(0xFF181926),
+          title: 'Figma Glass Prototype',
+          bgColor: Color(0xFF130C25),
+          cardBgColor: Color(0xFF22163B),
           textColor: Colors.white,
           subtextColor: Color(0xFFC084FC),
           primaryColor: Color(0xFFA855F7),
           secondaryColor: Color(0xFF06B6D4),
           isDark: true,
+          archetype: TemplateArchetype.glassmorphism,
           roleBadge: 'FIGMA AUTO-LAYOUT SYSTEM',
         );
 
+      // 12. Minimal Nordic (Scandinavian Minimalism)
       case 'minimal-nordic':
         return const TemplateConfig(
           id: 'minimal-nordic',
@@ -215,10 +254,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFF78716C),
           secondaryColor: Color(0xFF44403C),
           isDark: false,
-          isNordic: true,
+          archetype: TemplateArchetype.minimalNordic,
           roleBadge: 'SCANDINAVIAN ARCHITECTURAL',
         );
 
+      // 13. Creative Aurora (Glassmorphism / Glow)
       case 'aurora-creative':
         return const TemplateConfig(
           id: 'aurora-creative',
@@ -230,9 +270,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFFEC4899),
           secondaryColor: Color(0xFF8B5CF6),
           isDark: true,
+          archetype: TemplateArchetype.glassmorphism,
           roleBadge: 'AURORA MESH GRADIENT',
         );
 
+      // 14. Frost Academic (Scientific / AI)
       case 'frost-academic':
         return const TemplateConfig(
           id: 'frost-academic',
@@ -244,9 +286,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFF0284C7),
           secondaryColor: Color(0xFF38BDF8),
           isDark: false,
+          archetype: TemplateArchetype.aiResearcher,
           roleBadge: 'CRYSTAL ICE ACADEMIC',
         );
 
+      // 15. Coral Modernist (Editorial Magazine)
       case 'coral-modernist':
         return const TemplateConfig(
           id: 'coral-modernist',
@@ -258,9 +302,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFFFA5252),
           secondaryColor: Color(0xFFFF8787),
           isDark: false,
+          archetype: TemplateArchetype.editorial,
           roleBadge: 'EDITORIAL CORAL MODERNIST',
         );
 
+      // 16. Cyber Violet (Bento Grid)
       case 'cyber-violet':
         return const TemplateConfig(
           id: 'cyber-violet',
@@ -272,9 +318,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFF8B5CF6),
           secondaryColor: Color(0xFFA855F7),
           isDark: true,
+          archetype: TemplateArchetype.bento,
           roleBadge: 'ELECTRIC VIOLET GLOW',
         );
 
+      // 17. Nexus Developer (Terminal CLI)
       case 'nexus-developer':
         return const TemplateConfig(
           id: 'nexus-developer',
@@ -286,10 +334,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFF06B6D4),
           secondaryColor: Color(0xFF3B82F6),
           isDark: true,
-          isTerminal: true,
+          archetype: TemplateArchetype.terminal,
           roleBadge: 'NEXUS GIT COMMITS // LIVE',
         );
 
+      // 18. Slate Editorial (Editorial Magazine)
       case 'slate-editorial':
         return const TemplateConfig(
           id: 'slate-editorial',
@@ -301,9 +350,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFF334155),
           secondaryColor: Color(0xFF64748B),
           isDark: false,
+          archetype: TemplateArchetype.editorial,
           roleBadge: 'MONOCHROME EDITORIAL DIVIDERS',
         );
 
+      // 19. Crimson Studio (Bento Grid)
       case 'crimson-studio':
         return const TemplateConfig(
           id: 'crimson-studio',
@@ -315,9 +366,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFFE11D48),
           secondaryColor: Color(0xFFFB7185),
           isDark: true,
+          archetype: TemplateArchetype.bento,
           roleBadge: 'LUXURY RUBY STUDIO',
         );
 
+      // 20. Executive Classic (Editorial / Corporate)
       case 'executive-classic':
         return const TemplateConfig(
           id: 'executive-classic',
@@ -329,9 +382,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFFD97706),
           secondaryColor: Color(0xFFF59E0B),
           isDark: true,
+          archetype: TemplateArchetype.editorial,
           roleBadge: 'EXECUTIVE BOARD ADVISORY',
         );
 
+      // 21. Modern Glass (Featured Glassmorphism)
       case 'modern-glass':
       default:
         return const TemplateConfig(
@@ -344,6 +399,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
           primaryColor: Color(0xFF10B981),
           secondaryColor: Color(0xFF2563EB),
           isDark: true,
+          archetype: TemplateArchetype.glassmorphism,
           roleBadge: 'FROSTED GLASS GLOW // CV VERIFIED',
         );
     }
@@ -362,44 +418,46 @@ class PortfolioPreviewScreen extends StatelessWidget {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: cfg.textColor),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            if (onBack != null) {
+              onBack!();
+            } else if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const MainNavigationShell()),
+              );
+            }
+          },
         ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        title: Row(
           children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: cfg.primaryColor.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(6),
-                    border: cfg.isPopArt
-                        ? Border.all(color: const Color(0xFF0F172A), width: 1.5)
-                        : null,
-                  ),
-                  child: Text(
-                    cfg.id.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 9,
-                      fontWeight: FontWeight.w900,
-                      color: cfg.primaryColor,
-                    ),
-                  ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: cfg.primaryColor.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(6),
+                border: cfg.isPopArt
+                    ? Border.all(color: const Color(0xFF0F172A), width: 1.5)
+                    : null,
+              ),
+              child: Text(
+                cfg.id.toUpperCase(),
+                style: _getMonospaceStyle(
+                  fontSize: 9,
+                  fontWeight: FontWeight.w900,
+                  color: cfg.primaryColor,
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    profile.personal.fullName,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: cfg.textColor,
-                    ),
-                  ),
-                ),
-              ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                profile.personal.fullName,
+                overflow: TextOverflow.ellipsis,
+                style: _getTitleStyle(cfg, fontSize: 14),
+              ),
             ),
           ],
         ),
@@ -427,7 +485,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
                   _buildHeroCard(context, cfg),
                   const SizedBox(height: 16),
 
-                  // Analytics / Scorecard Bar
+                  // Analytics / Scorecard Bar (NO LIVE VIEWS!)
                   _buildScorecardBar(cfg),
                   const SizedBox(height: 20),
 
@@ -436,10 +494,15 @@ class PortfolioPreviewScreen extends StatelessWidget {
                       profile.skills.frameworks.isNotEmpty ||
                       profile.skills.tools.isNotEmpty) ...[
                     _buildSectionHeader(
-                      'Technical Arsenal & Skills',
+                      cfg.isTerminal
+                          ? '> STACK --LIST'
+                          : cfg.isCyberMatrix
+                              ? '[SECURITY ARSENAL // SKILLS]'
+                              : 'Technical Arsenal & Skills',
                       Icons.code,
                       cfg.primaryColor,
                       cfg.textColor,
+                      cfg,
                     ),
                     const SizedBox(height: 10),
                     _buildSkillsCard(cfg),
@@ -449,45 +512,75 @@ class PortfolioPreviewScreen extends StatelessWidget {
                   // Featured Projects Section
                   if (profile.projects.isNotEmpty) ...[
                     _buildSectionHeader(
-                      'Hardening Labs & Projects',
-                      Icons.rocket_launch_outlined,
-                      cfg.primaryColor,
+                      cfg.isTerminal
+                          ? '> DEPLOYED_PROJECTS --ALL'
+                          : cfg.isCyberMatrix
+                              ? '[SECURITY LABS & TARGETS]'
+                              : 'Hardening Labs & Projects',
+                      Icons.rocket_launch,
+                      cfg.secondaryColor,
                       cfg.textColor,
+                      cfg,
                     ),
                     const SizedBox(height: 10),
-                    ...profile.projects.map((p) => _buildProjectCard(p, cfg)),
-                    const SizedBox(height: 16),
+                    ...profile.projects.map((proj) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: _buildProjectCard(proj, cfg),
+                        )),
+                    const SizedBox(height: 10),
                   ],
 
-                  // Work Experience Timeline
+                  // Work Experience Section
                   if (profile.experience.isNotEmpty) ...[
                     _buildSectionHeader(
-                      'Work Experience & Audits',
+                      cfg.isTerminal
+                          ? '> CAREER_TRACE --HISTORY'
+                          : cfg.isEditorial
+                              ? 'Professional Engagements'
+                              : 'Work Experience',
                       Icons.work_outline,
                       cfg.primaryColor,
                       cfg.textColor,
+                      cfg,
                     ),
                     const SizedBox(height: 10),
-                    ...profile.experience.map((e) => _buildExperienceCard(e, cfg)),
-                    const SizedBox(height: 16),
+                    ...profile.experience.map((exp) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: _buildExperienceCard(exp, cfg),
+                        )),
+                    const SizedBox(height: 10),
                   ],
 
-                  // Education & Credentials
+                  // Education Section
                   if (profile.education.isNotEmpty) ...[
                     _buildSectionHeader(
-                      'Education & Degrees',
+                      cfg.isTerminal
+                          ? '> CREDENTIALS --ACADEMIC'
+                          : cfg.isEditorial
+                              ? 'Academic Foundations'
+                              : 'Education & Credentials',
                       Icons.school_outlined,
                       cfg.primaryColor,
                       cfg.textColor,
+                      cfg,
                     ),
                     const SizedBox(height: 10),
-                    ...profile.education.map((edu) => _buildEducationCard(edu, cfg)),
-                    const SizedBox(height: 24),
+                    ...profile.education.map((edu) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: _buildEducationCard(edu, cfg),
+                        )),
+                    const SizedBox(height: 10),
                   ],
 
-                  // Direct Resume / CV Download Action
-                  _buildResumeDownloadButton(context, cfg),
-                  const SizedBox(height: 36),
+                  // Bottom Watermark
+                  const SizedBox(height: 24),
+                  Center(
+                    child: Text(
+                      'Generated with Portfolify Studio • 21 Verified Styles',
+                      style: _getBodyStyle(cfg, fontSize: 10, color: cfg.subtextColor),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
                 ],
               ),
             ),
@@ -510,7 +603,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
             colors: [Color(0xFFFDE68A), Color(0xFFFDA4AF), Color(0xFFA5B4FC)],
           ),
           border: Border(
-            bottom: BorderSide(color: Color(0xFF0F172A), width: 2),
+            bottom: BorderSide(color: Color(0xFF0F172A), width: 2.5),
           ),
         ),
         child: Row(
@@ -578,7 +671,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
             Expanded(
               child: Text(
                 '> ${cfg.id} ~/profile.config.ts',
-                style: GoogleFonts.firaCode(fontSize: 11, color: const Color(0xFF94A3B8)),
+                style: _getMonospaceStyle(fontSize: 11, color: const Color(0xFF94A3B8)),
               ),
             ),
             Container(
@@ -589,7 +682,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
               ),
               child: Text(
                 'LIVE_CLI',
-                style: GoogleFonts.firaCode(fontSize: 9, fontWeight: FontWeight.bold, color: cfg.primaryColor),
+                style: _getMonospaceStyle(fontSize: 9, fontWeight: FontWeight.bold, color: cfg.primaryColor),
               ),
             ),
           ],
@@ -598,34 +691,91 @@ class PortfolioPreviewScreen extends StatelessWidget {
     }
 
     if (cfg.isCyberMatrix) {
-      // Cybersecurity Tactical Matrix Top Bar
+      // Cybersecurity HUD Top Bar
       return Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        color: const Color(0xFF050505),
+        color: const Color(0xFF05080A),
+        child: Row(
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: cfg.primaryColor,
+                boxShadow: [
+                  BoxShadow(color: cfg.primaryColor.withValues(alpha: 0.8), blurRadius: 6),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'SYS_DEFENSE: NOMINAL // PORT 443 ENCRYPTED',
+                style: _getMonospaceStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  color: cfg.primaryColor,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+            Text(
+              '[SECURE]',
+              style: _getMonospaceStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w900,
+                color: cfg.primaryColor,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isEditorial) {
+      // Editorial Magazine Top Bar
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        decoration: BoxDecoration(
+          color: cfg.primaryColor.withValues(alpha: 0.08),
+          border: Border(bottom: BorderSide(color: cfg.primaryColor.withValues(alpha: 0.2), width: 1)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '— CURRICULUM VITAE & PORTFOLIO —',
+              style: _getEditorialStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.5,
+                color: cfg.primaryColor,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isAiResearcher) {
+      // AI Researcher Top Bar
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+        color: const Color(0xFF140D26),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF00FF66),
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'SEC_OPS // TACTICAL_MATRIX',
-                  style: GoogleFonts.firaCode(fontSize: 10, fontWeight: FontWeight.bold, color: const Color(0xFF00FF66)),
-                ),
-              ],
+            Text(
+              'arXiv:2409.STUDIO // PEER REVIEWED',
+              style: _getMonospaceStyle(fontSize: 10, color: cfg.subtextColor, fontWeight: FontWeight.bold),
             ),
             Text(
-              '[ENCRYPTED]',
-              style: GoogleFonts.firaCode(fontSize: 9, color: const Color(0xFF86EFAC)),
+              'LOSS: 0.0014',
+              style: _getMonospaceStyle(fontSize: 10, color: cfg.primaryColor, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -656,9 +806,453 @@ class PortfolioPreviewScreen extends StatelessWidget {
     );
   }
 
-  // --- HERO PROFILE CARD ---
+  // --- HERO PROFILE CARD (UNIQUE PER ARCHETYPE) ---
 
   Widget _buildHeroCard(BuildContext context, TemplateConfig cfg) {
+    if (cfg.isPopArt) {
+      // Canva Pop Art Hero: Bold 3px Black Border, Drop Shadow, Bouncy Sticker Pills
+      return Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: const Color(0xFF0F172A), width: 2.5),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0xFF0F172A),
+              offset: Offset(4, 4),
+              blurRadius: 0,
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            // Avatar with Pop Art Outline
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: const Color(0xFFFDE68A),
+                border: Border.all(color: const Color(0xFF0F172A), width: 3),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0xFF0F172A),
+                    offset: Offset(3, 3),
+                  ),
+                ],
+              ),
+              child: ClipOval(
+                child: _buildAvatarImage(profile.personal.avatarUrl, profile.personal.fullName, cfg),
+              ),
+            ),
+            const SizedBox(height: 14),
+
+            // Highlighted Sticker Name Box
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEF08A),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFF0F172A), width: 2),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0xFF0F172A),
+                    offset: Offset(2, 2),
+                  ),
+                ],
+              ),
+              child: Text(
+                profile.personal.fullName,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFF0F172A),
+                  letterSpacing: -0.5,
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            Text(
+              profile.personal.headline,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+                color: Color(0xFFE11D48),
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            Text(
+              profile.personal.bio,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF334155),
+                height: 1.4,
+              ),
+            ),
+            const SizedBox(height: 14),
+
+            // Pop Art Action Buttons
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              alignment: WrapAlignment.center,
+              children: [
+                if (profile.personal.location.isNotEmpty)
+                  _buildPopStickerPill(Icons.location_on, profile.personal.location, const Color(0xFFF1F5F9)),
+                if (profile.personal.email.isNotEmpty)
+                  _buildPopActionPill(Icons.mail, 'Email', () => _launchUrl('mailto:${profile.personal.email}')),
+                if (profile.personal.githubUrl.isNotEmpty)
+                  _buildPopActionPill(Icons.code, 'GitHub', () => _launchUrl(profile.personal.githubUrl)),
+                if (profile.personal.linkedinUrl.isNotEmpty)
+                  _buildPopActionPill(Icons.link, 'LinkedIn', () => _launchUrl(profile.personal.linkedinUrl)),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isTerminal) {
+      // Terminal CLI Window Card: Monospace Shell, Command Prompts
+      return Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF080C16),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFF1E293B), width: 1.5),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Terminal Header Bar
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: const BoxDecoration(
+                color: Color(0xFF0F172A),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(14)),
+              ),
+              child: Row(
+                children: [
+                  Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFFEF4444), shape: BoxShape.circle)),
+                  const SizedBox(width: 5),
+                  Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFFF59E0B), shape: BoxShape.circle)),
+                  const SizedBox(width: 5),
+                  Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF10B981), shape: BoxShape.circle)),
+                  const SizedBox(width: 10),
+                  Text('bash ~ user@profile', style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFF64748B))),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Terminal Avatar Box
+                      Container(
+                        width: 64,
+                        height: 64,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: cfg.primaryColor, width: 1.5),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: _buildAvatarImage(profile.personal.avatarUrl, profile.personal.fullName, cfg),
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('\$ whoami', style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFF10B981))),
+                            Text(
+                              '${profile.personal.fullName} ▌',
+                              style: _getMonospaceStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Colors.white),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              profile.personal.headline,
+                              style: _getMonospaceStyle(fontSize: 11, color: cfg.primaryColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text('\$ cat bio.txt', style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFF10B981))),
+                  const SizedBox(height: 4),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF030712),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: const Color(0xFF1F2937)),
+                    ),
+                    child: Text(
+                      profile.personal.bio,
+                      style: _getMonospaceStyle(fontSize: 11, color: const Color(0xFFCBD5E1), height: 1.4),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Shell action buttons
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      if (profile.personal.email.isNotEmpty)
+                        _buildTerminalAction('mail', () => _launchUrl('mailto:${profile.personal.email}')),
+                      if (profile.personal.githubUrl.isNotEmpty)
+                        _buildTerminalAction('github', () => _launchUrl(profile.personal.githubUrl)),
+                      if (profile.personal.linkedinUrl.isNotEmpty)
+                        _buildTerminalAction('linkedin', () => _launchUrl(profile.personal.linkedinUrl)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isEditorial) {
+      // Editorial Magazine Style: Serif Masthead, Pull-Quote Border, Warm Clean Layout
+      return Container(
+        padding: const EdgeInsets.all(22),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF0F172A).withValues(alpha: 0.04),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Welcome Pill
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: cfg.primaryColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                'WELCOME TO MY PORTFOLIO',
+                style: _getEditorialStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1.2,
+                  color: cfg.primaryColor,
+                ),
+              ),
+            ),
+            const SizedBox(height: 14),
+
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Hi, I'm",
+                        style: _getEditorialStyle(fontSize: 16, color: const Color(0xFF64748B)),
+                      ),
+                      Text(
+                        profile.personal.fullName,
+                        style: _getEditorialStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w900,
+                          color: const Color(0xFF0F172A),
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        profile.personal.headline,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: cfg.primaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (profile.personal.avatarUrl.isNotEmpty) ...[
+                  const SizedBox(width: 14),
+                  Container(
+                    width: 72,
+                    height: 72,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.3), width: 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: cfg.primaryColor.withValues(alpha: 0.15),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(14),
+                      child: _buildAvatarImage(profile.personal.avatarUrl, profile.personal.fullName, cfg),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+            const SizedBox(height: 14),
+
+            // Pull-Quote Bio Border
+            Container(
+              decoration: BoxDecoration(
+                border: Border(left: BorderSide(color: cfg.primaryColor, width: 3)),
+              ),
+              padding: const EdgeInsets.only(left: 12),
+              child: Text(
+                profile.personal.bio,
+                style: _getEditorialStyle(
+                  fontSize: 13,
+                  color: const Color(0xFF475569),
+                  height: 1.5,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Editorial Links
+            Row(
+              children: [
+                if (profile.personal.location.isNotEmpty) ...[
+                  Icon(Icons.location_on, size: 14, color: cfg.primaryColor),
+                  const SizedBox(width: 4),
+                  Text(profile.personal.location, style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                  const SizedBox(width: 12),
+                ],
+                const Spacer(),
+                if (profile.personal.email.isNotEmpty)
+                  _buildSocialIcon(Icons.mail, () => _launchUrl('mailto:${profile.personal.email}'), cfg),
+                if (profile.personal.githubUrl.isNotEmpty)
+                  _buildSocialIcon(Icons.code, () => _launchUrl(profile.personal.githubUrl), cfg),
+                if (profile.personal.linkedinUrl.isNotEmpty)
+                  _buildSocialIcon(Icons.link, () => _launchUrl(profile.personal.linkedinUrl), cfg),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isCyberMatrix) {
+      // Cybersecurity HUD Card: Tactical Borders, Crosshairs, Status Meters
+      return Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: const Color(0xFF090D0F),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: cfg.primaryColor, width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: cfg.primaryColor.withValues(alpha: 0.15),
+              blurRadius: 16,
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.shield, size: 16, color: cfg.primaryColor),
+                const SizedBox(width: 6),
+                Text(
+                  '[OPERATIVE IDENT: CONFIRMED]',
+                  style: _getMonospaceStyle(fontSize: 10, fontWeight: FontWeight.bold, color: cfg.primaryColor),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                // Tactical Avatar
+                Container(
+                  width: 68,
+                  height: 68,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF05080A),
+                    border: Border.all(color: cfg.primaryColor, width: 2),
+                  ),
+                  child: _buildAvatarImage(profile.personal.avatarUrl, profile.personal.fullName, cfg),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        profile.personal.fullName.toUpperCase(),
+                        style: _getMonospaceStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Colors.white),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        profile.personal.headline,
+                        style: _getMonospaceStyle(fontSize: 11, color: cfg.subtextColor),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFF05080A),
+                border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.3)),
+              ),
+              child: Text(
+                profile.personal.bio,
+                style: _getMonospaceStyle(fontSize: 11, color: const Color(0xFFCBD5E1), height: 1.4),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              children: [
+                if (profile.personal.email.isNotEmpty)
+                  _buildCyberPill('MAIL_NODE', () => _launchUrl('mailto:${profile.personal.email}'), cfg),
+                if (profile.personal.githubUrl.isNotEmpty)
+                  _buildCyberPill('GIT_REPOS', () => _launchUrl(profile.personal.githubUrl), cfg),
+                if (profile.personal.linkedinUrl.isNotEmpty)
+                  _buildCyberPill('NET_PROFILE', () => _launchUrl(profile.personal.linkedinUrl), cfg),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Default Glass / Bento / Nordic Card
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: _cardBoxDecoration(cfg),
@@ -668,7 +1262,6 @@ class PortfolioPreviewScreen extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Avatar
               Container(
                 width: 68,
                 height: 68,
@@ -680,8 +1273,8 @@ class PortfolioPreviewScreen extends StatelessWidget {
                   ),
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: cfg.isPopArt ? const Color(0xFF0F172A) : cfg.primaryColor.withValues(alpha: 0.4),
-                    width: cfg.isPopArt ? 2 : 2.5,
+                    color: cfg.primaryColor.withValues(alpha: 0.4),
+                    width: 2.5,
                   ),
                 ),
                 child: ClipOval(
@@ -695,11 +1288,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
                   children: [
                     Text(
                       profile.personal.fullName,
-                      style: GoogleFonts.inter(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        color: cfg.textColor,
-                      ),
+                      style: _getTitleStyle(cfg, fontSize: 20),
                     ),
                     const SizedBox(height: 3),
                     Text(
@@ -728,58 +1317,36 @@ class PortfolioPreviewScreen extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 14),
-
-          // Bio Text
           Text(
             profile.personal.bio,
-            style: TextStyle(
-              fontSize: 12,
-              height: 1.45,
-              color: cfg.subtextColor,
-            ),
+            style: _getBodyStyle(cfg, fontSize: 13, color: cfg.textColor.withValues(alpha: 0.85), height: 1.45),
           ),
-
-          const SizedBox(height: 14),
-
-          // Contact & Social Icons Row
+          const SizedBox(height: 16),
+          // Action Buttons
           Row(
             children: [
               if (profile.personal.email.isNotEmpty)
-                _buildSocialIconButton(
-                  icon: Icons.email_outlined,
-                  onTap: () => launchUrl(Uri.parse('mailto:${profile.personal.email}')),
-                  cfg: cfg,
-                ),
+                _buildSocialIcon(Icons.mail_outline, () => _launchUrl('mailto:${profile.personal.email}'), cfg),
               if (profile.personal.githubUrl.isNotEmpty) ...[
                 const SizedBox(width: 8),
-                _buildSocialIconButton(
-                  icon: Icons.code,
-                  onTap: () => launchUrl(Uri.parse(profile.personal.githubUrl), mode: LaunchMode.externalApplication),
-                  cfg: cfg,
-                ),
+                _buildSocialIcon(Icons.code, () => _launchUrl(profile.personal.githubUrl), cfg),
               ],
               if (profile.personal.linkedinUrl.isNotEmpty) ...[
                 const SizedBox(width: 8),
-                _buildSocialIconButton(
-                  icon: Icons.link,
-                  onTap: () => launchUrl(Uri.parse(profile.personal.linkedinUrl), mode: LaunchMode.externalApplication),
-                  cfg: cfg,
-                ),
+                _buildSocialIcon(Icons.link, () => _launchUrl(profile.personal.linkedinUrl), cfg),
               ],
               const Spacer(),
-              if (profile.personal.targetRole.isNotEmpty)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: cfg.primaryColor.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.3)),
-                  ),
-                  child: Text(
-                    profile.personal.targetRole,
-                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: cfg.primaryColor),
+              if (profile.personal.resumeUrl != null && profile.personal.resumeUrl!.isNotEmpty)
+                ElevatedButton.icon(
+                  onPressed: () => _launchUrl(profile.personal.resumeUrl!),
+                  icon: const Icon(Icons.download, size: 14),
+                  label: const Text('Resume PDF', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: cfg.primaryColor,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
             ],
@@ -789,28 +1356,88 @@ class PortfolioPreviewScreen extends StatelessWidget {
     );
   }
 
-  // --- SCORECARD BAR ---
+  // --- SCORECARD BAR (NO LIVE VIEWS!) ---
 
   Widget _buildScorecardBar(TemplateConfig cfg) {
+    final projectsCount = '${profile.projects.length}';
+    final skillsCount = '${profile.skills.languages.length + profile.skills.frameworks.length}';
+    final rolesCount = '${profile.experience.length}';
+
+    if (cfg.isPopArt) {
+      // Pop Art Hard-Shadow Metric Boxes
+      return Row(
+        children: [
+          Expanded(child: _buildPopStatBox(projectsCount, 'PROJECTS', const Color(0xFFFEF08A))),
+          const SizedBox(width: 8),
+          Expanded(child: _buildPopStatBox(skillsCount, 'TECH SKILLS', const Color(0xFFFBCFE8))),
+          const SizedBox(width: 8),
+          Expanded(child: _buildPopStatBox(rolesCount, 'WORK ROLES', const Color(0xFFBAE6FD))),
+        ],
+      );
+    }
+
+    if (cfg.isTerminal) {
+      // Terminal Monospace Stats Line
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF080C16),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFF1E293B)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildTerminalStatItem('projects', projectsCount, cfg),
+            Text('|', style: _getMonospaceStyle(color: const Color(0xFF334155))),
+            _buildTerminalStatItem('stack_size', skillsCount, cfg),
+            Text('|', style: _getMonospaceStyle(color: const Color(0xFF334155))),
+            _buildTerminalStatItem('work_nodes', rolesCount, cfg),
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isCyberMatrix) {
+      // Cyber Matrix HUD Metrics
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF05080A),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.4)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildCyberStatItem('DEPLOYED_LABS', projectsCount, cfg),
+            _buildCyberStatItem('SECURITY_VECTORS', skillsCount, cfg),
+            _buildCyberStatItem('ROLES_AUDITED', rolesCount, cfg),
+          ],
+        ),
+      );
+    }
+
+    // Default Scorecard (No Live Views!)
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
       decoration: _cardBoxDecoration(cfg),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStatItem('${profile.projects.length}', 'Projects', cfg),
+          _buildStatItem(projectsCount, 'Projects', cfg),
           _buildDivider(cfg),
-          _buildStatItem('${profile.skills.languages.length + profile.skills.frameworks.length}', 'Tech Skills', cfg),
+          _buildStatItem(skillsCount, 'Tech Skills', cfg),
           _buildDivider(cfg),
-          _buildStatItem('${profile.experience.length}', 'Work Roles', cfg),
-          _buildDivider(cfg),
-          _buildStatItem('${profile.analytics.viewsCount}', 'Live Views', cfg),
+          _buildStatItem(rolesCount, 'Work Roles', cfg),
         ],
       ),
     );
   }
 
-  // --- SKILLS CARD ---
+  // --- SKILLS CARD (UNIQUE PER ARCHETYPE) ---
 
   Widget _buildSkillsCard(TemplateConfig cfg) {
     final allSkills = [
@@ -818,6 +1445,87 @@ class PortfolioPreviewScreen extends StatelessWidget {
       ...profile.skills.frameworks,
       ...profile.skills.tools,
     ];
+
+    if (cfg.isPopArt) {
+      // Colorful candy tags with 2px black borders and shadows
+      final colors = [
+        const Color(0xFFFEF08A),
+        const Color(0xFFFBCFE8),
+        const Color(0xFFBAE6FD),
+        const Color(0xFFBBF7D0),
+        const Color(0xFFFED7AA),
+      ];
+
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFF0F172A), width: 2),
+          boxShadow: const [
+            BoxShadow(color: Color(0xFF0F172A), offset: Offset(3, 3)),
+          ],
+        ),
+        child: Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: allSkills.asMap().entries.map((entry) {
+            final color = colors[entry.key % colors.length];
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFF0F172A), width: 1.5),
+                boxShadow: const [
+                  BoxShadow(color: Color(0xFF0F172A), offset: Offset(1.5, 1.5)),
+                ],
+              ),
+              child: Text(
+                entry.value,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFF0F172A),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    }
+
+    if (cfg.isTerminal) {
+      // Terminal bash chip list with $ command prefix
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF080C16),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFF1E293B)),
+        ),
+        child: Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: allSkills.map((s) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0F172A),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.3)),
+              ),
+              child: Text(
+                '\$ $s',
+                style: _getMonospaceStyle(fontSize: 11, color: cfg.primaryColor, fontWeight: FontWeight.bold),
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    }
 
     return Container(
       width: double.infinity,
@@ -831,11 +1539,133 @@ class PortfolioPreviewScreen extends StatelessWidget {
     );
   }
 
-  // --- PROJECT CARD ---
+  // --- PROJECT CARDS ---
 
-  Widget _buildProjectCard(ProjectItem p, TemplateConfig cfg) {
+  Widget _buildProjectCard(ProjectItem project, TemplateConfig cfg) {
+    if (cfg.isPopArt) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFF0F172A), width: 2),
+          boxShadow: const [
+            BoxShadow(color: Color(0xFF0F172A), offset: Offset(3, 3)),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    project.title,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Color(0xFF0F172A)),
+                  ),
+                ),
+                if (project.liveUrl != null && project.liveUrl!.isNotEmpty)
+                  GestureDetector(
+                    onTap: () => _launchUrl(project.liveUrl!),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFDE68A),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: const Color(0xFF0F172A), width: 1.5),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.open_in_new, size: 12, color: Color(0xFF0F172A)),
+                          SizedBox(width: 4),
+                          Text('Live Demo', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Color(0xFF0F172A))),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              project.description,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Color(0xFF475569), height: 1.4),
+            ),
+            if (project.technologies.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: project.technologies.map((t) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF1F5F9),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: const Color(0xFFCBD5E1)),
+                    ),
+                    child: Text(t, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF334155))),
+                  );
+                }).toList(),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
+
+    if (cfg.isTerminal) {
+      return Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF080C16),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFF1E293B)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.terminal, size: 14, color: cfg.primaryColor),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    'repo: ${project.title.toLowerCase().replaceAll(' ', '_')}.git',
+                    style: _getMonospaceStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF10B981).withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text('[BUILD: PASSING]', style: _getMonospaceStyle(fontSize: 9, color: const Color(0xFF10B981), fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              project.description,
+              style: _getMonospaceStyle(fontSize: 11, color: const Color(0xFF94A3B8), height: 1.4),
+            ),
+            if (project.technologies.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 6,
+                children: project.technologies.map((t) {
+                  return Text('#$t ', style: _getMonospaceStyle(fontSize: 10, color: cfg.primaryColor));
+                }).toList(),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
+
+    // Default Project Card
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: _cardBoxDecoration(cfg),
       child: Column(
@@ -846,218 +1676,191 @@ class PortfolioPreviewScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  p.title,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: cfg.textColor),
+                  project.title,
+                  style: _getTitleStyle(cfg, fontSize: 15),
                 ),
               ),
-              if (p.githubUrl != null && p.githubUrl!.isNotEmpty)
+              if (project.liveUrl != null && project.liveUrl!.isNotEmpty)
                 IconButton(
                   icon: const Icon(Icons.open_in_new, size: 16),
                   color: cfg.primaryColor,
-                  constraints: const BoxConstraints(),
-                  padding: EdgeInsets.zero,
-                  onPressed: () => launchUrl(Uri.parse(p.githubUrl!), mode: LaunchMode.externalApplication),
+                  onPressed: () => _launchUrl(project.liveUrl!),
                 ),
             ],
           ),
           const SizedBox(height: 4),
           Text(
-            p.description,
-            style: TextStyle(fontSize: 11, height: 1.4, color: cfg.subtextColor),
+            project.description,
+            style: _getBodyStyle(cfg, fontSize: 12, color: cfg.subtextColor, height: 1.4),
           ),
-          const SizedBox(height: 10),
-          Wrap(
-            spacing: 6,
-            runSpacing: 6,
-            children: p.technologies
-                .map((t) => Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: cfg.isDark ? Colors.white10 : Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.2)),
-                      ),
-                      child: Text(
-                        t,
-                        style: TextStyle(fontSize: 9, color: cfg.primaryColor, fontWeight: FontWeight.bold),
-                      ),
-                    ))
-                .toList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // --- EXPERIENCE CARD ---
-
-  Widget _buildExperienceCard(ExperienceItem e, TemplateConfig cfg) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: _cardBoxDecoration(cfg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(e.role, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: cfg.textColor)),
-          const SizedBox(height: 2),
-          Text('${e.company} • ${e.startDate} - ${e.endDate}',
-              style: TextStyle(fontSize: 11, color: cfg.primaryColor, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 6),
-          ...e.description.map((d) => Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('• ', style: TextStyle(color: cfg.primaryColor)),
-                    Expanded(child: Text(d, style: TextStyle(fontSize: 11, color: cfg.subtextColor, height: 1.3))),
-                  ],
-                ),
-              )),
-        ],
-      ),
-    );
-  }
-
-  // --- EDUCATION CARD ---
-
-  Widget _buildEducationCard(EducationItem edu, TemplateConfig cfg) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: _cardBoxDecoration(cfg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(edu.institution, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: cfg.textColor)),
-          const SizedBox(height: 2),
-          Text('${edu.degree} in ${edu.fieldOfStudy} (${edu.startYear} - ${edu.endYear})',
-              style: TextStyle(fontSize: 11, color: cfg.primaryColor, fontWeight: FontWeight.bold)),
-          if (edu.gpa != null) ...[
-            const SizedBox(height: 4),
-            Text('GPA: ${edu.gpa}', style: TextStyle(fontSize: 10, color: cfg.subtextColor, fontWeight: FontWeight.bold)),
+          if (project.technologies.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 6,
+              runSpacing: 4,
+              children: project.technologies.map((t) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: cfg.primaryColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    t,
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: cfg.primaryColor,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
           ],
         ],
       ),
     );
   }
 
-  // --- RESUME DOWNLOAD ACTION ---
+  // --- EXPERIENCE & EDUCATION CARDS ---
 
-  Widget _buildResumeDownloadButton(BuildContext context, TemplateConfig cfg) {
-    final hasResume = profile.personal.resumeUrl != null && profile.personal.resumeUrl!.isNotEmpty;
-
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton.icon(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: cfg.primaryColor,
-          foregroundColor: (cfg.primaryColor.computeLuminance() > 0.5) ? Colors.black : Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: cfg.isPopArt ? const BorderSide(color: Color(0xFF0F172A), width: 2) : BorderSide.none,
-          ),
-          elevation: cfg.isPopArt ? 4 : 2,
-        ),
-        icon: const Icon(Icons.download, size: 20),
-        label: Text(
-          hasResume ? 'Download Verified CV (PDF)' : 'Preview ATS Resume Format',
-          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-        ),
-        onPressed: () {
-          if (hasResume) {
-            launchUrl(Uri.parse(profile.personal.resumeUrl!), mode: LaunchMode.externalApplication);
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: const Text('Attach your PDF resume in Builder Step 2 to enable direct candidate download!'),
-                backgroundColor: cfg.primaryColor,
+  Widget _buildExperienceCard(ExperienceItem exp, TemplateConfig cfg) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: _cardBoxDecoration(cfg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                exp.role,
+                style: _getTitleStyle(cfg, fontSize: 14),
               ),
-            );
-          }
-        },
+              Text(
+                '${exp.startDate} - ${exp.endDate}',
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: cfg.primaryColor),
+              ),
+            ],
+          ),
+          Text(
+            exp.company,
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: cfg.subtextColor),
+          ),
+          if (exp.description.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Text(
+              exp.description.join(' • '),
+              style: _getBodyStyle(cfg, fontSize: 11, color: cfg.subtextColor, height: 1.4),
+            ),
+
+          ],
+        ],
       ),
     );
   }
 
-  // --- REUSABLE CARD DECORATION ---
+  Widget _buildEducationCard(EducationItem edu, TemplateConfig cfg) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: _cardBoxDecoration(cfg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  edu.degree,
+                  style: _getTitleStyle(cfg, fontSize: 14),
+                ),
+              ),
+              Text(
+                '${edu.startYear} - ${edu.endYear}',
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: cfg.primaryColor),
+              ),
+            ],
+          ),
+          Text(
+            edu.institution,
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: cfg.subtextColor),
+          ),
+          if (edu.fieldOfStudy.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            Text(
+              'Field: ${edu.fieldOfStudy}',
+              style: TextStyle(fontSize: 11, color: cfg.subtextColor),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
 
-  BoxDecoration _cardBoxDecoration(TemplateConfig cfg) {
-    if (cfg.isPopArt) {
-      // Retro Canva Pop Art Card with thick border and solid offset shadow
-      return BoxDecoration(
-        color: cfg.cardBgColor,
+  // --- STATS HELPERS (NO LIVE VIEWS!) ---
+
+  Widget _buildPopStatBox(String number, String label, Color bgColor) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      decoration: BoxDecoration(
+        color: bgColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFF0F172A), width: 2),
         boxShadow: const [
-          BoxShadow(
-            color: Color(0xFF0F172A),
-            offset: Offset(3, 3),
-          ),
+          BoxShadow(color: Color(0xFF0F172A), offset: Offset(2, 2)),
         ],
-      );
-    }
-
-    if (cfg.isNordic) {
-      // Architectural Nordic Minimalist Card
-      return BoxDecoration(
-        color: cfg.cardBgColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE7E5E4)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      );
-    }
-
-    // Default Glass / Terminal card
-    return BoxDecoration(
-      color: cfg.cardBgColor,
-      borderRadius: BorderRadius.circular(20),
-      border: Border.all(
-        color: cfg.isDark ? cfg.primaryColor.withValues(alpha: 0.25) : Colors.grey.shade200,
       ),
-      boxShadow: [
-        BoxShadow(
-          color: cfg.isDark
-              ? cfg.primaryColor.withValues(alpha: 0.08)
-              : Colors.black.withValues(alpha: 0.04),
-          blurRadius: 12,
-          offset: const Offset(0, 4),
-        ),
-      ],
+      child: Column(
+        children: [
+          Text(number, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Color(0xFF0F172A))),
+          const SizedBox(height: 2),
+          Text(label, style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: Color(0xFF334155))),
+        ],
+      ),
     );
   }
 
-  Widget _buildSectionHeader(String title, IconData icon, Color color, Color textColor) {
-    return Row(
+  Widget _buildTerminalStatItem(String label, String value, TemplateConfig cfg) {
+    return Column(
       children: [
-        Icon(icon, size: 16, color: color),
-        const SizedBox(width: 6),
-        Text(
-          title,
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: textColor),
-        ),
+        Text(value, style: _getMonospaceStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+        Text(label, style: _getMonospaceStyle(fontSize: 9, color: cfg.subtextColor)),
       ],
     );
   }
 
-  Widget _buildStatItem(String val, String label, TemplateConfig cfg) {
+  Widget _buildCyberStatItem(String label, String value, TemplateConfig cfg) {
+    return Column(
+      children: [
+        Text(value, style: _getMonospaceStyle(fontSize: 16, fontWeight: FontWeight.w900, color: cfg.primaryColor)),
+        Text(label, style: _getMonospaceStyle(fontSize: 8, fontWeight: FontWeight.bold, color: const Color(0xFF94A3B8))),
+      ],
+    );
+  }
+
+  Widget _buildStatItem(String count, String label, TemplateConfig cfg) {
     return Column(
       children: [
         Text(
-          val,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: cfg.textColor),
+          count,
+          style: cfg.isEditorial
+              ? _getEditorialStyle(fontSize: 20, fontWeight: FontWeight.w900, color: cfg.textColor)
+              : TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                  color: cfg.textColor,
+                ),
         ),
         const SizedBox(height: 2),
         Text(
           label,
-          style: TextStyle(fontSize: 9, color: cfg.subtextColor, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w600,
+            color: cfg.subtextColor,
+          ),
         ),
       ],
     );
@@ -1066,52 +1869,250 @@ class PortfolioPreviewScreen extends StatelessWidget {
   Widget _buildDivider(TemplateConfig cfg) {
     return Container(
       width: 1,
-      height: 22,
+      height: 24,
       color: cfg.isDark ? Colors.white12 : Colors.grey.shade200,
+    );
+  }
+
+  // --- STYLING & DECORATION HELPERS ---
+
+  BoxDecoration _cardBoxDecoration(TemplateConfig cfg) {
+    if (cfg.isPopArt) {
+      return BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFF0F172A), width: 2),
+        boxShadow: const [
+          BoxShadow(color: Color(0xFF0F172A), offset: Offset(3, 3)),
+        ],
+      );
+    }
+
+    if (cfg.isTerminal) {
+      return BoxDecoration(
+        color: const Color(0xFF080C16),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFF1E293B)),
+      );
+    }
+
+    if (cfg.isCyberMatrix) {
+      return BoxDecoration(
+        color: const Color(0xFF05080A),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.4)),
+      );
+    }
+
+    return BoxDecoration(
+      color: cfg.cardBgColor,
+      borderRadius: BorderRadius.circular(20),
+      border: Border.all(
+        color: cfg.isDark ? Colors.white.withValues(alpha: 0.08) : Colors.grey.shade200,
+      ),
+      boxShadow: [
+        if (!cfg.isDark)
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildSectionHeader(String title, IconData icon, Color iconColor, Color textColor, TemplateConfig cfg) {
+    return Row(
+      children: [
+        Icon(icon, size: 16, color: iconColor),
+        const SizedBox(width: 8),
+        Text(
+          title,
+          style: cfg.isTerminal || cfg.isCyberMatrix
+              ? _getMonospaceStyle(fontSize: 13, fontWeight: FontWeight.bold, color: textColor)
+              : cfg.isEditorial
+                  ? _getEditorialStyle(fontSize: 16, fontWeight: FontWeight.w800, color: textColor)
+                  : TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      color: textColor,
+                    ),
+        ),
+      ],
     );
   }
 
   Widget _buildSkillChip(String skill, TemplateConfig cfg) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: cfg.isDark
-            ? cfg.primaryColor.withValues(alpha: 0.12)
-            : cfg.primaryColor.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(10),
+        color: cfg.primaryColor.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: cfg.isPopArt ? const Color(0xFF0F172A) : cfg.primaryColor.withValues(alpha: 0.35),
-          width: cfg.isPopArt ? 1.5 : 1,
+          color: cfg.primaryColor.withValues(alpha: 0.25),
         ),
       ),
       child: Text(
         skill,
         style: TextStyle(
-          fontSize: 10,
+          fontSize: 11,
           fontWeight: FontWeight.bold,
-          color: cfg.primaryColor,
+          color: cfg.isDark ? cfg.textColor : cfg.primaryColor,
         ),
       ),
     );
   }
 
-  Widget _buildSocialIconButton({
-    required IconData icon,
-    required VoidCallback onTap,
-    required TemplateConfig cfg,
-  }) {
+  Widget _buildSocialIcon(IconData icon, VoidCallback onTap, TemplateConfig cfg) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: cfg.isDark ? Colors.white12 : Colors.grey.shade100,
+          color: cfg.primaryColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(10),
-          border: cfg.isPopArt ? Border.all(color: const Color(0xFF0F172A), width: 1.5) : null,
         ),
-        child: Icon(icon, size: 16, color: cfg.textColor),
+        child: Icon(icon, size: 16, color: cfg.primaryColor),
       ),
+    );
+  }
+
+  Widget _buildPopStickerPill(IconData icon, String text, Color bgColor) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFF0F172A), width: 1.5),
+        boxShadow: const [
+          BoxShadow(color: Color(0xFF0F172A), offset: Offset(1.5, 1.5)),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: const Color(0xFF0F172A)),
+          const SizedBox(width: 4),
+          Text(text, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPopActionPill(IconData icon, String label, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFF0F172A), width: 1.5),
+          boxShadow: const [
+            BoxShadow(color: Color(0xFF0F172A), offset: Offset(2, 2)),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 13, color: const Color(0xFF0F172A)),
+            const SizedBox(width: 5),
+            Text(label, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Color(0xFF0F172A))),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTerminalAction(String cmd, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: const Color(0xFF0F172A),
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: const Color(0xFF334155)),
+        ),
+        child: Text('./$cmd.sh', style: _getMonospaceStyle(fontSize: 11, color: const Color(0xFF38BDF8))),
+      ),
+    );
+  }
+
+  Widget _buildCyberPill(String tag, VoidCallback onTap, TemplateConfig cfg) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: const Color(0xFF05080A),
+          border: Border.all(color: cfg.primaryColor),
+        ),
+        child: Text('[$tag]', style: _getMonospaceStyle(fontSize: 10, fontWeight: FontWeight.bold, color: cfg.primaryColor)),
+      ),
+    );
+  }
+
+  // --- TYPOGRAPHY ENGINE ---
+
+  TextStyle _getTitleStyle(TemplateConfig cfg, {required double fontSize}) {
+    if (cfg.isEditorial) {
+      return _getEditorialStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: cfg.textColor);
+    }
+    if (cfg.isTerminal || cfg.isCyberMatrix) {
+      return _getMonospaceStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: cfg.textColor);
+    }
+    return TextStyle(
+      fontSize: fontSize,
+      fontWeight: FontWeight.w900,
+      color: cfg.textColor,
+    );
+  }
+
+  TextStyle _getBodyStyle(TemplateConfig cfg, {required double fontSize, Color? color, double? height}) {
+    if (cfg.isTerminal || cfg.isCyberMatrix) {
+      return _getMonospaceStyle(fontSize: fontSize, color: color ?? cfg.subtextColor, height: height);
+    }
+    if (cfg.isEditorial) {
+      return _getEditorialStyle(fontSize: fontSize, color: color ?? cfg.textColor, height: height);
+    }
+    return TextStyle(
+      fontSize: fontSize,
+      color: color ?? cfg.textColor,
+      height: height,
+    );
+  }
+
+  TextStyle _getMonospaceStyle({
+    double fontSize = 12,
+    FontWeight fontWeight = FontWeight.normal,
+    Color color = Colors.white,
+    double? letterSpacing,
+    double? height,
+  }) {
+    return GoogleFonts.firaCode(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+      letterSpacing: letterSpacing,
+      height: height,
+    );
+  }
+
+  TextStyle _getEditorialStyle({
+    double fontSize = 14,
+    FontWeight fontWeight = FontWeight.normal,
+    Color color = const Color(0xFF0F172A),
+    double? letterSpacing,
+    double? height,
+  }) {
+    return GoogleFonts.playfairDisplay(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+      letterSpacing: letterSpacing,
+      height: height,
     );
   }
 
@@ -1133,19 +2134,30 @@ class PortfolioPreviewScreen extends StatelessWidget {
           fit: BoxFit.cover,
           width: double.infinity,
           height: double.infinity,
-          errorBuilder: (_, __, ___) => _buildInitialLetter(fullName),
+          errorBuilder: (_, __, ___) => _buildPlaceholderInitial(fullName, cfg),
         );
       }
     }
-    return _buildInitialLetter(fullName);
+    return _buildPlaceholderInitial(fullName, cfg);
   }
 
-  Widget _buildInitialLetter(String fullName) {
+  Widget _buildPlaceholderInitial(String fullName, TemplateConfig cfg) {
     return Center(
       child: Text(
         fullName.isNotEmpty ? fullName[0].toUpperCase() : 'P',
-        style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Colors.white),
+        style: TextStyle(
+          fontSize: 26,
+          fontWeight: FontWeight.w900,
+          color: cfg.isDark ? Colors.white : cfg.primaryColor,
+        ),
       ),
     );
+  }
+
+  Future<void> _launchUrl(String url) async {
+    final uri = Uri.tryParse(url);
+    if (uri != null && await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 }
