@@ -71,8 +71,7 @@ class PortfolioProfile {
           githubUrl: 'https://github.com/adhithya',
           linkedinUrl: 'https://linkedin.com/in/adhithya',
           portfolioUrl: 'https://portfolio-generator-pg76.vercel.app/u/adhithya',
-          avatarUrl:
-              'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
+          avatarUrl: '',
           resumeUrl: '',
           resumeFileName: 'Adhithya_Resume.pdf',
           yearsExperience: '2+',
@@ -209,23 +208,23 @@ class PersonalInfo {
       };
 
   factory PersonalInfo.fromJson(Map<String, dynamic> json) => PersonalInfo(
-        fullName: json['fullName'] ?? '',
+        fullName: json['fullName'] ?? json['full_name'] ?? '',
         headline: json['headline'] ?? '',
         bio: json['bio'] ?? '',
-        targetRole: json['targetRole'] ?? '',
+        targetRole: json['targetRole'] ?? json['target_role'] ?? '',
         location: json['location'] ?? '',
         email: json['email'] ?? '',
         phone: json['phone'] ?? '',
-        githubUrl: json['githubUrl'] ?? '',
-        linkedinUrl: json['linkedinUrl'] ?? '',
-        portfolioUrl: json['portfolioUrl'] ?? '',
-        avatarUrl: json['avatarUrl'] ?? '',
-        resumeUrl: json['resumeUrl'],
-        resumeFileName: json['resumeFileName'],
-        yearsExperience: json['yearsExperience'] ?? '2+',
-        completedProjects: json['completedProjects'] ?? '10+',
-        happyClients: json['happyClients'] ?? '100%',
-        awardsWon: json['awardsWon'] ?? '3',
+        githubUrl: json['githubUrl'] ?? json['github'] ?? '',
+        linkedinUrl: json['linkedinUrl'] ?? json['linkedin'] ?? '',
+        portfolioUrl: json['portfolioUrl'] ?? json['website'] ?? '',
+        avatarUrl: json['avatarUrl'] ?? json['avatar_url'] ?? json['avatar'] ?? '',
+        resumeUrl: json['resumeUrl'] ?? json['resume_url'],
+        resumeFileName: json['resumeFileName'] ?? json['resume_file_name'],
+        yearsExperience: json['yearsExperience'] ?? json['years_experience'] ?? '2+',
+        completedProjects: json['completedProjects'] ?? json['completed_projects'] ?? '10+',
+        happyClients: json['happyClients'] ?? json['happy_clients'] ?? '100%',
+        awardsWon: json['awardsWon'] ?? json['awards_won'] ?? '3',
       );
 }
 

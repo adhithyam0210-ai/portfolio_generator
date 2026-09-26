@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../main.dart';
 import '../models/portfolio_models.dart';
-import '../widgets/share_bottom_sheet.dart';
 
 enum TemplateArchetype {
   terminal,
@@ -436,13 +437,6 @@ class PortfolioPreviewScreen extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: _getTitleStyle(cfg, fontSize: 16),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.share_outlined, color: cfg.primaryColor),
-            onPressed: () => ShareBottomSheet.show(context, profile, () {}),
-          ),
-          const SizedBox(width: 4),
-        ],
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -865,28 +859,26 @@ class PortfolioPreviewScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (profile.personal.avatarUrl.isNotEmpty) ...[
-                  const SizedBox(width: 14),
-                  Container(
-                    width: 72,
-                    height: 72,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.3), width: 2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: cfg.primaryColor.withValues(alpha: 0.15),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(14),
-                      child: _buildAvatarImage(profile.personal.avatarUrl, profile.personal.fullName, cfg),
-                    ),
+                const SizedBox(width: 14),
+                Container(
+                  width: 72,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.3), width: 2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: cfg.primaryColor.withValues(alpha: 0.15),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
-                ],
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: _buildAvatarImage(profile.personal.avatarUrl, profile.personal.fullName, cfg),
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 14),
@@ -3437,41 +3429,72 @@ class PortfolioPreviewScreen extends StatelessWidget {
   }
 
   Widget _buildAvatarImage(String avatarUrl, String fullName, TemplateConfig cfg) {
-    if (avatarUrl.isNotEmpty) {
-      if (avatarUrl.startsWith('data:image')) {
+    final cleanUrl = avatarUrl.trim();
+    // Only display image if the user explicitly chose/uploaded one
+    final isUserChosen = cleanUrl.isNotEmpty &&
+        !cleanUrl.contains('images.unsplash.com') &&
+        !cleanUrl.contains('default_avatar');
+
+    if (isUserChosen) {
+      // 1. Data URI or Base64 Image
+      if (cleanUrl.startsWith('data:') || cleanUrl.contains(';base64,')) {
         try {
-          final base64Part = avatarUrl.split(',').last;
+          final base64Part = cleanUrl.contains(',') ? cleanUrl.split(',').last : cleanUrl;
+          final normalized = base64.normalize(base64Part.replaceAll(RegExp(r'\s+'), ''));
+          final bytes = base64Decode(normalized);
           return Image.memory(
-            base64Decode(base64Part),
+            bytes,
             gaplessPlayback: true,
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
+            errorBuilder: (_, __, ___) => _buildProfileSymbol(cfg),
           );
         } catch (_) {}
-      } else if (avatarUrl.startsWith('http')) {
-        return Image.network(
-          avatarUrl,
-          gaplessPlayback: true,
+      }
+
+      // 2. Local file path from image picker
+      try {
+        if (!cleanUrl.startsWith('http')) {
+          final path = cleanUrl.startsWith('file://') ? cleanUrl.replaceFirst('file://', '') : cleanUrl;
+          final file = File(path);
+          if (file.existsSync()) {
+            return Image.file(
+              file,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+              errorBuilder: (_, __, ___) => _buildProfileSymbol(cfg),
+            );
+          }
+        }
+      } catch (_) {}
+
+      // 3. User Remote HTTP/HTTPS URL
+      if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
+        return CachedNetworkImage(
+          imageUrl: cleanUrl,
           fit: BoxFit.cover,
           width: double.infinity,
           height: double.infinity,
-          errorBuilder: (_, __, ___) => _buildPlaceholderInitial(fullName, cfg),
+          placeholder: (_, __) => _buildProfileSymbol(cfg),
+          errorWidget: (_, __, ___) => _buildProfileSymbol(cfg),
         );
       }
     }
-    return _buildPlaceholderInitial(fullName, cfg);
+
+    // Default to profile symbol if no image chosen by user
+    return _buildProfileSymbol(cfg);
   }
 
-  Widget _buildPlaceholderInitial(String fullName, TemplateConfig cfg) {
+  Widget _buildProfileSymbol(TemplateConfig cfg) {
     return Center(
-      child: Text(
-        fullName.isNotEmpty ? fullName[0].toUpperCase() : 'P',
-        style: TextStyle(
-          fontSize: 26,
-          fontWeight: FontWeight.w900,
-          color: cfg.isDark ? Colors.white : cfg.primaryColor,
-        ),
+      child: Icon(
+        Icons.person_rounded,
+        size: 36,
+        color: cfg.isDark
+            ? (cfg.isPopArt ? const Color(0xFF0F172A) : Colors.white70)
+            : (cfg.isPopArt ? const Color(0xFF0F172A) : cfg.primaryColor),
       ),
     );
   }

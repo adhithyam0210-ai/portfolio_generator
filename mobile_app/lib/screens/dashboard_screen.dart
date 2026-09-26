@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -474,37 +476,65 @@ class DashboardScreen extends StatelessWidget {
   }
 
   Widget _buildDashboardAvatar(String avatarUrl, String fullName) {
-    if (avatarUrl.isNotEmpty) {
-      if (avatarUrl.startsWith('data:image')) {
+    final cleanUrl = avatarUrl.trim();
+    final isUserChosen = cleanUrl.isNotEmpty &&
+        !cleanUrl.contains('images.unsplash.com') &&
+        !cleanUrl.contains('default_avatar');
+
+    if (isUserChosen) {
+      if (cleanUrl.startsWith('data:') || cleanUrl.contains(';base64,')) {
         try {
-          final base64Part = avatarUrl.split(',').last;
+          final base64Part = cleanUrl.contains(',') ? cleanUrl.split(',').last : cleanUrl;
+          final normalized = base64.normalize(base64Part.replaceAll(RegExp(r'\s+'), ''));
+          final bytes = base64Decode(normalized);
           return Image.memory(
-            base64Decode(base64Part),
+            bytes,
             gaplessPlayback: true,
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
+            errorBuilder: (_, __, ___) => _buildProfileSymbol(),
           );
         } catch (_) {}
-      } else if (avatarUrl.startsWith('http')) {
-        return Image.network(
-          avatarUrl,
-          gaplessPlayback: true,
+      }
+
+      try {
+        if (!cleanUrl.startsWith('http')) {
+          final path = cleanUrl.startsWith('file://') ? cleanUrl.replaceFirst('file://', '') : cleanUrl;
+          final file = File(path);
+          if (file.existsSync()) {
+            return Image.file(
+              file,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+              errorBuilder: (_, __, ___) => _buildProfileSymbol(),
+            );
+          }
+        }
+      } catch (_) {}
+
+      if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
+        return CachedNetworkImage(
+          imageUrl: cleanUrl,
           fit: BoxFit.cover,
           width: double.infinity,
           height: double.infinity,
-          errorBuilder: (_, __, ___) => _buildPlaceholderInitial(fullName),
+          placeholder: (_, __) => _buildProfileSymbol(),
+          errorWidget: (_, __, ___) => _buildProfileSymbol(),
         );
       }
     }
-    return _buildPlaceholderInitial(fullName);
+
+    return _buildProfileSymbol();
   }
 
-  Widget _buildPlaceholderInitial(String fullName) {
-    return Center(
-      child: Text(
-        fullName.isNotEmpty ? fullName[0].toUpperCase() : 'P',
-        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: Colors.white),
+  Widget _buildProfileSymbol() {
+    return const Center(
+      child: Icon(
+        Icons.person_rounded,
+        size: 34,
+        color: Colors.white,
       ),
     );
   }

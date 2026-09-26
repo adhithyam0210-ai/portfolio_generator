@@ -11,7 +11,8 @@ import {
   Code2, 
   Wand2, 
   Download, 
-  ExternalLink 
+  ExternalLink,
+  User 
 } from 'lucide-react';
 
 interface TemplateProps {
@@ -107,11 +108,17 @@ export const DanielVioletTemplate: React.FC<TemplateProps> = ({ profile, isPubli
           {/* Hero Avatar Image (Proportional Square Portrait) */}
           <div className="md:col-span-5 flex justify-center md:justify-end">
             <div className="relative w-48 sm:w-60 aspect-square rounded-3xl overflow-hidden border-2 border-purple-500/40 bg-purple-950/30 p-2 shadow-2xl shadow-purple-950/50">
-              <img 
-                src={personal.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600'} 
-                alt={personal.fullName}
-                className="w-full h-full object-cover rounded-2xl"
-              />
+              {personal.avatarUrl ? (
+                <img 
+                  src={personal.avatarUrl} 
+                  alt={personal.fullName}
+                  className="w-full h-full object-cover rounded-2xl"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-purple-950/40 text-purple-400 rounded-2xl">
+                  <User className="w-16 h-16" />
+                </div>
+              )}
             </div>
           </div>
 

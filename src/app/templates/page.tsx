@@ -16,7 +16,6 @@ import {
   Moon, 
   Sun, 
   Lock, 
-  Share2,
   CheckCircle2
 } from 'lucide-react';
 import Link from 'next/link';

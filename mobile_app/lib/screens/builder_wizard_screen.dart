@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
@@ -944,6 +946,21 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
     );
   }
 
+  Future<Uint8List> _resizeImageIfNeeded(Uint8List bytes) async {
+    try {
+      if (bytes.lengthInBytes <= 150 * 1024) return bytes;
+      final codec = await ui.instantiateImageCodec(bytes, targetWidth: 400);
+      final frame = await codec.getNextFrame();
+      final byteData = await frame.image.toByteData(format: ui.ImageByteFormat.png);
+      if (byteData != null) {
+        return byteData.buffer.asUint8List();
+      }
+    } catch (e) {
+      debugPrint('Image downsampling error: $e');
+    }
+    return bytes;
+  }
+
   Future<void> _pickAvatarImage(PortfolioProvider provider) async {
     try {
       final result = await FilePicker.platform.pickFiles(
@@ -957,10 +974,10 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
           bytes = await File(file.path!).readAsBytes();
         }
         if (bytes != null) {
-          final uint8 = Uint8List.fromList(bytes);
+          final rawUint8 = Uint8List.fromList(bytes);
+          final uint8 = await _resizeImageIfNeeded(rawUint8);
           final base64String = base64Encode(uint8);
-          final ext = file.extension ?? 'jpg';
-          final dataUri = 'data:image/$ext;base64,$base64String';
+          final dataUri = 'data:image/png;base64,$base64String';
           setState(() {
             _avatarBytesCache = uint8;
             provider.profile.personal.avatarUrl = dataUri;
@@ -996,21 +1013,28 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
   }
 
   Widget _buildAvatarPreview(String avatarUrl, String fullName) {
-    if (avatarUrl.isNotEmpty) {
-      if (avatarUrl.startsWith('data:image')) {
+    if (_avatarBytesCache != null) {
+      return Image.memory(
+        _avatarBytesCache!,
+        key: ValueKey(_avatarBytesCache.hashCode),
+        gaplessPlayback: true,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+      );
+    }
+
+    final cleanUrl = avatarUrl.trim();
+    final isUserChosen = cleanUrl.isNotEmpty &&
+        !cleanUrl.contains('images.unsplash.com') &&
+        !cleanUrl.contains('default_avatar');
+
+    if (isUserChosen) {
+      if (cleanUrl.startsWith('data:') || cleanUrl.contains(';base64,')) {
         try {
-          if (_avatarBytesCache != null) {
-            return Image.memory(
-              _avatarBytesCache!,
-              key: ValueKey(_avatarBytesCache.hashCode),
-              gaplessPlayback: true,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
-            );
-          }
-          final base64Part = avatarUrl.split(',').last;
-          _avatarBytesCache = base64Decode(base64Part);
+          final base64Part = cleanUrl.contains(',') ? cleanUrl.split(',').last : cleanUrl;
+          final normalized = base64.normalize(base64Part.replaceAll(RegExp(r'\s+'), ''));
+          _avatarBytesCache = base64Decode(normalized);
           return Image.memory(
             _avatarBytesCache!,
             key: ValueKey(_avatarBytesCache.hashCode),
@@ -1018,28 +1042,48 @@ class _BuilderWizardScreenState extends State<BuilderWizardScreen> {
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
+            errorBuilder: (_, __, ___) => _buildProfileSymbol(),
           );
         } catch (_) {}
-      } else if (avatarUrl.startsWith('http')) {
-        return Image.network(
-          avatarUrl,
-          key: ValueKey(avatarUrl),
-          gaplessPlayback: true,
+      }
+
+      try {
+        if (!cleanUrl.startsWith('http')) {
+          final path = cleanUrl.startsWith('file://') ? cleanUrl.replaceFirst('file://', '') : cleanUrl;
+          final file = File(path);
+          if (file.existsSync()) {
+            return Image.file(
+              file,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+              errorBuilder: (_, __, ___) => _buildProfileSymbol(),
+            );
+          }
+        }
+      } catch (_) {}
+
+      if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
+        return CachedNetworkImage(
+          imageUrl: cleanUrl,
           fit: BoxFit.cover,
           width: double.infinity,
           height: double.infinity,
-          errorBuilder: (_, __, ___) => _buildPlaceholderInitial(fullName),
+          placeholder: (_, __) => _buildProfileSymbol(),
+          errorWidget: (_, __, ___) => _buildProfileSymbol(),
         );
       }
     }
-    return _buildPlaceholderInitial(fullName);
+
+    return _buildProfileSymbol();
   }
 
-  Widget _buildPlaceholderInitial(String fullName) {
-    return Center(
-      child: Text(
-        fullName.isNotEmpty ? fullName[0].toUpperCase() : 'P',
-        style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: Colors.white),
+  Widget _buildProfileSymbol() {
+    return const Center(
+      child: Icon(
+        Icons.person_rounded,
+        size: 38,
+        color: Colors.white,
       ),
     );
   }

@@ -23,9 +23,6 @@ class PortfolioProvider extends ChangeNotifier {
   Future<void> reload() => _loadFromLocalAndCloud();
 
   Future<void> _loadFromLocalAndCloud() async {
-    _isLoading = true;
-    notifyListeners();
-
     try {
       final prefs = await SharedPreferences.getInstance();
       final cached = prefs.getString('cached_portfolio_profile');
@@ -37,22 +34,37 @@ class PortfolioProvider extends ChangeNotifier {
           _profile.analytics.resumeDownloads = 0;
           _profile.analytics.lastViewedAt = 'No views yet';
         }
-      }
 
-      // Try syncing from Supabase with generous timeout for mobile
+        // Reset legacy default avatar URL so only user-chosen images are shown
+        if (_profile.personal.avatarUrl.contains('images.unsplash.com') ||
+            _profile.personal.avatarUrl.contains('default_avatar')) {
+          _profile.personal.avatarUrl = '';
+        }
+      }
+    } catch (e) {
+      debugPrint('Local load error: $e');
+    } finally {
+      // Local profile is ready immediately — UI renders with 0 delay!
+      _isLoading = false;
+      notifyListeners();
+    }
+
+    // Background cloud sync: non-blocking so the app is immediately responsive
+    _syncFromCloudBackground();
+  }
+
+  Future<void> _syncFromCloudBackground() async {
+    try {
       final cloudProfile = await SupabaseService()
           .getPortfolioByUsername(_profile.username)
-          .timeout(const Duration(seconds: 6), onTimeout: () => null);
+          .timeout(const Duration(seconds: 4), onTimeout: () => null);
       if (cloudProfile != null) {
         _profile = cloudProfile;
         await _saveLocal();
+        notifyListeners();
       }
-
     } catch (e) {
-      debugPrint('Local/Cloud load error: $e');
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+      debugPrint('Background cloud sync error: $e');
     }
   }
 
@@ -66,24 +78,38 @@ class PortfolioProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> saveAndSync() async {
-    _isSyncing = true;
-    _syncMessage = 'Syncing to Supabase...';
-    notifyListeners();
-
+  // Fast optimistic saving: immediately updates local storage and UI, syncs to cloud in background
+  Future<bool> saveAndSync({bool immediate = false}) async {
+    // 1. Immediately persist locally (instant response)
     await _saveLocal();
-    final success = await SupabaseService().savePortfolio(_profile);
-
-    _isSyncing = false;
-    _syncMessage = success ? 'Saved & Synced to Cloud!' : 'Saved locally (Offline)';
     notifyListeners();
 
-    Future.delayed(const Duration(seconds: 3), () {
-      _syncMessage = null;
-      notifyListeners();
-    });
+    // 2. Perform cloud sync asynchronously in background without blocking UI
+    _isSyncing = true;
+    _syncMessage = 'Syncing...';
+    notifyListeners();
 
-    return success;
+    try {
+      final success = await SupabaseService()
+          .savePortfolio(_profile)
+          .timeout(const Duration(seconds: 4), onTimeout: () => false);
+
+      _isSyncing = false;
+      _syncMessage = success ? 'Saved & Synced!' : 'Saved locally';
+      notifyListeners();
+
+      Future.delayed(const Duration(seconds: 2), () {
+        _syncMessage = null;
+        notifyListeners();
+      });
+
+      return success;
+    } catch (e) {
+      _isSyncing = false;
+      _syncMessage = 'Saved locally';
+      notifyListeners();
+      return false;
+    }
   }
 
   // --- Profile Completion Score ---

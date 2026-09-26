@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
-import '../providers/portfolio_provider.dart';
 import 'landing_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
   double _progress = 0.15;
-  String _statusMessage = 'Launching Studio...';
+  final String _statusMessage = 'Launching Studio...';
 
   @override
   void initState() {
@@ -44,47 +42,29 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   }
 
   Future<void> _startBootSequence() async {
-    // Stage 1: Initializing
-    await Future.delayed(const Duration(milliseconds: 300));
+    // Quick, smooth launch without artificial lag (boot in ~600ms)
+    await Future.delayed(const Duration(milliseconds: 250));
     if (!mounted) return;
     setState(() {
-      _progress = 0.45;
-      _statusMessage = 'Launching Studio...';
+      _progress = 0.70;
     });
-
-    // Ensure provider data is loaded
-    try {
-      final provider = Provider.of<PortfolioProvider>(context, listen: false);
-      await provider.reload().timeout(const Duration(seconds: 4));
-    } catch (_) {}
-
-    // Stage 2: Templates & themes
-    await Future.delayed(const Duration(milliseconds: 400));
-    if (!mounted) return;
-    setState(() {
-      _progress = 0.80;
-      _statusMessage = 'Launching Studio...';
-    });
-
-    // Stage 3: Launch
-    await Future.delayed(const Duration(milliseconds: 400));
-    if (!mounted) return;
-    setState(() {
-      _progress = 1.0;
-      _statusMessage = 'Launching Studio...';
-    });
-
-    await Future.delayed(const Duration(milliseconds: 350));
-    if (!mounted) return;
 
     final prefs = await SharedPreferences.getInstance();
     final isLoggedIn = prefs.getBool('is_logged_in') ?? false;
+
+    await Future.delayed(const Duration(milliseconds: 250));
+    if (!mounted) return;
+    setState(() {
+      _progress = 1.0;
+    });
+
+    await Future.delayed(const Duration(milliseconds: 150));
     if (!mounted) return;
 
     // Transition smoothly to MainNavigationShell if logged in, else LandingScreen
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 600),
+        transitionDuration: const Duration(milliseconds: 350),
         pageBuilder: (context, animation, secondaryAnimation) =>
             isLoggedIn ? const MainNavigationShell() : const LandingScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -92,7 +72,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         },
       ),
     );
-
   }
 
   @override

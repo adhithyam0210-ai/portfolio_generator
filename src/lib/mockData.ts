@@ -22,7 +22,7 @@ export const INITIAL_PROFILE: PortfolioProfile = {
     githubUrl: 'https://github.com/alexrivera-dev',
     linkedinUrl: 'https://linkedin.com/in/alex-rivera-cs',
     portfolioUrl: 'https://portfolio-generator-pg76.vercel.app/u/alexrivera',
-    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600',
+    avatarUrl: '',
     resumeUrl: '/resume',
     resumeFileName: 'Alex_Rivera_Resume.pdf',
     yearsExperience: '3+',

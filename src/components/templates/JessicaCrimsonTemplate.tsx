@@ -12,7 +12,8 @@ import {
   Wand2, 
   Download, 
   ExternalLink,
-  Star
+  Star,
+  User
 } from 'lucide-react';
 
 interface TemplateProps {
@@ -57,11 +58,17 @@ export const JessicaCrimsonTemplate: React.FC<TemplateProps> = ({ profile, isPub
           
           <div className="lg:col-span-5 flex justify-center">
             <div className="relative w-full max-w-sm rounded-2xl overflow-hidden border-2 border-rose-900/40 bg-slate-900 shadow-2xl">
-              <img 
-                src={personal.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600'} 
-                alt={personal.fullName}
-                className="w-full h-[380px] object-cover"
-              />
+              {personal.avatarUrl ? (
+                <img 
+                  src={personal.avatarUrl} 
+                  alt={personal.fullName}
+                  className="w-full h-[380px] object-cover"
+                />
+              ) : (
+                <div className="w-full h-[380px] flex items-center justify-center bg-slate-900 text-rose-500/40">
+                  <User className="w-24 h-24" />
+                </div>
+              )}
             </div>
           </div>
 

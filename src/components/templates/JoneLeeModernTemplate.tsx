@@ -10,7 +10,8 @@ import {
   Code2, 
   Wand2, 
   ExternalLink, 
-  Download 
+  Download,
+  User 
 } from 'lucide-react';
 
 interface TemplateProps {
@@ -97,11 +98,17 @@ export const JoneLeeModernTemplate: React.FC<TemplateProps> = ({ profile, isPubl
           {/* Hero Avatar Image */}
           <div className="lg:col-span-5 relative flex justify-center">
             <div className="relative w-full max-w-md rounded-3xl overflow-hidden bg-slate-100 border-4 border-white shadow-2xl">
-              <img 
-                src={personal.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600'} 
-                alt={personal.fullName}
-                className="w-full h-[440px] sm:h-[480px] object-cover"
-              />
+              {personal.avatarUrl ? (
+                <img 
+                  src={personal.avatarUrl} 
+                  alt={personal.fullName}
+                  className="w-full h-[440px] sm:h-[480px] object-cover"
+                />
+              ) : (
+                <div className="w-full h-[440px] sm:h-[480px] flex items-center justify-center bg-slate-100 text-slate-300">
+                  <User className="w-24 h-24" />
+                </div>
+              )}
               <div className="absolute bottom-4 left-4 right-4 bg-gradient-to-r from-rose-500 to-pink-600 text-white p-4 rounded-2xl shadow-xl flex items-center justify-between">
                 <div>
                   <p className="text-xs uppercase font-bold text-rose-100">Target Role</p>
