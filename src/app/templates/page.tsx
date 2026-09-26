@@ -292,7 +292,7 @@ export default function TemplatesPage() {
 
             <div className="flex items-center gap-1.5 bg-slate-100 px-3.5 py-1.5 rounded-xl border border-slate-200 text-xs font-mono text-slate-600 flex-1 max-w-md truncate">
               <Lock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-              <span className="truncate">portfoliocraft.com/portfolio/{profile.username}?style={currentTemplate}</span>
+              <span className="truncate">portfolio-generator-pg76.vercel.app/u/{profile.username}</span>
             </div>
           </div>
 

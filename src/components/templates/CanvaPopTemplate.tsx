@@ -17,9 +17,6 @@ export const CanvaPopTemplate: React.FC<TemplateProps> = ({ profile, isPublicVie
       <div className="bg-gradient-to-r from-amber-300 via-rose-300 to-indigo-300 py-16 px-4 sm:px-8 relative overflow-hidden border-b-4 border-slate-900">
         
         {/* Decorative Floating Stickers */}
-        <div className="absolute top-4 left-6 bg-white border-2 border-slate-900 px-3 py-1 rounded-full text-xs font-black rotate-[-6deg] shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hidden sm:block">
-          ✨ Canva Style
-        </div>
         <div className="absolute bottom-4 right-10 bg-amber-400 border-2 border-slate-900 px-4 py-1.5 rounded-full text-xs font-black rotate-[5deg] shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hidden sm:block">
           🚀 Open to Hire
         </div>

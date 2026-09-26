@@ -15,8 +15,8 @@ export const MinimalNordicTemplate: React.FC<TemplateProps> = ({ profile, isPubl
       
       {/* NORDIC TOP BAR */}
       <div className="border-b border-[#E2DDD3] py-5 px-6 sm:px-12 flex items-center justify-between font-sans">
-        <span className="font-mono text-xs tracking-widest uppercase text-stone-500">
-          STUDIO NORDIC • {personal.fullName}
+        <span className="font-mono text-xs tracking-widest uppercase text-stone-700 font-bold">
+          {personal.fullName}
         </span>
 
         <div className="flex items-center gap-4 text-xs font-semibold text-stone-700">
@@ -42,9 +42,6 @@ export const MinimalNordicTemplate: React.FC<TemplateProps> = ({ profile, isPubl
         
         {/* HERO INTRO */}
         <div className="space-y-8 border-b border-[#E2DDD3] pb-16">
-          <span className="font-mono text-xs tracking-widest text-stone-500 uppercase block">
-            — ARCHITECTURAL & SOFTWARE PORTFOLIO
-          </span>
 
           <div className="flex flex-col-reverse md:flex-row md:items-start justify-between gap-8">
             <div className="space-y-6 max-w-4xl">
@@ -101,20 +98,17 @@ export const MinimalNordicTemplate: React.FC<TemplateProps> = ({ profile, isPubl
         <section className="space-y-10">
           <div className="flex items-baseline justify-between border-b border-[#E2DDD3] pb-4 font-sans">
             <h2 className="text-xs font-mono tracking-widest uppercase text-stone-500">
-              01 / SELECTED WORK ({projects.length})
+              SELECTED WORK ({projects.length})
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {projects.map((proj, idx) => (
+            {projects.map((proj) => (
               <div
                 key={proj.id}
                 className="bg-[#EFECE6] p-8 rounded-none border border-[#E2DDD3] space-y-6 flex flex-col justify-between hover:border-stone-800 transition-colors font-sans"
               >
                 <div className="space-y-3">
-                  <span className="text-[11px] font-mono text-stone-500 block">
-                    PROJ_0{idx + 1}
-                  </span>
                   <h3 className="text-2xl font-serif font-normal text-[#1C1B1A]">{proj.title}</h3>
                   <p className="text-xs text-stone-700 font-light leading-relaxed">{proj.description}</p>
 
@@ -150,7 +144,7 @@ export const MinimalNordicTemplate: React.FC<TemplateProps> = ({ profile, isPubl
           {/* Skills */}
           <div className="space-y-6">
             <h3 className="text-xs font-mono tracking-widest uppercase text-stone-500 border-b border-[#E2DDD3] pb-3">
-              02 / TECHNICAL STACK
+              TECHNICAL STACK
             </h3>
 
             <div className="space-y-4 text-xs font-medium">
@@ -177,7 +171,7 @@ export const MinimalNordicTemplate: React.FC<TemplateProps> = ({ profile, isPubl
             {/* Experience */}
             <div className="space-y-6">
               <h3 className="text-xs font-mono tracking-widest uppercase text-stone-500 border-b border-[#E2DDD3] pb-3">
-                03 / EXPERIENCE HISTORY
+                EXPERIENCE HISTORY
               </h3>
 
               <div className="space-y-6">
@@ -201,7 +195,7 @@ export const MinimalNordicTemplate: React.FC<TemplateProps> = ({ profile, isPubl
             {/* Education */}
             <div className="space-y-6">
               <h3 className="text-xs font-mono tracking-widest uppercase text-stone-500 border-b border-[#E2DDD3] pb-3">
-                04 / EDUCATION
+                EDUCATION
               </h3>
 
               <div className="space-y-4">

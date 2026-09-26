@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../core/constants/supabase_config.dart';
 import '../models/portfolio_models.dart';
 
 class ShareBottomSheet extends StatelessWidget {
@@ -29,7 +30,7 @@ class ShareBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final publicUrl = 'https://portfolify.app/u/${profile.username}';
+    final publicUrl = '${SupabaseConfig.webBaseUrl}/u/${profile.username}';
 
     return Container(
       decoration: const BoxDecoration(
@@ -229,7 +230,7 @@ class ShareBottomSheet extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.12),
+                color: color.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, color: color, size: 22),

@@ -70,7 +70,7 @@ class PortfolioProfile {
           phone: '+91 98765 43210',
           githubUrl: 'https://github.com/adhithya',
           linkedinUrl: 'https://linkedin.com/in/adhithya',
-          portfolioUrl: 'https://portfolify.app/u/adhithya',
+          portfolioUrl: 'https://portfolio-generator-pg76.vercel.app/u/adhithya',
           avatarUrl:
               'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
           resumeUrl: '',
@@ -114,7 +114,7 @@ class PortfolioProfile {
                 'Instant portfolio website & mobile app generator for technical students and developers.',
             technologies: ['Next.js', 'Flutter', 'Tailwind', 'Supabase'],
             githubUrl: 'https://github.com/adhithya/portfolify',
-            liveUrl: 'https://portfolify.app',
+            liveUrl: 'https://portfolio-generator-pg76.vercel.app',
             featured: true,
             category: 'Full Stack',
           ),
@@ -142,9 +142,9 @@ class PortfolioProfile {
           darkMode: true,
         ),
         analytics: AnalyticsData(
-          viewsCount: 148,
-          resumeDownloads: 32,
-          lastViewedAt: 'Just now',
+          viewsCount: 0,
+          resumeDownloads: 0,
+          lastViewedAt: 'No views yet',
         ),
       );
 }

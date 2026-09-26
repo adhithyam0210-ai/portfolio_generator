@@ -49,7 +49,7 @@ export default function DashboardPage() {
   const isPublished = profile.isPublished !== false;
   const publicUrl = typeof window !== 'undefined' 
     ? `${window.location.origin}/u/${profile.username}` 
-    : `https://portfolify.app/u/${profile.username}`;
+    : `https://portfolio-generator-pg76.vercel.app/u/${profile.username}`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(publicUrl);

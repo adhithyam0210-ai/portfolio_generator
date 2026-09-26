@@ -31,12 +31,18 @@ class PortfolioProvider extends ChangeNotifier {
       final cached = prefs.getString('cached_portfolio_profile');
       if (cached != null) {
         _profile = PortfolioProfile.fromJson(jsonDecode(cached));
+        // Reset legacy hardcoded mock analytics (148 / 32) to actual 0 if not yet synced from cloud
+        if (_profile.analytics.viewsCount == 148 && _profile.analytics.resumeDownloads == 32) {
+          _profile.analytics.viewsCount = 0;
+          _profile.analytics.resumeDownloads = 0;
+          _profile.analytics.lastViewedAt = 'No views yet';
+        }
       }
 
-      // Try syncing from Supabase with timeout
+      // Try syncing from Supabase with generous timeout for mobile
       final cloudProfile = await SupabaseService()
           .getPortfolioByUsername(_profile.username)
-          .timeout(const Duration(seconds: 2), onTimeout: () => null);
+          .timeout(const Duration(seconds: 6), onTimeout: () => null);
       if (cloudProfile != null) {
         _profile = cloudProfile;
         await _saveLocal();

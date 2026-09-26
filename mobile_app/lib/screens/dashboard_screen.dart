@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../core/constants/supabase_config.dart';
 import '../providers/portfolio_provider.dart';
 import '../services/supabase_service.dart';
 import '../widgets/share_bottom_sheet.dart';
@@ -91,7 +92,7 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<PortfolioProvider>(context);
     final profile = provider.profile;
-    final publicUrl = 'https://portfolify.app/u/${profile.username}';
+    final publicUrl = '${SupabaseConfig.webBaseUrl}/u/${profile.username}';
     final completionScore = provider.completionPercentage;
 
     return Scaffold(
@@ -261,7 +262,7 @@ class DashboardScreen extends StatelessWidget {
                               ),
                               const SizedBox(width: 6),
                               Text(
-                                profile.isPublished ? 'Published (Toggle)' : 'Unpublished (Toggle)',
+                                profile.isPublished ? 'Published' : 'Unpublished',
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.bold,

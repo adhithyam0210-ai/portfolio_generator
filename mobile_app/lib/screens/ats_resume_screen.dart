@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import '../core/constants/supabase_config.dart';
 import '../models/portfolio_models.dart';
 import '../providers/portfolio_provider.dart';
 import 'builder_wizard_screen.dart';
@@ -120,7 +121,7 @@ class _AtsResumeScreenState extends State<AtsResumeScreen> {
   void _shareResume(PortfolioProfile p) {
     final summary = '${p.personal.fullName} - ATS Resume\n'
         'Role: ${p.personal.targetRole.isNotEmpty ? p.personal.targetRole : p.personal.headline}\n'
-        'Portfolio: https://portfolify.app/u/${p.username}\n'
+        'Portfolio: ${SupabaseConfig.webBaseUrl}/u/${p.username}\n'
         'Contact: ${p.personal.email}';
     Share.share(summary, subject: '${p.personal.fullName} ATS Resume');
   }

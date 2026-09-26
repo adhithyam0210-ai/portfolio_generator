@@ -38,9 +38,6 @@ export const AIResearcherTemplate: React.FC<TemplateProps> = ({ profile, isPubli
             <span className="font-extrabold text-sm tracking-tight text-white group-hover:text-[#D946EF] transition-colors">
               {personal.fullName}
             </span>
-            <span className="hidden md:inline-block font-mono text-xs text-purple-300">
-              / AI Lab & Publications
-            </span>
           </a>
           <div className="hidden md:flex items-center gap-6 text-xs font-semibold text-purple-200">
             <a href="#bio" className="hover:text-[#D946EF] transition-colors">Lab Focus</a>

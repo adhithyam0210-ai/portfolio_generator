@@ -279,15 +279,15 @@ class PortfolioPreviewScreen extends StatelessWidget {
         return const TemplateConfig(
           id: 'frost-academic',
           title: 'Frost Academic',
-          bgColor: Color(0xFFF0F9FF),
+          bgColor: Color(0xFFF0F7FF),
           cardBgColor: Colors.white,
           textColor: Color(0xFF0F172A),
-          subtextColor: Color(0xFF0369A1),
+          subtextColor: Color(0xFF64748B),
           primaryColor: Color(0xFF0284C7),
           secondaryColor: Color(0xFF38BDF8),
           isDark: false,
-          archetype: TemplateArchetype.aiResearcher,
-          roleBadge: 'CRYSTAL ICE ACADEMIC',
+          archetype: TemplateArchetype.glassmorphism,
+          roleBadge: '',
         );
 
       // 15. Coral Modernist (Editorial Magazine)
@@ -303,7 +303,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
           secondaryColor: Color(0xFFFF8787),
           isDark: false,
           archetype: TemplateArchetype.editorial,
-          roleBadge: 'EDITORIAL CORAL MODERNIST',
+          roleBadge: '',
         );
 
       // 16. Cyber Violet (Bento Grid)
@@ -319,7 +319,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
           secondaryColor: Color(0xFFA855F7),
           isDark: true,
           archetype: TemplateArchetype.bento,
-          roleBadge: 'ELECTRIC VIOLET GLOW',
+          roleBadge: '',
         );
 
       // 17. Nexus Developer (Terminal CLI)
@@ -335,7 +335,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
           secondaryColor: Color(0xFF3B82F6),
           isDark: true,
           archetype: TemplateArchetype.terminal,
-          roleBadge: 'NEXUS GIT COMMITS // LIVE',
+          roleBadge: '',
         );
 
       // 18. Slate Editorial (Editorial Magazine)
@@ -351,7 +351,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
           secondaryColor: Color(0xFF64748B),
           isDark: false,
           archetype: TemplateArchetype.editorial,
-          roleBadge: 'MONOCHROME EDITORIAL DIVIDERS',
+          roleBadge: '',
         );
 
       // 19. Crimson Studio (Bento Grid)
@@ -359,15 +359,15 @@ class PortfolioPreviewScreen extends StatelessWidget {
         return const TemplateConfig(
           id: 'crimson-studio',
           title: 'Crimson Studio',
-          bgColor: Color(0xFF141416),
-          cardBgColor: Color(0xFF222228),
+          bgColor: Color(0xFF0A0A0A),
+          cardBgColor: Color(0xFF161618),
           textColor: Colors.white,
           subtextColor: Color(0xFFFDA4AF),
           primaryColor: Color(0xFFE11D48),
           secondaryColor: Color(0xFFFB7185),
           isDark: true,
           archetype: TemplateArchetype.bento,
-          roleBadge: 'LUXURY RUBY STUDIO',
+          roleBadge: '',
         );
 
       // 20. Executive Classic (Editorial / Corporate)
@@ -375,15 +375,15 @@ class PortfolioPreviewScreen extends StatelessWidget {
         return const TemplateConfig(
           id: 'executive-classic',
           title: 'Executive Classic',
-          bgColor: Color(0xFF0B192C),
-          cardBgColor: Color(0xFF1E3E62),
+          bgColor: Color(0xFF0F172A),
+          cardBgColor: Color(0xFF1E293B),
           textColor: Colors.white,
-          subtextColor: Color(0xFFFCD34D),
-          primaryColor: Color(0xFFD97706),
-          secondaryColor: Color(0xFFF59E0B),
+          subtextColor: Color(0xFF94A3B8),
+          primaryColor: Color(0xFF38BDF8),
+          secondaryColor: Color(0xFF60A5FA),
           isDark: true,
           archetype: TemplateArchetype.editorial,
-          roleBadge: 'EXECUTIVE BOARD ADVISORY',
+          roleBadge: '',
         );
 
       // 21. Modern Glass (Featured Glassmorphism)
@@ -431,35 +431,10 @@ class PortfolioPreviewScreen extends StatelessWidget {
             }
           },
         ),
-        title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(
-                color: cfg.primaryColor.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(6),
-                border: cfg.isPopArt
-                    ? Border.all(color: const Color(0xFF0F172A), width: 1.5)
-                    : null,
-              ),
-              child: Text(
-                cfg.id.toUpperCase(),
-                style: _getMonospaceStyle(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w900,
-                  color: cfg.primaryColor,
-                ),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                profile.personal.fullName,
-                overflow: TextOverflow.ellipsis,
-                style: _getTitleStyle(cfg, fontSize: 14),
-              ),
-            ),
-          ],
+        title: Text(
+          profile.personal.fullName,
+          overflow: TextOverflow.ellipsis,
+          style: _getTitleStyle(cfg, fontSize: 16),
         ),
         actions: [
           IconButton(
@@ -473,9 +448,6 @@ class PortfolioPreviewScreen extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            // Top Role-Specific Theme Bar (matches website top banner)
-            _buildThematicTopBar(cfg),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Column(
@@ -499,7 +471,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
                           : cfg.isCyberMatrix
                               ? '[SECURITY ARSENAL // SKILLS]'
                               : cfg.isNordic
-                                  ? '02 / TECHNICAL STACK'
+                                  ? 'TECHNICAL STACK'
                                   : cfg.isBento
                                       ? 'Design & Engineering Tooling'
                                       : 'Technical Arsenal & Skills',
@@ -521,7 +493,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
                           : cfg.isCyberMatrix
                               ? '[SECURITY LABS & TARGETS]'
                               : cfg.isNordic
-                                  ? '01 / SELECTED WORK (${profile.projects.length})'
+                                  ? 'SELECTED WORK'
                                   : cfg.isBento
                                       ? 'Featured Case Studies'
                                       : 'Hardening Labs & Projects',
@@ -546,7 +518,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
                           : cfg.isCyberMatrix
                               ? '[OPERATIVE HISTORY // ROLES]'
                               : cfg.isNordic
-                                  ? '03 / EXPERIENCE HISTORY'
+                                  ? 'EXPERIENCE HISTORY'
                                   : cfg.isBento
                                       ? 'Work Experience & Journey'
                                       : cfg.isEditorial
@@ -573,7 +545,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
                           : cfg.isCyberMatrix
                               ? '[ACADEMIC CLEARANCE // DEGREES]'
                               : cfg.isNordic
-                                  ? '04 / ACADEMIC FOUNDATIONS'
+                                  ? 'ACADEMIC FOUNDATIONS'
                                   : cfg.isBento
                                       ? 'Academic Background & Degrees'
                                       : cfg.isEditorial
@@ -592,313 +564,12 @@ class PortfolioPreviewScreen extends StatelessWidget {
                     const SizedBox(height: 10),
                   ],
 
-                  // Bottom Watermark
-                  const SizedBox(height: 24),
-                  Center(
-                    child: Text(
-                      'Generated with Portfolify Studio • 21 Verified Styles',
-                      style: _getBodyStyle(cfg, fontSize: 10, color: cfg.subtextColor),
-                    ),
-                  ),
                   const SizedBox(height: 32),
                 ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  // --- THEMATIC TOP BANNERS MATCHING THE WEBSITE ---
-
-  Widget _buildThematicTopBar(TemplateConfig cfg) {
-    if (cfg.isPopArt) {
-      // Canva Pop Art Top Banner (Gradient + Sticker)
-      return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFFFDE68A), Color(0xFFFDA4AF), Color(0xFFA5B4FC)],
-          ),
-          border: Border(
-            bottom: BorderSide(color: Color(0xFF0F172A), width: 2.5),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFF0F172A), width: 2),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0xFF0F172A),
-                    offset: Offset(2, 2),
-                  ),
-                ],
-              ),
-              child: const Text(
-                '✨ CANVA POP STYLE',
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Color(0xFF0F172A)),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF59E0B),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFF0F172A), width: 2),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0xFF0F172A),
-                    offset: Offset(2, 2),
-                  ),
-                ],
-              ),
-              child: const Text(
-                '🚀 OPEN TO WORK',
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.white),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    if (cfg.isTerminal) {
-      // macOS / Linux Terminal Window Bar
-      return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        color: const Color(0xFF070D1E),
-        child: Row(
-          children: [
-            Row(
-              children: [
-                Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFFEF4444), shape: BoxShape.circle)),
-                const SizedBox(width: 5),
-                Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFFF59E0B), shape: BoxShape.circle)),
-                const SizedBox(width: 5),
-                Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF10B981), shape: BoxShape.circle)),
-              ],
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                '> ${cfg.id} ~/profile.config.ts',
-                style: _getMonospaceStyle(fontSize: 11, color: const Color(0xFF94A3B8)),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(
-                color: cfg.primaryColor.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                'LIVE_CLI',
-                style: _getMonospaceStyle(fontSize: 9, fontWeight: FontWeight.bold, color: cfg.primaryColor),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    if (cfg.isCyberMatrix) {
-      // Cybersecurity HUD Top Bar
-      return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        color: const Color(0xFF05080A),
-        child: Row(
-          children: [
-            Container(
-              width: 8,
-              height: 8,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: cfg.primaryColor,
-                boxShadow: [
-                  BoxShadow(color: cfg.primaryColor.withValues(alpha: 0.8), blurRadius: 6),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                'SYS_DEFENSE: NOMINAL // PORT 443 ENCRYPTED',
-                style: _getMonospaceStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  color: cfg.primaryColor,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ),
-            Text(
-              '[SECURE]',
-              style: _getMonospaceStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w900,
-                color: cfg.primaryColor,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    if (cfg.isEditorial) {
-      // Editorial Magazine Top Bar
-      return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        decoration: BoxDecoration(
-          color: cfg.primaryColor.withValues(alpha: 0.08),
-          border: Border(bottom: BorderSide(color: cfg.primaryColor.withValues(alpha: 0.2), width: 1)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '— CURRICULUM VITAE & PORTFOLIO —',
-              style: _getEditorialStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.5,
-                color: cfg.primaryColor,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    if (cfg.isNordic) {
-      // Scandinavian Minimalist Top Bar (Matching MinimalNordicTemplate)
-      return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: const BoxDecoration(
-          color: Color(0xFFF6F4EF),
-          border: Border(bottom: BorderSide(color: Color(0xFFE2DDD3), width: 1)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                'STUDIO NORDIC • ${profile.personal.fullName.toUpperCase()}',
-                overflow: TextOverflow.ellipsis,
-                style: _getMonospaceStyle(
-                  fontSize: 10,
-                  letterSpacing: 1.5,
-                  color: const Color(0xFF78716C),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              'SELECTED WORK',
-              style: _getMonospaceStyle(
-                fontSize: 9,
-                letterSpacing: 1.0,
-                color: const Color(0xFFA8A29E),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    if (cfg.isBento) {
-      // Bento UI/UX Top Bar (Matching UIUXDesignerTemplate)
-      return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1)),
-        ),
-        child: Row(
-          children: [
-            Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFFFF6B6B), shape: BoxShape.circle)),
-            const SizedBox(width: 8),
-            Flexible(
-              child: Text(
-                profile.personal.fullName,
-                overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A)),
-              ),
-            ),
-            const SizedBox(width: 4),
-            Text(
-              '/ UI•UX Case Studies',
-              style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w600, color: const Color(0xFF94A3B8)),
-            ),
-            const Spacer(),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-              decoration: BoxDecoration(
-                color: const Color(0xFF0F172A),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Text('Download CV', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: Colors.white)),
-            ),
-          ],
-        ),
-      );
-    }
-
-    if (cfg.isAiResearcher) {
-      // AI Researcher Top Bar
-      return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
-        color: const Color(0xFF140D26),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'arXiv:2409.STUDIO // PEER REVIEWED',
-              style: _getMonospaceStyle(fontSize: 10, color: cfg.subtextColor, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              'LOSS: 0.0014',
-              style: _getMonospaceStyle(fontSize: 10, color: cfg.primaryColor, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-      );
-    }
-
-    // Default Glass / Modern bar
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      color: cfg.primaryColor.withValues(alpha: 0.08),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.verified, size: 14, color: cfg.primaryColor),
-          const SizedBox(width: 6),
-          Text(
-            cfg.roleBadge,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.5,
-              color: cfg.primaryColor,
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -1129,12 +800,12 @@ class PortfolioPreviewScreen extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.all(22),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: cfg.isDark ? cfg.cardBgColor : Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+          border: Border.all(color: cfg.isDark ? Colors.white12 : const Color(0xFFE2E8F0), width: 1.2),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF0F172A).withValues(alpha: 0.04),
+              color: cfg.isDark ? Colors.black26 : const Color(0xFF0F172A).withValues(alpha: 0.04),
               blurRadius: 16,
               offset: const Offset(0, 4),
             ),
@@ -1147,7 +818,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
-                color: cfg.primaryColor.withValues(alpha: 0.1),
+                color: cfg.primaryColor.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
@@ -1171,14 +842,14 @@ class PortfolioPreviewScreen extends StatelessWidget {
                     children: [
                       Text(
                         "Hi, I'm",
-                        style: _getEditorialStyle(fontSize: 16, color: const Color(0xFF64748B)),
+                        style: _getEditorialStyle(fontSize: 16, color: cfg.subtextColor),
                       ),
                       Text(
                         profile.personal.fullName,
                         style: _getEditorialStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.w900,
-                          color: const Color(0xFF0F172A),
+                          color: cfg.textColor,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -1230,7 +901,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
                 profile.personal.bio,
                 style: _getEditorialStyle(
                   fontSize: 13,
-                  color: const Color(0xFF475569),
+                  color: cfg.isDark ? cfg.subtextColor : const Color(0xFF475569),
                   height: 1.5,
                 ),
               ),
@@ -1243,7 +914,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
                 if (profile.personal.location.isNotEmpty) ...[
                   Icon(Icons.location_on, size: 14, color: cfg.primaryColor),
                   const SizedBox(width: 4),
-                  Text(profile.personal.location, style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                  Text(profile.personal.location, style: TextStyle(fontSize: 11, color: cfg.subtextColor)),
                   const SizedBox(width: 12),
                 ],
                 const Spacer(),
@@ -1504,65 +1175,64 @@ class PortfolioPreviewScreen extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.all(22),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: cfg.isDark ? cfg.cardBgColor : Colors.white,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
-          boxShadow: const [
-            BoxShadow(color: Color(0x0A0F172A), blurRadius: 16, offset: Offset(0, 4)),
+          border: Border.all(color: cfg.isDark ? Colors.white12 : const Color(0xFFE2E8F0), width: 1.2),
+          boxShadow: [
+            BoxShadow(
+              color: cfg.isDark ? Colors.black26 : const Color(0x0A0F172A),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
           ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Target role pill badge with palette icon
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFF1F1),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFFFFD4D4)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.palette_outlined, size: 13, color: Color(0xFFFF6B6B)),
-                  const SizedBox(width: 5),
-                  Text(
-                    profile.personal.targetRole.isNotEmpty
-                        ? profile.personal.targetRole
-                        : 'Software Engineer / Web & App Dev',
-                    style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xFFFF6B6B),
-                    ),
+            // Target role pill badge
+            if (profile.personal.targetRole.isNotEmpty)
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                decoration: BoxDecoration(
+                  color: cfg.isDark
+                      ? cfg.primaryColor.withValues(alpha: 0.15)
+                      : const Color(0xFFFFF1F1),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: cfg.isDark
+                        ? cfg.primaryColor.withValues(alpha: 0.3)
+                        : const Color(0xFFFFD4D4),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 14),
-
-            // Giant Hero Title with coral highlight
-            RichText(
-              text: TextSpan(
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w900,
-                  color: const Color(0xFF0F172A),
-                  height: 1.15,
-                  letterSpacing: -0.6,
                 ),
-                children: const [
-                  TextSpan(text: 'Crafting intuitive accessible '),
-                  TextSpan(
-                    text: 'user experience',
-                    style: TextStyle(color: Color(0xFFFF6B6B)),
-                  ),
-                  TextSpan(text: ' & digital products.'),
-                ],
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.palette_outlined, size: 13, color: cfg.primaryColor),
+                    const SizedBox(width: 5),
+                    Text(
+                      profile.personal.targetRole,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        color: cfg.primaryColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+            // User Name
+            Text(
+              profile.personal.fullName,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 24,
+                fontWeight: FontWeight.w900,
+                color: cfg.textColor,
+                letterSpacing: -0.6,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
 
             // Headline
             Text(
@@ -1570,7 +1240,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
               style: GoogleFonts.plusJakartaSans(
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFF334155),
+                color: cfg.primaryColor,
               ),
             ),
             const SizedBox(height: 12),
@@ -1584,7 +1254,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w400,
-                      color: const Color(0xFF64748B),
+                      color: cfg.subtextColor,
                       height: 1.45,
                     ),
                   ),
@@ -1596,9 +1266,16 @@ class PortfolioPreviewScreen extends StatelessWidget {
                   height: 72,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(22),
-                    border: Border.all(color: Colors.white, width: 3),
-                    boxShadow: const [
-                      BoxShadow(color: Color(0x18FF6B6B), blurRadius: 14, offset: Offset(0, 4)),
+                    border: Border.all(
+                      color: cfg.isDark ? cfg.primaryColor.withValues(alpha: 0.4) : Colors.white,
+                      width: 2.5,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: cfg.primaryColor.withValues(alpha: 0.2),
+                        blurRadius: 14,
+                        offset: const Offset(0, 4),
+                      ),
                     ],
                   ),
                   child: ClipRRect(
@@ -1621,10 +1298,10 @@ class PortfolioPreviewScreen extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF0F172A),
+                        color: cfg.primaryColor,
                         borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                          BoxShadow(color: Color(0x200F172A), blurRadius: 6, offset: Offset(0, 2)),
+                        boxShadow: [
+                          BoxShadow(color: cfg.primaryColor.withValues(alpha: 0.3), blurRadius: 6, offset: const Offset(0, 2)),
                         ],
                       ),
                       child: const Row(
@@ -1643,16 +1320,16 @@ class PortfolioPreviewScreen extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF1F5F9),
+                        color: cfg.isDark ? Colors.white10 : const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: const Color(0xFFCBD5E1)),
+                        border: Border.all(color: cfg.isDark ? Colors.white12 : const Color(0xFFCBD5E1)),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.code, size: 13, color: Color(0xFF0F172A)),
-                          SizedBox(width: 5),
-                          Text('GitHub / Work', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
+                          Icon(Icons.code, size: 13, color: cfg.textColor),
+                          const SizedBox(width: 5),
+                          Text('GitHub / Work', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: cfg.textColor)),
                         ],
                       ),
                     ),
@@ -1663,16 +1340,16 @@ class PortfolioPreviewScreen extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF8FAFC),
+                        color: cfg.isDark ? Colors.white10 : const Color(0xFFF8FAFC),
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: const Color(0xFFE2E8F0)),
+                        border: Border.all(color: cfg.isDark ? Colors.white12 : const Color(0xFFE2E8F0)),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.mail_outline, size: 13, color: Color(0xFFFF6B6B)),
-                          SizedBox(width: 5),
-                          Text('Email', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF334155))),
+                          Icon(Icons.mail_outline, size: 13, color: cfg.primaryColor),
+                          const SizedBox(width: 5),
+                          Text('Email', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: cfg.subtextColor)),
                         ],
                       ),
                     ),
@@ -1689,35 +1366,30 @@ class PortfolioPreviewScreen extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: const Color(0xFF18122B),
+          color: cfg.cardBgColor,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFD946EF).withValues(alpha: 0.5), width: 1.5),
+          border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.5), width: 1.5),
           boxShadow: [
-            BoxShadow(color: const Color(0xFFD946EF).withValues(alpha: 0.15), blurRadius: 18),
+            BoxShadow(color: cfg.primaryColor.withValues(alpha: 0.15), blurRadius: 18),
           ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD946EF).withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: const Color(0xFFD946EF).withValues(alpha: 0.4)),
-                  ),
-                  child: Text(
-                    'arXiv:2409.STUDIO',
-                    style: _getMonospaceStyle(fontSize: 10, fontWeight: FontWeight.bold, color: const Color(0xFFD946EF)),
-                  ),
+            if (profile.personal.targetRole.isNotEmpty)
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: cfg.primaryColor.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.4)),
                 ),
-                const SizedBox(width: 8),
-                Text('// PEER REVIEWED', style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFF22D3EE))),
-              ],
-            ),
-            const SizedBox(height: 12),
+                child: Text(
+                  profile.personal.targetRole,
+                  style: _getMonospaceStyle(fontSize: 10, fontWeight: FontWeight.bold, color: cfg.primaryColor),
+                ),
+              ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1730,14 +1402,14 @@ class PortfolioPreviewScreen extends StatelessWidget {
                         style: GoogleFonts.spaceGrotesk(
                           fontSize: 22,
                           fontWeight: FontWeight.w900,
-                          color: Colors.white,
+                          color: cfg.textColor,
                           letterSpacing: -0.5,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         profile.personal.headline,
-                        style: GoogleFonts.spaceGrotesk(fontSize: 12, fontWeight: FontWeight.w600, color: const Color(0xFFC084FC)),
+                        style: GoogleFonts.spaceGrotesk(fontSize: 12, fontWeight: FontWeight.w600, color: cfg.secondaryColor),
                       ),
                     ],
                   ),
@@ -1748,9 +1420,9 @@ class PortfolioPreviewScreen extends StatelessWidget {
                   height: 68,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFF22D3EE), width: 2),
+                    border: Border.all(color: cfg.secondaryColor, width: 2),
                     boxShadow: [
-                      BoxShadow(color: const Color(0xFF22D3EE).withValues(alpha: 0.3), blurRadius: 10),
+                      BoxShadow(color: cfg.secondaryColor.withValues(alpha: 0.3), blurRadius: 10),
                     ],
                   ),
                   child: ClipRRect(
@@ -1763,7 +1435,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               profile.personal.bio,
-              style: GoogleFonts.spaceGrotesk(fontSize: 12, color: const Color(0xFFCBD5E1), height: 1.45),
+              style: GoogleFonts.spaceGrotesk(fontSize: 12, color: cfg.subtextColor, height: 1.45),
             ),
             const SizedBox(height: 14),
             Wrap(
@@ -1776,11 +1448,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF281F3D),
+                        color: cfg.isDark ? Colors.white10 : const Color(0xFF281F3D),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: const Color(0xFFD946EF).withValues(alpha: 0.5)),
+                        border: Border.all(color: cfg.primaryColor.withValues(alpha: 0.5)),
                       ),
-                      child: Text('Code / Repos ↗', style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFFD946EF), fontWeight: FontWeight.bold)),
+                      child: Text('Code / Repos ↗', style: _getMonospaceStyle(fontSize: 10, color: cfg.primaryColor, fontWeight: FontWeight.bold)),
                     ),
                   ),
                 if (profile.personal.email.isNotEmpty)
@@ -1789,11 +1461,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF281F3D),
+                        color: cfg.isDark ? Colors.white10 : const Color(0xFF281F3D),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: const Color(0xFF22D3EE).withValues(alpha: 0.5)),
+                        border: Border.all(color: cfg.secondaryColor.withValues(alpha: 0.5)),
                       ),
-                      child: Text('Contact PI ↗', style: _getMonospaceStyle(fontSize: 10, color: const Color(0xFF22D3EE), fontWeight: FontWeight.bold)),
+                      child: Text('Contact ↗', style: _getMonospaceStyle(fontSize: 10, color: cfg.secondaryColor, fontWeight: FontWeight.bold)),
                     ),
                   ),
               ],
@@ -2013,11 +1685,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: cfg.isDark ? cfg.cardBgColor : Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
-          boxShadow: const [
-            BoxShadow(color: Color(0x060F172A), blurRadius: 10, offset: Offset(0, 3)),
+          border: Border.all(color: cfg.isDark ? Colors.white12 : const Color(0xFFE2E8F0), width: 1.2),
+          boxShadow: [
+            BoxShadow(color: cfg.isDark ? Colors.black26 : const Color(0x060F172A), blurRadius: 10, offset: const Offset(0, 3)),
           ],
         ),
         child: Row(
@@ -2025,22 +1697,22 @@ class PortfolioPreviewScreen extends StatelessWidget {
           children: [
             Column(
               children: [
-                Text(projectsCount, style: GoogleFonts.plusJakartaSans(fontSize: 18, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A))),
-                const Text('Case Studies', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFFFF6B6B))),
+                Text(projectsCount, style: GoogleFonts.plusJakartaSans(fontSize: 18, fontWeight: FontWeight.w900, color: cfg.textColor)),
+                Text('Case Studies', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: cfg.primaryColor)),
               ],
             ),
-            Container(width: 1, height: 28, color: const Color(0xFFF1F5F9)),
+            Container(width: 1, height: 28, color: cfg.isDark ? Colors.white12 : const Color(0xFFF1F5F9)),
             Column(
               children: [
-                Text(skillsCount, style: GoogleFonts.plusJakartaSans(fontSize: 18, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A))),
-                const Text('Design Tooling', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF64748B))),
+                Text(skillsCount, style: GoogleFonts.plusJakartaSans(fontSize: 18, fontWeight: FontWeight.w900, color: cfg.textColor)),
+                Text('Design Tooling', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: cfg.subtextColor)),
               ],
             ),
-            Container(width: 1, height: 28, color: const Color(0xFFF1F5F9)),
+            Container(width: 1, height: 28, color: cfg.isDark ? Colors.white12 : const Color(0xFFF1F5F9)),
             Column(
               children: [
-                Text(rolesCount, style: GoogleFonts.plusJakartaSans(fontSize: 18, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A))),
-                const Text('Experience', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF64748B))),
+                Text(rolesCount, style: GoogleFonts.plusJakartaSans(fontSize: 18, fontWeight: FontWeight.w900, color: cfg.textColor)),
+                Text('Experience', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: cfg.subtextColor)),
               ],
             ),
           ],
@@ -2115,18 +1787,18 @@ class PortfolioPreviewScreen extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: cfg.isDark ? cfg.cardBgColor : Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
-          boxShadow: const [
-            BoxShadow(color: Color(0x060F172A), blurRadius: 10, offset: Offset(0, 3)),
+          border: Border.all(color: cfg.isDark ? Colors.white12 : const Color(0xFFE2E8F0), width: 1.2),
+          boxShadow: [
+            BoxShadow(color: cfg.isDark ? Colors.black26 : const Color(0x060F172A), blurRadius: 10, offset: const Offset(0, 3)),
           ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (profile.skills.languages.isNotEmpty) ...[
-              Text('CORE & LANGUAGES', style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w800, color: const Color(0xFF64748B))),
+              Text('CORE & LANGUAGES', style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w800, color: cfg.subtextColor)),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 6,
@@ -2134,17 +1806,17 @@ class PortfolioPreviewScreen extends StatelessWidget {
                 children: profile.skills.languages.map((s) => Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFF1F1),
+                    color: cfg.isDark ? cfg.primaryColor.withValues(alpha: 0.15) : const Color(0xFFFFF1F1),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: const Color(0xFFFFD4D4)),
+                    border: Border.all(color: cfg.isDark ? cfg.primaryColor.withValues(alpha: 0.3) : const Color(0xFFFFD4D4)),
                   ),
-                  child: Text(s, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFFFF6B6B))),
+                  child: Text(s, style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: cfg.isDark ? cfg.textColor : cfg.primaryColor)),
                 )).toList(),
               ),
               const SizedBox(height: 14),
             ],
             if (profile.skills.frameworks.isNotEmpty) ...[
-              Text('FRAMEWORKS & LIBRARIES', style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w800, color: const Color(0xFF64748B))),
+              Text('FRAMEWORKS & LIBRARIES', style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w800, color: cfg.subtextColor)),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 6,
@@ -2152,17 +1824,17 @@ class PortfolioPreviewScreen extends StatelessWidget {
                 children: profile.skills.frameworks.map((s) => Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF1F5F9),
+                    color: cfg.isDark ? Colors.white10 : const Color(0xFFF1F5F9),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: const Color(0xFFE2E8F0)),
+                    border: Border.all(color: cfg.isDark ? Colors.white12 : const Color(0xFFE2E8F0)),
                   ),
-                  child: Text(s, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
+                  child: Text(s, style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: cfg.textColor)),
                 )).toList(),
               ),
               const SizedBox(height: 14),
             ],
             if (profile.skills.tools.isNotEmpty) ...[
-              Text('TOOLS & DESIGN ECOSYSTEM', style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w800, color: const Color(0xFF64748B))),
+              Text('TOOLS & DESIGN ECOSYSTEM', style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w800, color: cfg.subtextColor)),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 6,
@@ -2170,11 +1842,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
                 children: profile.skills.tools.map((s) => Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: cfg.isDark ? Colors.white10 : Colors.white,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: const Color(0xFFCBD5E1)),
+                    border: Border.all(color: cfg.isDark ? Colors.white12 : const Color(0xFFCBD5E1)),
                   ),
-                  child: Text(s, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF334155))),
+                  child: Text(s, style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: cfg.textColor)),
                 )).toList(),
               ),
             ],
@@ -2469,11 +2141,11 @@ class PortfolioPreviewScreen extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: cfg.isDark ? cfg.cardBgColor : Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
-          boxShadow: const [
-            BoxShadow(color: Color(0x080F172A), blurRadius: 10, offset: Offset(0, 3)),
+          border: Border.all(color: cfg.isDark ? Colors.white12 : const Color(0xFFE2E8F0), width: 1.2),
+          boxShadow: [
+            BoxShadow(color: cfg.isDark ? Colors.black26 : const Color(0x080F172A), blurRadius: 10, offset: const Offset(0, 3)),
           ],
         ),
         child: Column(
@@ -2485,19 +2157,19 @@ class PortfolioPreviewScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFF1F1),
+                    color: cfg.isDark ? cfg.primaryColor.withValues(alpha: 0.15) : const Color(0xFFFFF1F1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Text('FEATURED CASE STUDY', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Color(0xFFFF6B6B))),
+                  child: Text('FEATURED CASE STUDY', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: cfg.primaryColor)),
                 ),
                 if (project.liveUrl != null && project.liveUrl!.isNotEmpty)
                   GestureDetector(
                     onTap: () => _launchUrl(project.liveUrl!),
-                    child: const Row(
+                    child: Row(
                       children: [
-                        Text('Case Study', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Color(0xFFFF6B6B))),
-                        SizedBox(width: 2),
-                        Icon(Icons.arrow_forward, size: 12, color: Color(0xFFFF6B6B)),
+                        Text('Case Study', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: cfg.primaryColor)),
+                        const SizedBox(width: 2),
+                        Icon(Icons.arrow_forward, size: 12, color: cfg.primaryColor),
                       ],
                     ),
                   ),
@@ -2506,12 +2178,12 @@ class PortfolioPreviewScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               project.title,
-              style: GoogleFonts.plusJakartaSans(fontSize: 16, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A)),
+              style: GoogleFonts.plusJakartaSans(fontSize: 16, fontWeight: FontWeight.w900, color: cfg.textColor),
             ),
             const SizedBox(height: 6),
             Text(
               project.description,
-              style: GoogleFonts.plusJakartaSans(fontSize: 12, color: const Color(0xFF64748B), height: 1.4),
+              style: GoogleFonts.plusJakartaSans(fontSize: 12, color: cfg.subtextColor, height: 1.4),
             ),
             if (project.technologies.isNotEmpty) ...[
               const SizedBox(height: 10),
@@ -2522,10 +2194,10 @@ class PortfolioPreviewScreen extends StatelessWidget {
                   return Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF1F5F9),
+                      color: cfg.isDark ? Colors.white10 : const Color(0xFFF1F5F9),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Text(t, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF334155))),
+                    child: Text(t, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: cfg.textColor)),
                   );
                 }).toList(),
               ),
@@ -2757,9 +2429,12 @@ class PortfolioPreviewScreen extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: cfg.isDark ? cfg.cardBgColor : Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+          border: Border.all(color: cfg.isDark ? Colors.white12 : const Color(0xFFE2E8F0), width: 1.2),
+          boxShadow: [
+            BoxShadow(color: cfg.isDark ? Colors.black26 : const Color(0x060F172A), blurRadius: 10, offset: const Offset(0, 3)),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -2770,18 +2445,18 @@ class PortfolioPreviewScreen extends StatelessWidget {
                 Expanded(
                   child: Text(
                     exp.role,
-                    style: GoogleFonts.plusJakartaSans(fontSize: 15, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A)),
+                    style: GoogleFonts.plusJakartaSans(fontSize: 15, fontWeight: FontWeight.w900, color: cfg.textColor),
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF1F5F9),
+                    color: cfg.isDark ? Colors.white10 : const Color(0xFFF1F5F9),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     '${exp.startDate} - ${exp.endDate}',
-                    style: const TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Color(0xFF64748B)),
+                    style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: cfg.subtextColor),
                   ),
                 ),
               ],
@@ -2789,7 +2464,7 @@ class PortfolioPreviewScreen extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               exp.company,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFFFF6B6B)),
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: cfg.primaryColor),
             ),
             if (exp.description.isNotEmpty) ...[
               const SizedBox(height: 8),
@@ -2798,12 +2473,12 @@ class PortfolioPreviewScreen extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.check_circle_outline, size: 13, color: Color(0xFFFF6B6B)),
+                    Icon(Icons.check_circle_outline, size: 13, color: cfg.primaryColor),
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(
                         d,
-                        style: GoogleFonts.plusJakartaSans(fontSize: 11.5, color: const Color(0xFF475569), height: 1.4),
+                        style: GoogleFonts.plusJakartaSans(fontSize: 11.5, color: cfg.subtextColor, height: 1.4),
                       ),
                     ),
                   ],
@@ -3021,9 +2696,12 @@ class PortfolioPreviewScreen extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: cfg.isDark ? cfg.cardBgColor : Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+          border: Border.all(color: cfg.isDark ? Colors.white12 : const Color(0xFFE2E8F0), width: 1.2),
+          boxShadow: [
+            BoxShadow(color: cfg.isDark ? Colors.black26 : const Color(0x060F172A), blurRadius: 10, offset: const Offset(0, 3)),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -3034,17 +2712,17 @@ class PortfolioPreviewScreen extends StatelessWidget {
                 Expanded(
                   child: Text(
                     edu.degree,
-                    style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w900, color: const Color(0xFF0F172A)),
+                    style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w900, color: cfg.textColor),
                   ),
                 ),
-                Text('${edu.startYear} - ${edu.endYear}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF64748B))),
+                Text('${edu.startYear} - ${edu.endYear}', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: cfg.subtextColor)),
               ],
             ),
             const SizedBox(height: 3),
-            Text(edu.institution, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFFFF6B6B))),
+            Text(edu.institution, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: cfg.primaryColor)),
             if (edu.fieldOfStudy.isNotEmpty) ...[
               const SizedBox(height: 4),
-              Text('Major: ${edu.fieldOfStudy}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+              Text('Major: ${edu.fieldOfStudy}', style: TextStyle(fontSize: 11, color: cfg.subtextColor)),
             ],
           ],
         ),
@@ -3358,6 +3036,8 @@ class PortfolioPreviewScreen extends StatelessWidget {
         Expanded(
           child: Text(
             title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: cfg.isTerminal || cfg.isCyberMatrix
                 ? _getMonospaceStyle(fontSize: 13, fontWeight: FontWeight.bold, color: textColor)
                 : cfg.isEditorial

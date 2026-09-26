@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
   double _progress = 0.15;
-  String _statusMessage = 'Initializing Portfolify Studio...';
+  String _statusMessage = 'Launching Studio...';
 
   @override
   void initState() {
@@ -45,34 +45,33 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   Future<void> _startBootSequence() async {
     // Stage 1: Initializing
-    await Future.delayed(const Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 300));
     if (!mounted) return;
     setState(() {
       _progress = 0.45;
-      _statusMessage = 'Connecting to Supabase PostgreSQL...';
+      _statusMessage = 'Launching Studio...';
     });
 
     // Ensure provider data is loaded
     try {
       final provider = Provider.of<PortfolioProvider>(context, listen: false);
-      await provider.reload().timeout(const Duration(seconds: 2));
+      await provider.reload().timeout(const Duration(seconds: 4));
     } catch (_) {}
 
-
     // Stage 2: Templates & themes
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 400));
     if (!mounted) return;
     setState(() {
       _progress = 0.80;
-      _statusMessage = 'Configuring 21 website-matching templates...';
+      _statusMessage = 'Launching Studio...';
     });
 
-    // Stage 3: Ready
-    await Future.delayed(const Duration(milliseconds: 500));
+    // Stage 3: Launch
+    await Future.delayed(const Duration(milliseconds: 400));
     if (!mounted) return;
     setState(() {
       _progress = 1.0;
-      _statusMessage = 'Ready! Launching Studio...';
+      _statusMessage = 'Launching Studio...';
     });
 
     await Future.delayed(const Duration(milliseconds: 350));
@@ -193,25 +192,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                           color: Colors.white,
                         ),
                       ),
-                      const SizedBox(height: 8),
-
-                      // Subtitle
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.bolt, size: 16, color: Color(0xFF38BDF8)),
-                          const SizedBox(width: 4),
-                          Text(
-                            'DYNAMIC PORTFOLIO & ATS STUDIO',
-                            style: GoogleFonts.inter(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 1.5,
-                              color: const Color(0xFF94A3B8),
-                            ),
-                          ),
-                        ],
-                      ),
                       const SizedBox(height: 48),
 
                       // Progress Bar
@@ -259,42 +239,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   ),
                 ),
               ),
-            ),
-          ),
-
-          // Bottom features watermark
-          Positioned(
-            bottom: 32,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.cloud_done, size: 14, color: Color(0xFF10B981)),
-                const SizedBox(width: 6),
-                Text(
-                  'Cloud Sync',
-                  style: GoogleFonts.inter(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF64748B),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Text('•', style: TextStyle(color: Colors.grey.shade700)),
-                ),
-                const Icon(Icons.style, size: 14, color: Color(0xFF38BDF8)),
-                const SizedBox(width: 6),
-                Text(
-                  '21 Web Templates',
-                  style: GoogleFonts.inter(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF64748B),
-                  ),
-                ),
-              ],
             ),
           ),
         ],

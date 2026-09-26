@@ -143,7 +143,7 @@ export default function LandingPage() {
                   <p className="text-[10px] text-slate-600">5.0 Star Rated Student Engineer</p>
                 </div>
               </div>
-              <h3 className="text-lg font-black text-slate-900 group-hover:text-blue-600 transition-colors">1. Snowly Frost</h3>
+              <h3 className="text-lg font-black text-slate-900 group-hover:text-blue-600 transition-colors">Snowly Frost</h3>
               <p className="text-xs text-slate-600">Clean ice-blue & white theme, circular avatar badges, stats counter bar, and testimonial cards.</p>
             </div>
           </div>
@@ -161,7 +161,7 @@ export default function LandingPage() {
                   <p className="text-[10px] text-rose-500 font-bold">What I Do — 6 Services Cards</p>
                 </div>
               </div>
-              <h3 className="text-lg font-black text-slate-900 group-hover:text-rose-500 transition-colors">2. Jone Lee Modern</h3>
+              <h3 className="text-lg font-black text-slate-900 group-hover:text-rose-500 transition-colors">Jone Lee Modern</h3>
               <p className="text-xs text-slate-600">Crisp white background with vibrant coral accents, floating headshot badge, and services grid.</p>
             </div>
           </div>
@@ -179,7 +179,7 @@ export default function LandingPage() {
                   <p className="text-[10px] text-purple-400 font-bold">Category Tabs & Accordion Services</p>
                 </div>
               </div>
-              <h3 className="text-lg font-black text-slate-900 group-hover:text-purple-600 transition-colors">3. Daniel Violet</h3>
+              <h3 className="text-lg font-black text-slate-900 group-hover:text-purple-600 transition-colors">Daniel Violet</h3>
               <p className="text-xs text-slate-600">Deep midnight dark theme with violet glow, accordion services list, and tabbed portfolio filter.</p>
             </div>
           </div>
@@ -197,7 +197,7 @@ export default function LandingPage() {
                   <p className="text-[10px] text-rose-500 font-bold">Crimson Red Spotlight Card</p>
                 </div>
               </div>
-              <h3 className="text-lg font-black text-slate-900 group-hover:text-rose-600 transition-colors">4. Jessica Crimson</h3>
+              <h3 className="text-lg font-black text-slate-900 group-hover:text-rose-600 transition-colors">Jessica Crimson</h3>
               <p className="text-xs text-slate-600">Studio black theme with bold crimson red primary accents, highlighted card spotlight, and stats grid.</p>
             </div>
           </div>
@@ -215,7 +215,7 @@ export default function LandingPage() {
                   <p className="text-[10px] text-blue-400 font-bold">Terminal Snippets & Badges</p>
                 </div>
               </div>
-              <h3 className="text-lg font-black text-slate-900 group-hover:text-blue-600 transition-colors">5. Modern Tech</h3>
+              <h3 className="text-lg font-black text-slate-900 group-hover:text-blue-600 transition-colors">Modern Tech</h3>
               <p className="text-xs text-slate-600">Dark sleek developer theme with code snippets, glowing badges, and project cards.</p>
             </div>
           </div>
@@ -233,7 +233,7 @@ export default function LandingPage() {
                   <p className="text-[10px] text-slate-400 font-bold">Monochrome Elegance</p>
                 </div>
               </div>
-              <h3 className="text-lg font-black text-slate-900 group-hover:text-slate-600 transition-colors">6. Minimalist Slate</h3>
+              <h3 className="text-lg font-black text-slate-900 group-hover:text-slate-600 transition-colors">Minimalist Slate</h3>
               <p className="text-xs text-slate-600">Clean, editorial typography-focused layout with refined border dividers.</p>
             </div>
           </div>

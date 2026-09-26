@@ -37,7 +37,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (savedUser && savedProfile) {
         setUser(JSON.parse(savedUser));
-        setProfile(JSON.parse(savedProfile));
+        const parsed = JSON.parse(savedProfile);
+        if (parsed.analytics && (parsed.analytics.viewsCount === 342 || parsed.analytics.viewsCount === 238) && parsed.analytics.resumeDownloads === 48) {
+          parsed.analytics.viewsCount = 0;
+          parsed.analytics.resumeDownloads = 0;
+          parsed.analytics.lastViewedAt = 'No views yet';
+        }
+        setProfile(parsed);
       } else {
         setUser(INITIAL_USER);
         setProfile(INITIAL_PROFILE);
@@ -88,7 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         ...INITIAL_PROFILE.personal,
         fullName: newUser.name,
         email: newUser.email,
-        portfolioUrl: `https://portfolify.app/u/${newUser.username}`,
+        portfolioUrl: `https://portfolio-generator-pg76.vercel.app/u/${newUser.username}`,
       },
     };
 
@@ -115,7 +121,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         ...INITIAL_PROFILE.personal,
         fullName: name,
         email,
-        portfolioUrl: `https://portfolify.app/u/${cleanUsername}`,
+        portfolioUrl: `https://portfolio-generator-pg76.vercel.app/u/${cleanUsername}`,
       },
     };
 

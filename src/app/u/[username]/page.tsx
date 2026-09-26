@@ -15,8 +15,13 @@ export default function PublicPortfolioPage({ params }: { params: { username: st
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Increment view counter when recruiter views public portfolio
+    // Increment view counter locally if active user, and persist real view to database
     incrementProfileViews();
+    fetch('/api/analytics', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: params.username, event: 'view' }),
+    }).catch(() => {});
 
     const fetchRemote = async () => {
       if (profile && profile.username.toLowerCase() === params.username.toLowerCase()) {

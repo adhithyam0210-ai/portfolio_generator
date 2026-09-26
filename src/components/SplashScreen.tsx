@@ -6,24 +6,23 @@ import { Sparkles, Layers, ShieldCheck, Zap } from 'lucide-react';
 export const SplashScreen: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [fading, setFading] = useState(false);
-  const [progress, setProgress] = useState(15);
-  const [statusText, setStatusText] = useState('Initializing Portfolify Studio...');
+  const [progress, setProgress] = useState(25);
+  const [statusText, setStatusText] = useState('Launching Studio...');
 
   useEffect(() => {
-    // Step-by-step progress simulation to ensure smooth loading and asset priming
     const t1 = setTimeout(() => {
-      setProgress(45);
-      setStatusText('Syncing templates & theme engines...');
+      setProgress(60);
+      setStatusText('Launching Studio...');
     }, 400);
 
     const t2 = setTimeout(() => {
-      setProgress(85);
-      setStatusText('Loading candidate portfolio profiles...');
+      setProgress(90);
+      setStatusText('Launching Studio...');
     }, 900);
 
     const t3 = setTimeout(() => {
       setProgress(100);
-      setStatusText('Ready!');
+      setStatusText('Launching Studio...');
       setFading(true);
     }, 1400);
 
@@ -64,12 +63,9 @@ export const SplashScreen: React.FC = () => {
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl font-black tracking-tight text-white mb-2">
+        <h1 className="text-3xl font-black tracking-tight text-white mb-6">
           Portfolify
         </h1>
-        <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-8 flex items-center gap-1.5">
-          <Zap className="w-3.5 h-3.5 text-blue-400" /> Dynamic Portfolio & ATS Studio
-        </p>
 
         {/* Modern Progress Bar */}
         <div className="w-64 sm:w-72 bg-slate-800/80 rounded-full h-2 overflow-hidden border border-slate-700/60 p-[1px] mb-3">
@@ -83,17 +79,6 @@ export const SplashScreen: React.FC = () => {
         <p className="text-xs text-slate-400 font-mono tracking-tight animate-pulse min-h-[18px]">
           {statusText}
         </p>
-      </div>
-
-      {/* Bottom Footer Info */}
-      <div className="absolute bottom-8 text-[11px] text-slate-500 flex items-center gap-3">
-        <span className="flex items-center gap-1">
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Supabase Cloud Sync
-        </span>
-        <span>•</span>
-        <span className="flex items-center gap-1">
-          <Layers className="w-3.5 h-3.5 text-blue-400" /> 21 Verified Templates
-        </span>
       </div>
     </div>
   );

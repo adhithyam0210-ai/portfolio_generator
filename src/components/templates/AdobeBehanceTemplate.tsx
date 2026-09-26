@@ -13,14 +13,11 @@ export const AdobeBehanceTemplate: React.FC<TemplateProps> = ({ profile, isPubli
   return (
     <div className="bg-[#0D0D0D] text-slate-100 min-h-screen font-sans pb-24 selection:bg-blue-600 selection:text-white">
       
-      {/* ADOBE BEHANCE STYLE TOP BRAND BAR */}
+      {/* TOP BRAND BAR */}
       <div className="border-b border-slate-800 bg-[#141414] py-4 px-6 sm:px-12 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 font-black text-white flex items-center justify-center text-sm shadow-md">
-            Be
-          </div>
-          <span className="font-extrabold text-sm tracking-wider uppercase text-slate-200">
-            Adobe Portfolio • Showcase
+          <span className="font-extrabold text-base tracking-wider text-slate-100">
+            {personal.fullName}
           </span>
         </div>
 
@@ -48,10 +45,6 @@ export const AdobeBehanceTemplate: React.FC<TemplateProps> = ({ profile, isPubli
         {/* HERO FEATURED BANNER */}
         <div className="bg-[#171717] rounded-3xl p-8 sm:p-14 border border-slate-800 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
           <div className="space-y-4 max-w-3xl text-center md:text-left">
-            <span className="px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-extrabold uppercase tracking-widest inline-block">
-              Adobe Creative Studio
-            </span>
-
             <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight">
               {personal.fullName}
             </h1>
@@ -114,7 +107,7 @@ export const AdobeBehanceTemplate: React.FC<TemplateProps> = ({ profile, isPubli
                 <div className="h-48 bg-gradient-to-tr from-slate-900 via-blue-950/40 to-slate-900 p-6 flex flex-col justify-between border-b border-slate-800 group-hover:from-blue-950/60 group-hover:to-indigo-950/60 transition-colors">
                   <div className="flex justify-between items-center">
                     <span className="text-[10px] font-extrabold uppercase bg-slate-950/80 text-blue-400 border border-slate-700 px-2.5 py-0.5 rounded-full">
-                      BEHANCE FEATURED
+                      FEATURED PROJECT
                     </span>
                     <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-blue-400 transition-colors" />
                   </div>

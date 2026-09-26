@@ -17,16 +17,11 @@ export const FigmaGlassTemplate: React.FC<TemplateProps> = ({ profile, isPublicV
       <div className="absolute top-10 left-10 w-[500px] h-[500px] bg-gradient-to-tr from-cyan-500/20 via-indigo-500/20 to-purple-500/20 rounded-full blur-[140px] pointer-events-none -z-10"></div>
       <div className="absolute top-1/2 right-10 w-[600px] h-[600px] bg-gradient-to-tr from-pink-500/15 via-rose-500/15 to-amber-500/15 rounded-full blur-[160px] pointer-events-none -z-10"></div>
 
-      {/* TOP FIGMA BRAND BAR */}
+      {/* TOP BRAND BAR */}
       <div className="border-b border-cyan-500/20 bg-slate-950/60 backdrop-blur-md py-4 px-6 sm:px-12 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 via-indigo-500 to-pink-500 p-0.5 shadow-lg shadow-cyan-500/20">
-            <div className="w-full h-full bg-slate-950 rounded-[6px] flex items-center justify-center font-black text-xs text-cyan-400">
-              Fi
-            </div>
-          </div>
-          <span className="font-black text-xs tracking-wider uppercase text-cyan-400">
-            Figma Glass UI • Portfolio Config
+          <span className="font-black text-sm tracking-wider text-cyan-400">
+            {personal.fullName}
           </span>
         </div>
 
@@ -49,11 +44,6 @@ export const FigmaGlassTemplate: React.FC<TemplateProps> = ({ profile, isPublicV
         {/* HERO FIGMA GLASS PANEL */}
         <div className="bg-slate-900/60 backdrop-blur-xl p-8 sm:p-14 rounded-3xl border border-cyan-500/30 shadow-[0_0_50px_rgba(6,182,212,0.1)] relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
           <div className="space-y-5 max-w-3xl text-center md:text-left">
-            <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-gradient-to-r from-cyan-500/20 via-indigo-500/20 to-pink-500/20 border border-cyan-400/40 text-cyan-300 text-xs font-extrabold uppercase tracking-wider">
-              <Zap className="w-3.5 h-3.5 text-cyan-400 fill-cyan-400" />
-              Figma Neo-Glass Design System
-            </span>
-
             <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight">
               {personal.fullName}
             </h1>

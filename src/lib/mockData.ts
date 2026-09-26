@@ -21,7 +21,7 @@ export const INITIAL_PROFILE: PortfolioProfile = {
     phone: '+1 (650) 555-0192',
     githubUrl: 'https://github.com/alexrivera-dev',
     linkedinUrl: 'https://linkedin.com/in/alex-rivera-cs',
-    portfolioUrl: 'https://portfolify.app/u/alexrivera',
+    portfolioUrl: 'https://portfolio-generator-pg76.vercel.app/u/alexrivera',
     avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600',
     resumeUrl: '/resume',
     resumeFileName: 'Alex_Rivera_Resume.pdf',
@@ -118,8 +118,8 @@ export const INITIAL_PROFILE: PortfolioProfile = {
     darkMode: false,
   },
   analytics: {
-    viewsCount: 342,
-    resumeDownloads: 48,
-    lastViewedAt: 'Just now',
+    viewsCount: 0,
+    resumeDownloads: 0,
+    lastViewedAt: 'No views yet',
   },
 };

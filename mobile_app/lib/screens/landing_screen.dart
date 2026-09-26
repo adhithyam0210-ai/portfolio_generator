@@ -112,7 +112,7 @@ class LandingScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Create high-converting developer portfolios & auto-generated ATS resumes in minutes without code.',
+                    'Create high-converting developer portfolios in minutes without code.',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.inter(
                       fontSize: 14,
@@ -131,16 +131,16 @@ class LandingScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   _buildFeatureTile(
-                    Icons.description_outlined,
-                    'Auto ATS Resume Generator',
-                    'Generates 1-click ATS compliant printable resumes directly from your profile data.',
+                    Icons.share_outlined,
+                    'Instant Share Link & QR',
+                    'Share your live portfolio URL with recruiters and showcase your projects anywhere.',
                     const Color(0xFF10B981),
                   ),
                   const SizedBox(height: 12),
                   _buildFeatureTile(
-                    Icons.cloud_sync_outlined,
-                    'Supabase Cloud Sync',
-                    'Instant live cloud synchronization across web and mobile platforms.',
+                    Icons.devices_outlined,
+                    'Multi-Device Responsive',
+                    'Pixel-perfect layouts optimized for mobile, tablet, and widescreen displays.',
                     const Color(0xFFA855F7),
                   ),
                   const SizedBox(height: 36),
